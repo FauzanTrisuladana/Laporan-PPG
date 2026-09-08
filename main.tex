@@ -6,7 +6,6 @@
 \usepackage{graphicx}
 \usepackage{titling}
 \usepackage{titlesec}
-\usepackage[backend=biber,style=ieee]{biblatex}
 
 % Package tambahan untuk layout dan formatting
 \usepackage{geometry}           % untuk margin
@@ -85,7 +84,7 @@
 }
 
 % Info dokumen
-\newcommand{\Pertemuan}{11}
+\newcommand{\Pertemuan}{2}
 \newcommand{\Materi}{Navigate Unreal Engine 5.8}
 \title{Laporan Praktikum \\ Pengembangan Game\\
 Pertemuan \Pertemuan\\
@@ -98,9 +97,6 @@ Pertemuan \Pertemuan\\
 \author{\NamaMahasiswa\\\NIMMahasiswa}
 
 \begin{document}
-
-% Jika ingin daftar pustaka muncul meskipun belum ada entri di ref.bib,
-% tambahkan entri BibTeX ke file ref.bib terlebih dulu.
 
 % Title Page
 \begin{titlingpage} 
@@ -156,7 +152,6 @@ Pertemuan \Pertemuan\\
   \fancyfoot[C]{\thepage}
 }
 
-
 % --- Styling Judul Daftar Isi, Gambar, dan Kode ---
 \renewcommand{\cfttoctitlefont}{\hfill\normalfont\LARGE\bfseries}
 \renewcommand{\cftaftertoctitle}{\hfill}
@@ -191,8 +186,7 @@ Pertemuan \Pertemuan\\
 % Daftar Gambar
 \listoffigures
 
-% --- Halaman Laporan Pertemuan (seperti contoh gambar) ---
-% Tidak pakai \chapter agar bisa menyatu dengan halaman sebelumnya.
+% --- Halaman Laporan Pertemuan ---
 \newpage
 \begin{center}
   \textbf{\LARGE Pertemuan \Pertemuan\\
@@ -200,27 +194,173 @@ Pertemuan \Pertemuan\\
 \end{center}
 
 \section{Tujuan Praktikum}
-\begin{enumerate}
-  \item Something
+\par Praktikum Pengembangan Game pada Pertemuan 2 ini berfokus pada pengenalan mendalam ekosistem Unreal Engine 5.8 serta keterampilan esensial dalam menavigasi dan mengonfigurasi komponen level editor 3D. Adapun tujuan spesifik yang ingin dicapai melalui pelaksanaan praktikum ini adalah sebagai berikut:
+\begin{enumerate}[label=\arabic*.]
+  \item Mahasiswa memahami arsitektur lingkungan kerja Unreal Engine 5.8, alur instalasi dan peluncuran engine melalui Epic Games Launcher, serta manajemen pembuatan proyek baru berbasis template interaktif.
+  \item Mahasiswa menguasai teknik navigasi ruang tiga dimensi (\textit{3D Viewport navigation}) menggunakan kombinasi input periferal mouse dan keyboard untuk observasi adegan secara fleksibel dan akurat.
+  \item Mahasiswa mampu menerapkan manipulasi transformasi objek 3D (\textit{Actors}) mencakup translasi (\textit{Move}), rotasi (\textit{Rotate}), dan penskalaan (\textit{Scale}) secara visual melalui \textit{Transform Gizmo} maupun secara presisi melalui panel Details dengan bantuan fitur \textit{Grid Snapping}.
+  \item Mahasiswa memahami hierarki penyusunan elemen level pada panel Outliner dan mampu mengonfigurasi properti tabrakan fisik (\textit{Collision Presets}) serta menghapus entitas penghalang (\textit{Blocking Volume}) guna mengatur interaksi pergerakan karakter.
+  \item Mahasiswa mampu mengonfigurasi dan mengaplikasikan material turunan (\textit{Material Instance}) dengan manipulasi parameter warna berbasis \textit{Physically Based Rendering} (PBR) tanpa memerlukan kompilasi ulang \textit{shader}.
+  \item Mahasiswa mengenal serta mampu mengonfigurasi parameter emisi pada sistem partikel visual generasi modern (\textit{Niagara VFX System}) dan mengintegrasikan komponen pencahayaan lokal (\textit{Point Light}) ke dalam lingkungan level.
+  \item Mahasiswa mampu menjalankan validasi mekanik dan interaksi dunia game secara langsung menggunakan mode \textit{Play-in-Editor} (PIE) serta memahami prosedur penyimpanan level dan aset proyek secara terstruktur.
 \end{enumerate}
 
-%contoh gambar dan kode
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.5\textwidth]{resource/contoh-gambar.png}
-%     \caption{Contoh Gambar}
-%     \label{fig:contoh-gambar}
-% \end{figure}
+\section{Dokumentasi Praktikum}
+\par Bagian dokumentasi ini menyajikan rangkaian tahapan implementasi teknis yang dilakukan selama sesi praktikum navigasi Unreal Engine 5.8. Pembahasan disajikan secara sistematis mencakup peluncuran lingkungan kerja, pemahaman antarmuka, manipulasi aktor 3D, konfigurasi fisika tabrakan, kustomisasi material, pengaturan efek visual partikel, sistem pencahayaan, hingga pengujian interaktif menggunakan mode \textit{Play-in-Editor}.
 
-% \begin{lstlisting}[language=php, caption={Contoh Kode Python}, label={lst:contoh-kode}]
-% def hello_world():
-%     print("Hello, World!")
-% \end{lstlisting}
+\subsection{Peluncuran Engine dan Pembuatan Proyek Baru}
+\par Tahapan awal pengembangan game pada Unreal Engine dimulai dari inisialisasi lingkungan kerja pada sistem operasi serta pembuatan struktur berkas proyek yang sesuai dengan standarisasi praktikum.
 
-\section{Dokumetasi Praktikum}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/1.png}
+  \caption{Peluncuran Unreal Engine 5.8.2 melalui Epic Games Launcher}
+  \label{fig:peluncuran-ue}
+\end{figure}
 
-\par Sesuai dengan tujuan praktikum, berikut adalah hasil yang diperoleh dan pembahasan terkait materi yang telah dipelajari.
+\par Berdasarkan Gambar \ref{fig:peluncuran-ue}, langkah pertama yang dilakukan adalah membuka aplikasi \textit{Epic Games Launcher} pada komputer pengembang. Pada menu navigasi utama di sebelah kiri, dipilih tab \textit{Unreal Engine}, kemudian dilanjutkan dengan memilih sub-menu \textit{Library} pada bilah atas. Pada bagian \textit{Engine Versions}, terdeteksi instalasi resmi Unreal Engine versi 5.8.2. Proses inisialisasi editor dijalankan dengan menekan tombol \textit{Launch} berwarna kuning yang terletak di samping label versi engine. Tahapan peluncuran ini memuat modul-modul inti engine, pustaka grafis, serta dependensi dependensi runtime yang dibutuhkan untuk menjalankan antarmuka grafis level editor secara optimal.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/2.png}
+  \caption{Konfigurasi dan Pembuatan Proyek Baru Menggunakan Template Intro To Unreal}
+  \label{fig:pembuatan-proyek}
+\end{figure}
+
+\par Setelah proses peluncuran engine selesai, jendela dialog \textit{Unreal Project Browser} akan muncul seperti yang terdokumentasi pada Gambar \ref{fig:pembuatan-proyek}. Pada jendela ini, pengembang memilih kategori template \textit{GAMES} pada panel sebelah kiri, kemudian memilih template khusus pembelajaran bertajuk \textit{Intro To Unreal}. Template ini menyediakan ruangan interaktif terstruktur (\textit{guided walkthrough level}) yang dirancang khusus untuk memandu pemahaman mekanik dasar engine. Pada panel konfigurasi proyek di sebelah kanan, parameter \textit{Project Defaults} diatur menggunakan Blueprint dengan target platform berupa \textit{Desktop} dan tingkat kualitas grafis \textit{Maximum}. Direktori penyimpanan diarahkan ke folder lokal komputer (\texttt{C:/Users/Legion/Documents/Unreal Projects}), serta nama proyek ditentukan secara formal mengikuti format penamaan praktikum, yaitu \texttt{Fauzan\_538699\_Intro}. Proyek baru kemudian dibuat dengan menekan tombol \textit{Create}.
+
+\subsection{Pengenalan Antarmuka Editor dan Navigasi Viewport 3D}
+\par Setelah pembuatan proyek berhasil, Unreal Engine secara otomatis memuat level utama yang menjadi laboratorium pengujian interaktif, yaitu \texttt{Lvl\_IntroRoom}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/3.png}
+  \caption{Tampilan Awal Level Editor dan Panduan Navigasi Ruang 3D}
+  \label{fig:antarmuka-editor}
+\end{figure}
+
+\par Sebagaimana diperlihatkan pada Gambar \ref{fig:antarmuka-editor}, tampilan antarmuka editor Unreal Engine 5.8 terdiri atas beberapa komponen esensial yang terintegrasi secara modular. Di sisi kiri layar, terbuka panel \textit{Unreal Engine 5.8 Documentation} yang menyajikan referensi dokumentasi resmi. Pada area tengah, terdapat jendela utama \textit{3D Viewport} yang menampilkan lingkungan level ruang tiga dimensi lengkap dengan teks panduan navigasi. Pengembang mempraktikkan navigasi kamera menggunakan metode penerbangan bebas (\textit{fly-through camera}), yaitu dengan menahan tombol klik kanan mouse (\textit{Right Mouse Button} / RMB) sembari menekan tombol \texttt{W} untuk bergerak maju, \texttt{S} untuk mundur, \texttt{A} untuk bergeser ke kiri, dan \texttt{D} untuk bergeser ke kanan. Kecepatan kamera dapat disesuaikan menggunakan roda putar mouse (\textit{scroll wheel}). Di samping itu, panel Outliner terlihat pada sudut kanan atas untuk mengelola hierarki aktor, panel Details di sudut kanan bawah untuk menginspeksi properti objek, serta bilah \textit{Content Drawer} pada bagian bawah yang dapat dipanggil menggunakan kombinasi pintasan \texttt{Ctrl + Space}.
+
+\subsection{Manipulasi Objek dan Transformasi Transform}
+\par Kemampuan menata letak objek secara presisi dalam ruang 3D merupakan fondasi utama dalam perancangan level (\textit{level design}). Bagian ini mengeksplorasi penggunaan alat transformasi (\textit{Gizmo}) dan panel Details.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/4.png}
+  \caption{Manipulasi Transformasi Objek Menggunakan 3D Transform Gizmo}
+  \label{fig:manipulasi-gizmo}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:manipulasi-gizmo}, pengembang melakukan interaksi langsung dengan aktor bernama \texttt{BP\_GizmoDemo3} pada stasiun tutorial bertajuk ``3/16 Moving Actors''. Ketika objek tersebut dipilih di dalam \textit{viewport}, muncul representasi visual sumbu koordinat tiga dimensi (\textit{3D Gizmo}) yang memiliki tiga sumbu warna standar: merah untuk sumbu X (orientasi maju/mundur), hijau untuk sumbu Y (orientasi kanan/kiri), dan biru untuk sumbu Z (orientasi atas/bawah). Pengembang memanfaatkan tombol pintasan keyboard standar industri game engine, yaitu tombol \texttt{W} untuk mode translasi (\textit{Select and Translate}), tombol \texttt{E} untuk mode rotasi (\textit{Select and Rotate}), dan tombol \texttt{R} untuk mode penskalaan (\textit{Select and Scale}). Penggeseran objek sepanjang sumbu koordinat secara langsung memicu pembaruan nilai posisi (\textit{Location}) secara dinamis pada kategori \textit{Transform} di panel Details.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/5.png}
+  \caption{Penskalaan Non-Uniform pada Aktor 3D di Ruang Viewport}
+  \label{fig:penskalaan-objek}
+\end{figure}
+
+\par Pada tahapan yang ditunjukkan oleh Gambar \ref{fig:penskalaan-objek}, pengembang mengaktifkan mode penskalaan objek dengan menekan tombol pintasan \texttt{R}. Penskalaan dilakukan secara tidak seragam (\textit{non-uniform scaling}) pada aktor \texttt{BP\_GizmoDemo3} dengan cara menarik salah satu lengan sumbu \textit{gizmo}. Hasil modifikasi geometris ini terkonfirmasi secara presisi melalui nilai numerik pada panel Details di sebelah kanan, di mana dimensi skala sumbu X bernilai \texttt{1.25}, sumbu Y mengalami peregangan hingga mencapai nilai \texttt{1.885827}, sedangkan sumbu Z tetap dipertahankan pada skala standar \texttt{1.0}. Hal ini membuktikan fleksibilitas editor Unreal Engine dalam memungkinkan penyesuaian bentuk objek baik secara intuitif melalui interaksi grafis maupun secara terukur melalui input numerik parametrik.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/6.png}
+  \caption{Translasi dan Penjajaran Objek Menggunakan Fitur Grid Snapping}
+  \label{fig:translasi-snapping}
+\end{figure}
+
+\par Sejalan dengan tahapan manipulasi ruang, Gambar \ref{fig:translasi-snapping} memperlihatkan proses reposisi dan perataan objek \texttt{SM\_ChamferCube5} di atas platform level. Untuk memastikan objek tersusun secara rapi dan tidak saling tumpang tindih secara sembarangan, pengembang mengaktifkan fitur \textit{Grid Snapping} yang terletak pada sudut kanan atas bilah navigasi \textit{viewport} dengan toleransi snap sebesar 10 unit. Fitur penguncian kisi ini membatasi pergerakan translasi objek agar selalu melompat pada kelipatan koordinat tertentu saat ditarik menggunakan tombol \texttt{W}. Dengan demikian, elemen kubus dapat disejajarkan secara presisi mengikuti kontur platform panduan modul pembelajaran.
+
+\subsection{Konfigurasi Tabrakan Fisik dan Pengelolaan Hierarki Scene}
+\par Interaksi fisik dalam lingkungan game memerlukan definisi batas tabrakan (\textit{collision}) serta pengorganisasian aktor dalam hierarki adegan yang bersih dan terstruktur.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/7.png}
+  \caption{Konfigurasi Properti Tabrakan (Collision Presets) pada Objek Ramp}
+  \label{fig:konfigurasi-collision}
+\end{figure}
+
+\par Pada stasiun pembelajaran ``4/16 Collision'', pengembang meneliti dan mengonfigurasi batas interaksi fisik objek seperti yang didokumentasikan pada Gambar \ref{fig:konfigurasi-collision}. Aktor lereng tanjakan \texttt{SM\_Ramp5} dipilih pada \textit{viewport} untuk dianalisis sifat tabrakannya. Melalui panel Details pada kategori \textit{Collision}, diperiksa konfigurasi \textit{Collision Presets}. Agar objek dapat dipijak oleh karakter pemain dan menahan benda-benda fisik tanpa terjadi efek tembus objek (\textit{clipping}), parameter \textit{Collision Presets} dipastikan berada pada mode \texttt{BlockAll} (atau \texttt{Default} dengan saluran respons pemblokiran aktif penuh). Penyetelan ini memastikan komponen \textit{Static Mesh} mengkalkulasikan batas poligon tabrakan fisik secara menyeluruh terhadap seluruh objek dinamis maupun statis di sekitarnya.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/8.png}
+  \caption{Pengelolaan Hierarki Outliner dan Penghapusan Aktor Blocking Volume}
+  \label{fig:outliner-blocking-volume}
+\end{figure}
+
+\par Selanjutnya, Gambar \ref{fig:outliner-blocking-volume} mendemonstrasikan penyelesaian tantangan pada area ``8/16 Atmosphere''. Pada area ini, terdapat pemandangan atmosfer terbuka dengan pencahayaan \textit{Sky Atmosphere} dan \textit{Directional Light}. Namun, jalur pergerakan pemain terhalang oleh dinding batas tak kasat mata berupa \textit{Blocking Volume}. Untuk membuka rute perjalanan, pengembang memanfaatkan panel Outliner yang mengatalogkan seluruh hierarki aktor yang ada di dalam level. Pengembang mencari dan memilih entitas \texttt{Blocking Volume} dari daftar aktor di Outliner, kemudian melakukan penghapusan objek dengan menekan tombol \texttt{Delete} pada keyboard. Setelah volume penghalang tersebut dihapus dari adegan, barikade fisik menghilang sehingga karakter pemain dapat melanjutkan eksplorasi ke stasiun berikutnya tanpa rintangan.
+
+\subsection{Kustomisasi Material Instans dan Sistem Visual Effect Niagara}
+\par Unreal Engine 5.8 menyediakan sistem material berbasis fisika (\textit{Physically Based Rendering}) serta sistem partikel generasi baru (\textit{Niagara}) untuk menciptakan tampilan visual yang menarik dan dinamis.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/9.png}
+  \caption{Kustomisasi Parameter Warna pada Material Instance Editor}
+  \label{fig:material-instance-editor}
+\end{figure}
+
+\par Berdasarkan dokumentasi pada Gambar \ref{fig:material-instance-editor}, pengembang membuka jendela editor khusus \textit{Material Instance} untuk aset \texttt{MI\_Intro\_Colorway}. Berbeda dengan material utama (\textit{Master Material}) yang memerlukan proses kompilasi kode \textit{shader} yang memakan waktu setiap kali ada perubahan logika, \textit{Material Instance} memungkinkan modifikasi parameter secara instan di memori GPU. Pengembang mengaktifkan parameter turunan \textit{Color}, kemudian membuka jendela interaktif \textit{Color Picker}. Pengembang memilih rona warna biru keabuan (\textit{slate teal}) dengan kode heksadesimal \texttt{\#2B5473FF} dan representasi nilai sRGB sebesar 0.024 untuk kanal merah, 0.088 untuk kanal hijau, dan 0.169 untuk kanal biru. Perubahan warna ini dapat diamati secara langsung pada bola pratinjau material di sudut kiri atas jendela editor.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/10.png}
+  \caption{Penerapan Material Instans pada Permukaan Objek Sphere di Ruang 3D}
+  \label{fig:aplikasi-material}
+\end{figure}
+
+\par Setelah kustomisasi parameter warna selesai disimpan, Gambar \ref{fig:aplikasi-material} memperlihatkan pengaplikasian material instans tersebut ke dalam dunia level pada stasiun ``5/16 Materials''. Aset material \texttt{MI\_Intro\_Colorway} diterapkan secara langsung ke slot material dari aktor \texttt{Sphere8}. Permukaan bola 3D secara instan memperlihatkan karakteristik visual material PBR yang baru, termasuk pantulan spekular (\textit{specular highlights}), derajat kekasaran permukaan (\textit{roughness}), dan interaksi pantulan cahaya global terhadap lingkungan di sekitarnya. Hal ini membuktikan bahwa alur kerja \textit{Material Instance} sangat efektif dan efisien untuk melakukan pengulangan iterasi desain visual dalam proses produksi game.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/11.png}
+  \caption{Konfigurasi Parameter Sistem Partikel Dinamis pada Niagara Editor}
+  \label{fig:niagara-particle-system}
+\end{figure}
+
+\par Uji coba visual berlanjut pada pengenalan sistem efek partikel mutakhir melalui \textit{Niagara VFX System Editor} sebagaimana tampak pada Gambar \ref{fig:niagara-particle-system}. Pengembang membuka aset partikel \texttt{NS\_DemoNiagara} yang tersusun atas modul pemancar partikel (\textit{emitter}) di pengaturan yang bernama \texttt{OmnidirectionalBurst}. Pada panel \textit{Emitter Properties} dan \textit{Spawn Burst Instantaneous}, pengembang melakukan modifikasi terhadap parameter kuantitas emisi partikel dengan nilai \textit{Spawn Count} mencapai \texttt{15920} partikel. Selain itu, parameter kecepatan inisial (\textit{Velocity}), distribusi acak ke segala arah (\textit{Omnidirectional}), serta gaya gravitasi dan hambatan udara (\textit{Drag}) diuji coba. Hasil simulasi letupan partikel dapat diamati secara \textit{real-time} pada panel pratinjau Niagara, mendemonstrasikan kemampuan komputasi partikel Unreal Engine yang berjalan efisien pada arsitektur GPU modern.
+
+\subsection{Pencahayaan, Pengujian Interaktif (Play-in-Editor), dan Penyimpanan Level}
+\par Fase akhir dari siklus pengembangan pada pertemuan ini meliputi implementasi tata cahaya buatan, validasi mekanisme permainan secara interaktif, dan penyimpanan permanen berkas proyek.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/12.png}
+  \caption{Penempatan dan Penyesuaian Intensitas Komponen Point Light}
+  \label{fig:penempatan-point-light}
+\end{figure}
+
+\par Pada stasiun ``10/16 Lights'', pengembang mempraktikkan penambahan sumber cahaya lokal buatan ke dalam adegan seperti yang ditampilkan pada Gambar \ref{fig:penempatan-point-light}. Komponen pencahayaan berjenis \textit{Point Light} ditambahkan ke dalam ruang 3D menggunakan tombol pintasan cepat \texttt{L + Klik Kiri} pada posisi kursor di \textit{viewport}. Sumber cahaya ini memancarkan iluminasi secara merata ke segala arah dari satu titik pusat koordinat. Melalui panel Details, pengembang menyetel parameter \textit{Intensity} ke nilai \texttt{100.53 lm} (lumen), mengatur radius atenuasi jangkauan sinar, serta memastikan kotak centang opsi \textit{Cast Shadows} aktif. Dengan pengaturan tersebut, cahaya yang memancar mampu menghasilkan bayangan jatuh dinamis pada objek kubus dan lantai di bawahnya, meningkatkan kedalaman spasial dan nilai estetika level secara dramatis.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/13.png}
+  \caption{Pengujian Interaktif Level Menggunakan Mode Play-in-Editor (PIE)}
+  \label{fig:play-in-editor}
+\end{figure}
+
+\par Seluruh modifikasi komponen level yang telah diterapkan selanjutnya diuji kelayakannya secara langsung melalui simulasi game menggunakan fitur \textit{Play-in-Editor} (PIE) seperti terlihat pada Gambar \ref{fig:play-in-editor}. Pengujian diaktifkan dengan menekan tombol \textit{Play} pada bilah alat utama atau melalui pintasan keyboard \texttt{Alt + P}. Editor beralih secara mulus ke mode eksekusi permainan yang ditandai dengan munculnya pesan informasi sistem: \textit{``Game is running. Press Esc key to return to Editor''} dan \textit{``Shift+F1 for Mouse Cursor''}. Pengembang mengendalikan karakter pemain untuk menelusuri seluruh stasiun tutorial, memvalidasi tabrakan lereng yang kokoh saat dipijak, mengamati pancaran partikel Niagara yang responsif, serta menikmati tata pencahayaan dinamis yang telah dirancang sebelumnya.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/14.png}
+  \caption{Penyelesaian Seluruh Modul Interaktif dan Penyimpanan Level Proyek}
+  \label{fig:penyelesaian-dan-penyimpanan}
+\end{figure}
+
+\par Rangkaian kegiatan praktikum diakhiri dengan pencapaian ke stasiun final ``15/16 Templates'' dan konfirmasi ringkasan modul sebagaimana diperlihatkan pada Gambar \ref{fig:penyelesaian-dan-penyimpanan}. Setelah seluruh tujuan pembelajaran tercapai dan divalidasi dengan baik, pengembang melakukan prosedur penyimpanan data secara menyeluruh. Proses penyimpanan level dilakukan dengan menekan tombol ikon disket (\textit{Save Current Level}) pada bilah menu atau menggunakan tombol pintasan standar \texttt{Ctrl + S}. Aksi ini memastikan seluruh koordinat transformasi aktor, konfigurasi tabrakan, modifikasi material instans, emisi partikel Niagara, dan penempatan lampu tersimpan secara permanen ke dalam disk penyimpanan proyek tanpa menyisakan status berkas kotor (\textit{dirty assets}).
 
 \section{Hasil Akhir}
+\par Pelaksanaan Praktikum Pengembangan Game Pertemuan 2 dengan topik \textit{Navigate Unreal Engine 5.8} telah berhasil diselesaikan secara tuntas dan komprehensif. Melalui serangkaian tahapan yang dijalankan pada level interaktif \texttt{Lvl\_IntroRoom}, diperoleh beberapa capaian dan pemahaman kompetensi teknis sebagai berikut:
+\begin{enumerate}[label=\alph*.]
+  \item \textbf{Penguasaan Antarmuka dan Ekosistem Kerja Engine:} Mahasiswa telah berhasil memahami struktur modular editor Unreal Engine versi 5.8.2, alur peluncuran melalui Epic Games Launcher, serta inisialisasi proyek berbasis template \textit{Intro To Unreal} dengan standar tata kelola direktori yang rapi.
+  \item \textbf{Kemahiran Navigasi Spasial 3D:} Keterampilan menavigasi ruang tiga dimensi pada \textit{3D Viewport} telah dikuasai dengan baik melalui integrasi kontrol kamera bebas (\textit{WASD + Right Mouse Button}) serta kontrol orbit objek, memungkinkan inspeksi adegan secara cepat dari berbagai sudut pandang.
+  \item \textbf{Presisi Manipulasi Aktor 3D:} Mahasiswa berhasil mempraktikkan tiga operasi transformasi fundamental (\textit{Move} [\texttt{W}], \textit{Rotate} [\texttt{E}], dan \textit{Scale} [\texttt{R}]) secara intuitif dengan \textit{3D Gizmo} maupun secara eksak dengan nilai parametrik numerik pada panel Details. Pemanfaatan fitur \textit{Grid Snapping} terbukti mempermudah penyusunan objek secara proporsional dan teratur.
+  \item \textbf{Manajemen Scene dan Interaksi Tabrakan:} Pemahaman struktur hierarki objek pada panel Outliner diwujudkan melalui identifikasi serta eliminasi aktor pembatas (\textit{Blocking Volume}). Di samping itu, konfigurasi properti tabrakan fisik (\textit{Collision Presets: BlockAll}) pada objek geometri lereng (\textit{Ramp}) berhasil diterapkan sehingga mencegah karakter menembus geometri lingkungan.
+  \item \textbf{Efisiensi Pipeline Visual Material dan Partikel:} Pembuatan dan kustomisasi \textit{Material Instance} (\texttt{MI\_Intro\_Colorway}) berhasil menghemat siklus kompilasi \textit{shader} dan memberikan respons visual real-time pada objek bola 3D. Selain itu, eksperimen parameter pada \textit{Niagara VFX System} (\texttt{NS\_DemoNiagara}) memberikan wawasan fundamental mengenai pembuatan efek visual interaktif berbasis partikel berdensitas tinggi.
+  \item \textbf{Pencahayaan Lokal dan Validasi Eksekusi Runtime:} Penempatan komponen \textit{Point Light} dengan pengaturan intensitas terkalibrasi di pengaturannya dan bayangan jatuh dinamis berhasil meningkatkan kedalaman estetika visual adegan. Seluruh sistem lingkungan tersebut berhasil divalidasi kinerjanya secara stabil dan bebas galat melalui mode \textit{Play-in-Editor} (PIE), diakhiri dengan penyimpanan level proyek secara utuh.
+\end{enumerate}
 
 \end{document}
