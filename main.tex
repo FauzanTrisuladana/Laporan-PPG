@@ -6,7 +6,7 @@
 \usepackage{graphicx}
 \usepackage{titling}
 \usepackage{titlesec}
-\usepackage[backend=biber,style=ieee]{biblatex}
+\usepackage{amsmath}
 
 % Package tambahan untuk layout dan formatting
 \usepackage{geometry}           % untuk margin
@@ -85,8 +85,8 @@
 }
 
 % Info dokumen
-\newcommand{\Pertemuan}{11}
-\newcommand{\Materi}{Navigate Unreal Engine 5.8}
+\newcommand{\Pertemuan}{3}
+\newcommand{\Materi}{Variable \& Condition}
 \title{Laporan Praktikum \\ Praktikum Pengembangan Game\\
 Pertemuan \Pertemuan\\
 \Materi}
@@ -99,22 +99,19 @@ Pertemuan \Pertemuan\\
 
 \begin{document}
 
-% Jika ingin daftar pustaka muncul meskipun belum ada entri di ref.bib,
-% tambahkan entri BibTeX ke file ref.bib terlebih dulu.
-
 % Title Page
-\begin{titlingpage} 
+\begin{titlingpage}
   \begin{center}
 
     \vspace{4cm}
-    \begin{Large} 
+    \begin{Large}
       \textbf{\thetitle} \\
     \end{Large}
     \vspace{2cm}
-    
-    \includegraphics[height=8cm]{resource/lambang ugm.png}\\ 
+
+    \includegraphics[height=8cm]{resource/lambang ugm.png}\\
     \vspace{2cm}
-    
+
     \textbf{Disusun oleh:}\\[0.8em]
     \begin{minipage}{0.8\textwidth}
       \raggedright
@@ -127,7 +124,7 @@ Pertemuan \Pertemuan\\
         \end{tabular}
       \end{large}
     \end{minipage}
-    
+
     \vspace{2cm}
     \begin{Large}
       \textbf{Program Studi D-IV Teknologi Rekayasa Perangkat Lunak} \\
@@ -137,7 +134,7 @@ Pertemuan \Pertemuan\\
       \textbf{Yogyakarta}\\
       \textbf{2026}\\
     \end{Large}
-    
+
   \end{center}
 \end{titlingpage}
 
@@ -155,7 +152,6 @@ Pertemuan \Pertemuan\\
   \renewcommand{\footrulewidth}{0pt}
   \fancyfoot[C]{\thepage}
 }
-
 
 % --- Styling Judul Daftar Isi, Gambar, dan Kode ---
 \renewcommand{\cfttoctitlefont}{\hfill\normalfont\LARGE\bfseries}
@@ -191,8 +187,7 @@ Pertemuan \Pertemuan\\
 % Daftar Gambar
 \listoffigures
 
-% --- Halaman Laporan Pertemuan (seperti contoh gambar) ---
-% Tidak pakai \chapter agar bisa menyatu dengan halaman sebelumnya.
+% --- Halaman Laporan Pertemuan ---
 \newpage
 \begin{center}
   \textbf{\LARGE Pertemuan \Pertemuan\\
@@ -200,27 +195,179 @@ Pertemuan \Pertemuan\\
 \end{center}
 
 \section{Tujuan Praktikum}
-\begin{enumerate}
-  \item Something
+\par Praktikum Pengembangan Game pada Pertemuan 3 ini berfokus pada penguasaan visual scripting Blueprint dalam ekosistem Unreal Engine 5.8, khususnya implementasi variabel dan kondisi logika. Adapun tujuan spesifik yang ingin dicapai melalui pelaksanaan praktikum ini adalah sebagai berikut:
+\begin{enumerate}[label=\arabic*.]
+  \item Mampu memahami arsitektur visual scripting Blueprint pada Unreal Engine 5.8 serta karakteristik siklus hidup eksekusi event fundamental, yaitu pemanggilan \textit{Event BeginPlay} pada inisialisasi awal dan pemanggilan berkelanjutan \textit{Event Tick} pada setiap \textit{frame}.
+  \item Mampu menyusun tata kelola direktori kerja proyek secara terstruktur serta menginisialisasi Blueprint Actor \texttt{BP\_Bos} yang dilengkapi dengan \textit{Cube StaticMeshComponent}.
+  \item Mampu menguasai deklarasi, penyesuaian tipe data, serta manajemen variabel primitif, khususnya \textit{Boolean} dan \textit{Float}, melalui panel \textit{My Blueprint} dan panel \textit{Details} untuk menyimpan \textit{dynamic state} objek di dalam memori game.
+  \item Mampu mengonfigurasi penangkapan input interaktif dari pemain dengan menghubungkan node \textit{Enable Input} ke fungsi \textit{Get Player Controller}.
+  \item Mampu merancang alur logika kondisional memanfaatkan node \textit{Branch} serta operator \textit{NOT Boolean} yang dipicu oleh input tombol \textit{Keyboard Event R}.
+  \item Mampu menyelesaikan tantangan tugas laporan praktikum dengan mengimplementasikan \textit{ping-pong scale animation} secara prosedural pada siklus \textit{Event Tick} menggunakan perbandingan relasional $\ge$ serta fungsi \textit{Set Actor Scale 3D}.
+  \item Mampu melakukan validasi fungsionalitas logika, observasi aliran eksekusi node secara langsung, dan pengujian interaktif dunia game secara stabil pada mode \textit{Play-in-Editor} (PIE).
 \end{enumerate}
 
-%contoh gambar dan kode
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.5\textwidth]{resource/contoh-gambar.png}
-%     \caption{Contoh Gambar}
-%     \label{fig:contoh-gambar}
-% \end{figure}
+\section{Dokumentasi Praktikum}
+\par Bagian dokumentasi ini menyajikan rangkaian tahapan implementasi teknis yang saya laksanakan selama sesi Praktikum Pengembangan Game Pertemuan 3 dengan topik pembahasan \textit{Variable \& Condition} pada Unreal Engine 5.8. Pembahasan disajikan secara sistematis mencakup inisialisasi lingkungan kerja proyek, perancangan aktor Blueprint, pemahaman komparatif siklus eksekusi \textit{Event BeginPlay} dan \textit{Event Tick}, pembuatan serta pengelolaan variabel bertipe primitif, perancangan struktur kendali kondisi \textit{Branch}, integrasi \textit{player input}, hingga penyelesaian tantangan tugas praktikum berupa modulasi transformasi \textit{scale} objek 3D secara prosedural.
 
-% \begin{lstlisting}[language=php, caption={Contoh Kode Python}, label={lst:contoh-kode}]
-% def hello_world():
-%     print("Hello, World!")
-% \end{lstlisting}
+\subsection{Inisialisasi Proyek dan Pembuatan Blueprint Actor}
+\par Tahapan awal pengembangan game pada modul ini diawali dengan pembuatan struktur proyek baru pada mesin Unreal Engine serta penyiapan direktori kerja terstandarisasi untuk menampung aset visual scripting.
 
-\section{Dokumetasi Praktikum}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/1.png}
+  \caption{Pembuatan Proyek Baru Unreal Engine 5.8 Menggunakan Template Third Person}
+  \label{fig:pembuatan-proyek-ue}
+\end{figure}
 
-\par Sesuai dengan tujuan praktikum, berikut adalah hasil yang diperoleh dan pembahasan terkait materi yang telah dipelajari.
+\par Berdasarkan Gambar \ref{fig:pembuatan-proyek-ue}, langkah pertama yang saya lakukan adalah menginisialisasi proyek baru melalui jendela \textit{Unreal Project Browser}. Pada panel kategori sebelah kiri, saya memilih opsi \textit{Games} lalu menentukan template \textit{Third Person} sebagai basis lingkungan pengembangan awal. Di sisi kanan, saya memastikan konfigurasi \textit{Project Defaults} menggunakan bahasa visual \textit{Blueprint}, menetapkan target platform ke \textit{Desktop}, serta menyetel preset kualitas grafis pada level \textit{Maximum}. Selanjutnya, saya menentukan lokasi penyimpanan direktori kerja dan memberi nama proyek sesuai format yaitu \texttt{Fauzan\_538699\_PPG} sesuai dengan konvensi penamaan yang diinstruksikan pada modul praktikum. Proses kemudian dilanjutkan dengan menekan tombol \textit{Create} untuk memuat lingkungan kerja editor.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/2.png}
+  \caption{Pembuatan Direktori Blueprints pada Content Drawer}
+  \label{fig:pembuatan-folder-blueprints}
+\end{figure}
+
+\par Setelah \textit{Workspace} level utama terbuka sempurna, langkah berikutnya yang saya kerjakan adalah mengorganisasi hierarki berkas proyek sebagaimana ditunjukkan pada Gambar \ref{fig:pembuatan-folder-blueprints}. Kemudian melalui panel \textit{Content Drawer} yang dapat diakses menggunakan tombol pintasan \texttt{Ctrl + Space}, saya menavigasi ke dalam direktori \texttt{All > Content}. Di lokasi ini, saya membuat subdirektori baru yang dinamai \texttt{Blueprints}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/3.png}
+  \caption{Pembuatan Blueprint Class Baru Bertipe Actor dengan Nama BP\_Bos}
+  \label{fig:pembuatan-blueprint-actor}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:pembuatan-blueprint-actor}, saya kemudian masuk ke dalam direktori \texttt{Content > Blueprints} untuk menciptakan suatu entitas objek baru. Saya mengeklik kanan pada area kosong peramban konten atau menekan tombol \textit{+ Add}, lalu memilih menu \textit{Blueprint Class}. Pada jendela \textit{Pick Parent Class}, saya memilih kelas \textit{Actor} sebagai fondasi dasar objek karena memiliki kapabilitas bawaan untuk ditempatkan atau di-\textit{spawn} secara dinamis ke dalam ruang 3D level permainan. Aset Blueprint yang baru terbentuk tersebut saya beri nama \texttt{BP\_Bos} sesuai dengan standarisasi penamaan aset dengan \textit{prefix} \texttt{BP\_}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/4.png}
+  \caption{Penambahan Komponen Geometri Visual Cube pada Blueprint BP\_Bos}
+  \label{fig:penambahan-komponen-cube}
+\end{figure}
+
+\par Langkah berlanjut dengan membuka jendela editor aset \texttt{BP\_Bos} melalui klik dua kali, sebagaimana diperlihatkan pada Gambar \ref{fig:penambahan-komponen-cube}. Di dalam tab editor, saya mengamati panel \textit{Components} yang berada di sisi kiri atas. Pada kondisi awal, kelas Actor hanya memiliki komponen akar bawaan bernama \textit{DefaultSceneRoot}. Agar objek memiliki representasi wujud visual pada ruang 3D, saya mengeklik tombol \textit{+ Add}, mengetikkan kata kunci pencarian \texttt{cu}, dan memilih komponen geometri \textit{Cube}. Aksi ini menyematkan instans \textit{Cube StaticMeshComponent} ke dalam hierarki komponen aktor, memungkinkan objek tersebut diproyeksikan dan diuji interaksinya di dalam level permainan.
+
+\subsection{Eksplorasi Alur Eksekusi: Event BeginPlay dan Event Tick}
+\par Setelah komponen visual terpasang, fokus praktikum saya arahkan pada tab \textit{Event Graph} untuk mempelajari siklus hidup eksekusi event mendasar yang disediakan oleh Unreal Engine.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/5.png}
+  \caption{Pemanggilan Node Print String melalui Menu Pencarian Kontekstual}
+  \label{fig:penambahan-node-print-string}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:penambahan-node-print-string}, saya beralih dari panel \textit{Viewport} ke tab grafis \textit{Event Graph} milik \texttt{BP\_Bos}. Pada kanvas kerja tersebut telah tersedia node dasar secara default, salah satunya adalah \textit{Event BeginPlay}. Saya menarik kabel eksekusi \textit{execution wire} berwarna putih dari pin keluaran \textit{Event BeginPlay} menuju area kosong, yang memunculkan menu kontekstual \textit{Executable Actions}. Pada kolom pencarian, saya memasukkan teks \texttt{Print} dan memilih fungsi pustaka pengembangan \textit{Print String}. Node ini berfungsi sebagai sarana diagnostik esensial untuk menampilkan pesan teks langsung ke \textit{screen output} maupun ke jendela \textit{Output Log}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/6.png}
+  \caption{Konfigurasi Logika Cetak Pesan pada Event BeginPlay dan Event Tick}
+  \label{fig:konfigurasi-beginplay-tick}
+\end{figure}
+
+\par Melanjutkan perancangan alur kerja diagnostik, Gambar \ref{fig:konfigurasi-beginplay-tick} memperlihatkan keterhubungan dua node eksekusi utama yang telah saya konfigurasikan. Node \textit{Event BeginPlay} saya sambungkan dengan node \textit{Print String} pertama di mana parameter nilai pin \textit{In String} saya ubah menjadi teks \texttt{"HALLO"}. Di bawahnya, node \textit{Event Tick} saya hubungkan ke node \textit{Print String} kedua dengan teks \texttt{"Tiap Frame"}. Konfigurasi komparatif ini saya rancang secara khusus untuk menguji perbedaan mendasar antara kedua siklus eksekusi, di mana \textit{Event BeginPlay} diinisiasi tepat satu kali ketika aktor memasuki permainan, sementara \textit{Event Tick} dipanggil secara terus-menerus pada setiap \textit{per-frame update}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/7.png}
+  \caption{Validasi Perbedaan Frekuensi Eksekusi Event pada Mode Play-in-Editor (PIE)}
+  \label{fig:pengujian-pie-tick}
+\end{figure}
+
+\par Setelah melakukan kompilasi dan penyimpanan Blueprint, saya meletakkan instans \texttt{BP\_Bos} ke dalam level dan menguji perilaku eksekusinya secara nyata menggunakan mode \textit{Play-in-Editor} (PIE) dengan menekan tombol pintasan \texttt{Alt + P}, seperti ditunjukkan pada Gambar \ref{fig:pengujian-pie-tick}. Hasil pengamatan visual secara langsung memvalidasi hipotesis kerja: di sudut kiri atas layar muncul luapan pesan teks berwarna biru bertuliskan \texttt{"Tiap Frame"} yang terus-menerus dicetak dengan frekuensi sangat tinggi mengikuti \textit{frame rate}. Sementara itu, pesan \texttt{"HALLO"} hanya tercetak satu kali di awal sesi permainan dan dengan cepat tergeser ke atas oleh aliran pesan \textit{Event Tick}. Pengujian ini memberikan pemahaman konkret mengenai alokasi beban pemrosesan pada logika game.
+
+\subsection{Implementasi Variabel Boolean dan Percabangan Logika (Condition)}
+\par Pada tahapan berikutnya, saya mengimplementasikan konsep \textit{state management} memanfaatkan variabel serta kendali alur eksekusi percabangan kondisi menggunakan node \textit{Branch}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/8.png}
+  \caption{Pembuatan Variabel Baru Bertipe Data Boolean pada Panel My Blueprint}
+  \label{fig:pembuatan-variabel-boolean}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:pembuatan-variabel-boolean}, saya kembali membuka editor \texttt{BP\_Bos} untuk menambahkan variabel penampung status. Pada panel \textit{My Blueprint} di sisi kiri, saya menuju kategori \textit{Variables} dan mengeklik tombol ikon \textit{+ Add}. Variabel baru yang terbentuk secara otomatis awalnya bernama \textit{NewVar}. Pada kolom tersebut, saya mengubah identitas variabel menjadi \texttt{isActive} dan memastikan tipe datanya terpilih sebagai \textit{Boolean}. Karakteristik tipe data boolean dalam Unreal Engine direpresentasikan secara visual melalui kode warna merah marun, yang mengindikasikan bahwa nilai yang dapat ditampung terbatas pada kondisi biner, yaitu \textit{True} atau \textit{False}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/9.png}
+  \caption{Konfigurasi Properti dan Rincian Variabel isActive pada Panel Details}
+  \label{fig:inspeksi-detail-variabel}
+\end{figure}
+
+\par Rincian spesifikasi dari variabel yang baru dibuat saya periksa lebih lanjut melalui panel \textit{Details} di sisi kanan editor, sebagaimana tampak pada Gambar \ref{fig:inspeksi-detail-variabel}. Pada panel ini, parameter \textit{Variable Name} terkonfirmasi sebagai \texttt{isActive} dan \textit{Variable Type} berstatus \textit{Boolean}. Sistem memberikan notifikasi pada bagian \textit{Default Value} berupa instruksi \textit{"Please compile the blueprint"} yang menandakan bahwa sebelum nilai default variabel dapat ditentukan atau diubah, berkas Blueprint wajib melalui proses kompilasi terlebih dahulu agar struktur memori variabel terdaftar dengan benar ke dalam kelas.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/10.png}
+  \caption{Arsitektur Logika Percabangan Branch, Pengaktifan Input, dan Pembalikan Nilai Boolean}
+  \label{fig:logika-branch-input-toggle}
+\end{figure}
+
+\par Pada Gambar \ref{fig:logika-branch-input-toggle}, saya membangun arsitektur visual scripting yang memadukan input interaktif pengguna dengan percabangan logika. Alur kerja disusun melalui tiga rangkaian node utama:
+\begin{enumerate}
+  \item \textbf{Aktivasi Input Pemain:} Node \textit{Event BeginPlay} dihubungkan ke node \textit{Enable Input} dengan target \texttt{self}. Masukan \textit{Player Controller} diperoleh dari pemanggilan fungsi \textit{Get Player Controller} pada \textit{Player Index 0}, memastikan bahwa aktor \texttt{BP\_Bos} memiliki hak akses untuk menangkap sinyal masukan dari perangkat keras pengguna.
+  \item \textbf{Pengujian Kondisi Berkelanjutan:} Node \textit{Event Tick} dialirkan menuju node percabangan \textit{Branch}. Pin masukan \textit{Condition} pada node \textit{Branch} dihubungkan dengan variabel getter \texttt{isActive}. Apabila kondisi bernilai \textit{True}, alur eksekusi memicu node \textit{Print String} dengan teks \texttt{"True LEEE"}. Sebaliknya, apabila kondisi bernilai \textit{False}, alur eksekusi memicu node \textit{Print String} dengan teks \texttt{"False LEEEEEE"}.
+  \item \textbf{Mekanisme Pembalik Status (Toggle):} Untuk memanipulasi nilai variabel secara dinamis saat permainan berlangsung, saya menambahkan node masukan tombol \textit{Keyboard Event R}. Ketika tombol \texttt{R} berada pada kondisi \textit{Pressed}, sinyal dialirkan ke node setter \textit{SET isActive}. Nilai masukan baru diperoleh dari variabel getter \texttt{isActive} yang dilewatkan terlebih dahulu ke operator logika \textit{NOT Boolean}, sehingga setiap penekanan tombol akan melakukan \textit{toggle} status boolean dari aktif menjadi nonaktif atau sebaliknya secara presisi.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/11.png}
+  \caption{Pengujian Dinamis Pergantian State Logika via Input Tombol R pada Mode PIE}
+  \label{fig:pengujian-toggle-pie}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:pengujian-toggle-pie}, saya menjalankan validasi fungsionalitas logika di atas melalui simulasi interaktif mode \textit{Play-in-Editor}. Pada detik-detik awal eksekusi, layar permainan secara stabil menampilkan aliran pesan biru bertuliskan \texttt{"False LEEEEE"} karena nilai inisial dari variabel \texttt{isActive} bernilai \textit{false}. Kemudian, ketika saya menekan tombol \texttt{R} pada keyboard, operator logika \textit{NOT} secara instan membalikkan nilai variabel menjadi \textit{true}. Dampaknya terlihat secara nyata pada layar, di mana aliran pesan berganti secara mulus menjadi deretan teks \texttt{"True LEEE"}. Pengujian ini membuktikan bahwa mekanisme interupsi input, manipulasi state variabel, dan kondisi \textit{Branch} berjalan dengan sempurna tanpa adanya galat runtime.
+
+\subsection{Pengerjaan Tugas Praktikum: Penskalaan Objek Dinamis Berbasis Kondisi}
+\par Bagian akhir dari sesi praktikum ini merupakan pengerjaan tantangan tugas modul, di mana saya diminta merancang logika otomatisasi transformasi objek pada ruang 3D menggunakan kombinasi \textit{Event Tick}, variabel skala numerik, perbandingan logika, dan manipulasi vektor.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/12.png}
+  \caption{Aktor BP\_Bos pada Level Arena dalam Fase Pengecilan Skala Menuju Nilai Minimum}
+  \label{fig:tugas-skala-minimum}
+\end{figure}
+
+\par Gambar \ref{fig:tugas-skala-minimum} mendokumentasikan implementasi tugas praktikum saat dijalankan pada level uji coba. Aktor kubus \texttt{BP\_Bos} yang diletakkan di depan karakter pemain diprogram untuk menjalankan \textit{ping-pong scale animation} secara prosedural. Pada tangkapan layar ini, terlihat objek kubus sedang berada pada dimensi yang sangat kecil mendekati nilai batas bawahnya yaitu \texttt{Scale Target = 0.1}. Pengurangan dimensi ini berlangsung secara bertahap dan mulus pada setiap siklus \textit{Event Tick}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/13.png}
+  \caption{Transformasi Aktor BP\_Bos Membesar secara Bertahap Menuju Batas Maksimum}
+  \label{fig:tugas-skala-maksimum}
+\end{figure}
+
+\par Melanjutkan observasi simulasi, Gambar \ref{fig:tugas-skala-maksimum} memperlihatkan fase berikutnya dari siklus animasi penskalaan. Ketika dimensi kubus telah menyentuh batas minimum yang ditentukan, ambang batas kondisi secara otomatis beralih memicu penambahan skala. Objek kubus terlihat bertumbuh membesar kembali secara proporsional menuju nilai skala aslinya, yaitu dimensi \texttt{1.0}. Pergerakan ekspansi dan reduksi dimensi geometri 3D ini terus berulang secara dinamis tanpa henti selama permainan disimulasikan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/14.png}
+  \caption{Arsitektur Visual Scripting BP\_Bos untuk Penskalaan Dinamis dalam Mode Simulasi Aktif}
+  \label{fig:tugas-blueprint-simulasi}
+\end{figure}
+
+\par Seluruh arsitektur Blueprint yang mengendalikan animasi penskalaan prosedural tersebut saya tampilkan secara transparan pada Gambar \ref{fig:tugas-blueprint-simulasi}. Tangkapan layar ini diambil saat status editor berada dalam mode \textit{Simulating}, ditandai dengan label \textit{SIMULATING} pada kanvas grafis serta aliran \textit{wire execution pulse} yang berpendar oranye aktif. Rincian arsitektur teknis yang dirancang adalah sebagai berikut:
+\begin{enumerate}
+  \item \textbf{Inisialisasi Variabel Target:} Saya menambahkan variabel baru bernama \texttt{scaleTarget} dengan tipe data \textit{Float} (warna hijau) yang menyimpan nilai ambang batas skala yang dituju.
+  \item \textbf{Evaluasi Kondisi Skala Komponen:} Pada setiap detak komputasi \textit{Event Tick}, saya memanggil fungsi \textit{Get Actor Scale 3D} untuk membaca dimensi transformasional aktor saat ini. Nilai komponen sumbu $X$ (\textit{Return Value X}) diekstraksi dan dibandingkan dengan variabel \texttt{scaleTarget} menggunakan operator pembanding \textit{Greater Than or Equal To} ($\ge$).
+  \item \textbf{Cabang True (Pengecilan Dimensi):} Jika skala aktor saat ini bernilai $\ge$ \texttt{scaleTarget}, maka node \textit{Branch} mengeksekusi jalur \textit{True}. Pada jalur ini, nilai variabel \texttt{scaleTarget} disetel ulang menjadi \texttt{0.1}. Selanjutnya, fungsi \textit{Set Actor Scale 3D} dipanggil dengan nilai skala baru yang dihasilkan dari operasi \textit{Subtract Vector} sebesar \texttt{0.01} terhadap nilai skala aktor saat ini. Aksi ini menghasilkan efek pengerutan kubus secara bertahap.
+  \item \textbf{Cabang False (Pembesaran Dimensi):} Sebaliknya, apabila skala aktor bernilai lebih kecil dari target, node \textit{Branch} mengalihkan eksekusi ke jalur \textit{False}. Jalur ini menetapkan kembali \texttt{scaleTarget} bernilai \texttt{1.0} dan memicu fungsi \textit{Set Actor Scale 3D} dengan masukan nilai dari operasi \textit{Add Vector} sebesar \texttt{0.01}. Aksi ini menghasilkan efek pemuaian kubus kembali ke ukuran semula.
+\end{enumerate}
+\par Dengan rancangan arsitektur visual scripting yang memanfaatkan pembacaan skala real-time serta peralihan nilai variabel target secara kondisional, mekanisme animasi penskalaan objek 3D tersebut berhasil bekerja secara mandiri, stabil, dan sepenuhnya prosedural.
 
 \section{Hasil Akhir}
+\par Berdasarkan keseluruhan tahapan praktikum yang telah saya laksanakan pada modul Pertemuan 3 dengan materi \textit{Variable \& Condition}, dapat disimpulkan bahwa implementasi logika pemrograman visual berbasis Blueprint pada Unreal Engine 5.8 telah berhasil diselesaikan dengan hasil yang sangat memuaskan. Rincian sintesis pemahaman teknis dan capaian kompetensi yang saya peroleh meliputi:
+\begin{enumerate}[label=\alph*.]
+  \item \textbf{Pemahaman Siklus Hidup dan Alur Eksekusi Event:} Saya telah menguasai perbedaan fungsional esensial antara \textit{Event BeginPlay} yang dieksekusi secara diskret satu kali pada inisialisasi awal objek serta \textit{Event Tick} yang dieksekusi secara kontinu pada setiap pembaruan bingkai melalui \textit{per-frame execution}. Pemahaman ini menjadi dasar penting dalam mengoptimalkan performa komputasi logika dalam pengembangan game.
+  \item \textbf{Penguasaan Variabel dan Manajemen State Dinamis:} Saya mampu membuat, mendeklarasikan, serta mengonfigurasi tipe data fundamental Unreal Engine pada panel \textit{My Blueprint} dan \textit{Details}, mencakup tipe data \textit{Boolean} berkode warna merah untuk pengendalian status biner serta \textit{Float} berkode warna hijau untuk representasi nilai numerik presisi tinggi.
+  \item \textbf{Integrasi Sistem Masukan Pemain (Player Input Mapping):} Saya berhasil menerapkan node aktivasi masukan \textit{Enable Input} yang dikaitkan dengan \textit{Player Controller Index 0}, memungkinkan aktor Blueprint independen untuk merespons sinyal perangkat keras periferal secara langsung melalui node \textit{Keyboard Event}.
+  \item \textbf{Implementasi Struktur Kontrol Percabangan dan Aljabar Boolean:} Logika kondisional berhasil saya bangun menggunakan node \textit{Branch} untuk memvalidasi syarat evaluasi runtime. Pemanfaatan operator gerbang logika \textit{NOT Boolean} terbukti efektif dalam merealisasikan mekanisme \textit{toggle state} yang responsif terhadap input tombol \texttt{R}.
+  \item \textbf{Penyelesaian Tugas Penskalaan Prosedural (Ping-Pong Animation):} Tantangan tugas praktikum berhasil saya pecahkan secara elegan melalui kombinasi node pembacaan dimensi transformasional \textit{Get Actor Scale 3D}, operasi aritmetika vektor \textit{Vector Addition} dan \textit{Vector Subtraction}, operator relasional $\ge$, serta pembaruan skala visual \textit{Set Actor Scale 3D}. Mekanisme ini mampu memodulasi ukuran kubus bolak-balik antara ambang batas \texttt{0.1} dan \texttt{1.0} secara mulus tanpa cacat animasi.
+  \item \textbf{Kemampuan Diagnostik dan Debugging Visual Scripting:} Melalui pemanfaatan fungsi diagnostik \textit{Print String} dan inspeksi visual alur \textit{wire execution pulse} pada mode simulasi editor, saya mampu menganalisis alur data dan memverifikasi kebenaran algoritma secara langsung tanpa terjadi kebocoran memori atau galat kompilasi.
+\end{enumerate}
 
 \end{document}
