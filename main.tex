@@ -85,8 +85,8 @@
 }
 
 % Info dokumen
-\newcommand{\Pertemuan}{11}
-\newcommand{\Materi}{Navigate Unreal Engine 5.8}
+\newcommand{\Pertemuan}{5}
+\newcommand{\Materi}{Game Instance \& Save Game}
 \title{Laporan Praktikum \\ Praktikum Pengembangan Game\\
 Pertemuan \Pertemuan\\
 \Materi}
@@ -99,22 +99,19 @@ Pertemuan \Pertemuan\\
 
 \begin{document}
 
-% Jika ingin daftar pustaka muncul meskipun belum ada entri di ref.bib,
-% tambahkan entri BibTeX ke file ref.bib terlebih dulu.
-
 % Title Page
-\begin{titlingpage} 
+\begin{titlingpage}
   \begin{center}
 
     \vspace{4cm}
-    \begin{Large} 
+    \begin{Large}
       \textbf{\thetitle} \\
     \end{Large}
     \vspace{2cm}
-    
-    \includegraphics[height=8cm]{resource/lambang ugm.png}\\ 
+
+    \includegraphics[height=8cm]{resource/lambang ugm.png}\\
     \vspace{2cm}
-    
+
     \textbf{Disusun oleh:}\\[0.8em]
     \begin{minipage}{0.8\textwidth}
       \raggedright
@@ -127,7 +124,7 @@ Pertemuan \Pertemuan\\
         \end{tabular}
       \end{large}
     \end{minipage}
-    
+
     \vspace{2cm}
     \begin{Large}
       \textbf{Program Studi D-IV Teknologi Rekayasa Perangkat Lunak} \\
@@ -137,7 +134,7 @@ Pertemuan \Pertemuan\\
       \textbf{Yogyakarta}\\
       \textbf{2026}\\
     \end{Large}
-    
+
   \end{center}
 \end{titlingpage}
 
@@ -155,7 +152,6 @@ Pertemuan \Pertemuan\\
   \renewcommand{\footrulewidth}{0pt}
   \fancyfoot[C]{\thepage}
 }
-
 
 % --- Styling Judul Daftar Isi, Gambar, dan Kode ---
 \renewcommand{\cfttoctitlefont}{\hfill\normalfont\LARGE\bfseries}
@@ -180,6 +176,7 @@ Pertemuan \Pertemuan\\
 \renewcommand{\contentsname}{\centering Daftar Isi}
 \renewcommand{\listfigurename}{\centering Daftar Gambar}
 \renewcommand{\lstlistlistingname}{\centering Daftar Kode}
+\renewcommand{\figurename}{Gambar}
 
 % --- Gaya Daftar Gambar dan Daftar Kode ---
 \renewcommand{\cftloftitlefont}{\hfill\normalfont\LARGE\bfseries}
@@ -191,8 +188,7 @@ Pertemuan \Pertemuan\\
 % Daftar Gambar
 \listoffigures
 
-% --- Halaman Laporan Pertemuan (seperti contoh gambar) ---
-% Tidak pakai \chapter agar bisa menyatu dengan halaman sebelumnya.
+% --- Halaman Laporan Pertemuan ---
 \newpage
 \begin{center}
   \textbf{\LARGE Pertemuan \Pertemuan\\
@@ -201,26 +197,429 @@ Pertemuan \Pertemuan\\
 
 \section{Tujuan Praktikum}
 \begin{enumerate}
-  \item Something
+  \item Mampu memahami konsep persistensi data dan manajemen status permainan pada Unreal Engine.
+  \item Mampu membuat dan mengimplementasikan \textit{Game Instance} sebagai pengelola data global yang bertahan lintas level permainan.
+  \item Mampu merancang dan mengonfigurasi sistem \textit{Save Game} untuk menyimpan serta memuat progres permainan ke media penyimpanan lokal.
+  \item Mampu menerapkan \textit{Blueprint Interface} untuk komunikasi dan pertukaran data antar-aktor secara modular dan \textit{decoupled}.
+  \item Mampu mengintegrasikan mekanisme \textit{checkpoint} untuk menyimpan dan memulihkan posisi transformasi karakter pemain.
+  \item Mampu menguji dan memvalidasi keberhasilan persistensi data permainan secara menyeluruh melalui simulasi \textit{Play-in-Editor} (PIE).
 \end{enumerate}
 
-%contoh gambar dan kode
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.5\textwidth]{resource/contoh-gambar.png}
-%     \caption{Contoh Gambar}
-%     \label{fig:contoh-gambar}
-% \end{figure}
+\section{Dokumentasi Praktikum}
 
-% \begin{lstlisting}[language=php, caption={Contoh Kode Python}, label={lst:contoh-kode}]
-% def hello_world():
-%     print("Hello, World!")
-% \end{lstlisting}
+\par Bagian dokumentasi ini menyajikan rangkaian tahapan teknis yang saya laksanakan selama sesi Praktikum Pengembangan Game Pertemuan 5 dengan topik \textit{Game Instance \& Save Game} pada Unreal Engine 5. Pembahasan mencakup perancangan \textit{Structure} \texttt{S\_PlayerState} dan kelas \texttt{BP\_SaveGame}, konfigurasi kelas pengelola persisten \texttt{BP\_GameInstance} pada \textit{Project Settings}, implementasi komunikasi modular melalui \textit{Blueprint Interface} \texttt{BPI\_SaveData}, penyusunan alur komputasi penyimpanan dan pemuatan data di memori serta disk lokal, integrasi restorasi posisi karakter pada \texttt{BP\_ThirdPersonCharacter}, pembuatan aktor pemicu \texttt{BP\_CheckPoint}, hingga pengujian simulasi \textit{Play-in-Editor} (PIE) untuk memvalidasi keberhasilan persistensi posisi pemain antarsesi.
 
-\section{Dokumetasi Praktikum}
+\subsection{Perancangan Structure dan BP\_SaveGame}
 
-\par Sesuai dengan tujuan praktikum, berikut adalah hasil yang diperoleh dan pembahasan terkait materi yang telah dipelajari.
+\par Pada tahapan awal praktikum, fokus pengembangan saya arahkan pada penyusunan fondasi arsitektur data yang akan disimpan ke dalam media penyimpanan disk. Dalam Unreal Engine, proses serialisasi data ke berkas lokal dengan format \texttt{.sav} dikelola melalui kelas khusus bernama \textit{SaveGame}. Oleh karena itu, saya mengawali langkah praktikum dengan menciptakan kelas dasar simpanan tersebut serta menyusun aset \textit{Structure} untuk merangkum atribut \textit{Transform} pemain secara terstruktur.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/1.png}
+  \caption{Pemilihan Parent Class SaveGame pada Dialog Pick Parent Class}
+  \label{fig:savegame-pick-parent}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:savegame-pick-parent}, langkah awal yang saya lakukan adalah membuat aset \textit{Blueprint Class} baru melalui \textit{Content Drawer}. Pada jendela dialog \textit{Pick Parent Class}, saya memperluas kategori \textit{All Classes} dan mengetikkan kata kunci pencarian \texttt{save} pada bilah pencarian. Dari hasil daftar kelas yang ditampilkan, saya memilih kelas bawaan mesin \textit{SaveGame} sebagai \textit{parent class}. Pemilihan kelas ini sangat esensial karena mesin Unreal Engine telah menyediakan fungsi bawaan serialisasi data tingkat rendah pada kelas \textit{SaveGame} untuk menulis dan membaca status variabel secara efisien ke media penyimpanan fisik.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/2.png}
+  \caption{Pembuatan Aset BP\_SaveGame pada Content Drawer}
+  \label{fig:savegame-asset-created}
+\end{figure}
+
+\par Setelah memilih \textit{parent class} tersebut, Gambar \ref{fig:savegame-asset-created} memperlihatkan aset baru yang berhasil terbentuk di direktori \texttt{Content > Blueprints}. Saya memberi nama aset tersebut \texttt{BP\_SaveGame} dengan mengadopsi standar penamaan resmi Unreal Engine, yaitu menyematkan prefiks \texttt{BP\_} untuk penamaan \textit{Blueprint}. Berkas ini berfungsi sebagai wadah penampung seluruh variabel status permainan yang ingin saya pertahankan saat pemain menutup permainan atau berpindah sesi level.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/3.png}
+  \caption{Pembuatan Aset Structure melalui Menu Konteks Blueprint}
+  \label{fig:struct-create-menu}
+\end{figure}
+
+\par Untuk menyatukan berbagai atribut pemain menjadi satu kesatuan data yang rapi dan mudah dioperasikan, saya membuat aset \textit{Structure} kustom. Sebagaimana tampak pada Gambar \ref{fig:struct-create-menu}, saya mengeklik kanan pada area kosong \textit{Content Drawer}, lalu mengarahkan kursor ke menu flyout \textit{Blueprint} dan memilih opsi \textit{Structure}. Pemanfaatan \textit{Structure} ini memungkinkan pengelompokan variabel heterogen ke dalam satu tipe data majemuk, sehingga menyederhanakan arsitektur aliran data pada \textit{Event Graph} tanpa perlu menghubungkan banyak pin data terpisah.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/4.png}
+  \caption{Aset Structure S\_PlayerState pada Direktori Proyek}
+  \label{fig:struct-playerstate-created}
+\end{figure}
+
+\par Sebagaimana diperlihatkan pada Gambar \ref{fig:struct-playerstate-created}, berkas \textit{Structure} yang baru dibuat tersebut saya beri nama \texttt{S\_PlayerState} dengan menggunakan prefiks standar \texttt{S\_} untuk penamaan aset. Aset ini secara khusus dialokasikan untuk mendefinisikan informasi status pemain yang relevan dengan mekanisme penyimpanan posisi pada praktikum pertemuan ini.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/5.png}
+  \caption{Konfigurasi Tipe Data Variabel Menjadi Transform pada S\_PlayerState}
+  \label{fig:struct-type-transform}
+\end{figure}
+
+\par Pada tahap berikutnya, saya membuka editor \textit{Structure} \texttt{S\_PlayerState} untuk mengonfigurasi variabel. Mengacu pada Gambar \ref{fig:struct-type-transform}, saya mengeklik dua kali berkas \texttt{S\_PlayerState}. Pada baris variabel yang tersedia, saya membuka menu \textit{drop-down} pemilihan tipe data yang bernilai awal \textit{Boolean}. Kemudian, saya memilih tipe data \textit{Transform} yang menyimpan komponen spasial \textit{Location}, \textit{Rotation}, dan \textit{Scale}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/6.png}
+  \caption{Deklarasi Variabel Transform pada Structure S\_PlayerState}
+  \label{fig:struct-variable-declared}
+\end{figure}
+
+\par Sesuai dengan Gambar \ref{fig:struct-variable-declared}, saya menetapkan nama variabel tersebut menjadi \texttt{Transform} dengan tipe data yang telah terkunci pada \textit{Transform} berwarna oranye. Setelah konfigurasi variabel ini selesai, saya menekan ikon \textit{Save} di sudut kiri atas jendela editor untuk memastikan definisi \textit{Structure} tersimpan sempurna ke dalam memori proyek permainan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/7.png}
+  \caption{Penambahan Variabel S\_PlayerState pada BP\_SaveGame}
+  \label{fig:savegame-variable-playerstate}
+\end{figure}
+
+\par Melanjutkan integrasi data, Gambar \ref{fig:savegame-variable-playerstate} memperlihatkan langkah saya saat membuka berkas \texttt{BP\_SaveGame} pada editor \textit{Blueprint}. Di panel \textit{My Blueprint} pada kategori \textit{Variables}, saya mengeklik tombol \textit{+ Add} untuk menambahkan variabel baru bernama \texttt{S\_PlayerState}. Pada panel \textit{Details} di sisi kanan layar, saya mengubah tipe datanya menjadi \textit{Structure} \texttt{S\_PlayerState} yang telah dibuat sebelumnya. Dengan deklarasi ini, kelas \texttt{BP\_SaveGame} kini memiliki kapasitas untuk menyimpan seluruh informasi spasial pemain setiap kali proses serialisasi dipicu.
+
+\subsection{Konfigurasi Blueprint Game Instance dan Project Settings}
+
+\par Komponen penting berikutnya dalam arsitektur persistensi Unreal Engine adalah \textit{GameInstance}. Berbeda dengan aktor di level atau kelas \textit{GameMode} yang akan direset dan dihancurkan setiap kali transisi level berlangsung, objek \textit{GameInstance} diinisiasi satu kali saat aplikasi game pertama kali diluncurkan dan terus hidup di memori RAM hingga proses permainan ditutup secara penuh. Oleh karena itu, saya mengimplementasikan \textit{GameInstance} kustom sebagai jembatan perantara antara aktor aktif di dalam level dengan berkas simpanan fisik di disk.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/8.png}
+  \caption{Pemilihan Parent Class GameInstance pada Dialog Pick Parent Class}
+  \label{fig:gameinstance-pick-parent}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:gameinstance-pick-parent}, saya kembali membuka jendela dialog \textit{Pick Parent Class} melalui \textit{Content Drawer}. Pada bilah pencarian \textit{parent class}, saya mengetikkan kata kunci \texttt{game ins} dan memilih kelas \textit{GameInstance}. Kelas dasar ini menyediakan fungsionalitas penanganan siklus hidup tingkat aplikasi yang melampaui siklus hidup \textit{level} permainan, menjadikannya lokasi ideal untuk menaruh data global sesi permainan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/9.png}
+  \caption{Aset BP\_GameInstance pada Content Drawer}
+  \label{fig:gameinstance-asset-created}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:gameinstance-asset-created}, berkas \texttt{BP\_GameInstance} terbentuk pada direktori \texttt{Content > Blueprints}. Kelas ini mengelola logika penyimpanan dan pemuatan data yang dapat diakses oleh seluruh aktor memanfaatkan node \texttt{Get Game Instance}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/10.png}
+  \caption{Konfigurasi Game Instance Class pada Project Settings Maps \& Modes}
+  \label{fig:project-settings-gameinstance}
+\end{figure}
+
+\par Agar mesin Unreal Engine mengenali dan menjalankan kelas \texttt{BP\_GameInstance} saat simulasi dimulai, saya harus mendaftarkannya pada konfigurasi tingkat proyek. Sebagaimana ditunjukkan pada Gambar \ref{fig:project-settings-gameinstance}, saya membuka menu \textit{Edit > Project Settings}, lalu menavigasi ke bagian \textit{Project > Maps \& Modes}. Pada kategori \textit{Game Instance} di bagian bawah panel konfigurasi, saya mengubah properti \textit{Game Instance Class} dari kelas bawaan menjadi \texttt{BP\_GameInstance}. Perubahan ini tersimpan secara otomatis pada berkas konfigurasi \texttt{DefaultEngine.ini}, sehingga mesin akan selalu menginstansiasi kelas ini setiap kali sesi permainan dieksekusi.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/11.png}
+  \caption{Deklarasi Variabel SaveGame dan SlotName pada BP\_GameInstance}
+  \label{fig:gameinstance-variables}
+\end{figure}
+
+\par Langkah berikutnya yang saya lakukan adalah mendeklarasikan variabel pendukung di dalam \texttt{BP\_GameInstance} sebagaimana terlihat pada Gambar \ref{fig:gameinstance-variables}. Melalui panel \textit{My Blueprint}, saya menambahkan dua variabel utama:
+\begin{enumerate}
+  \item \texttt{SaveGame}: Variabel dengan tipe objek referensi \texttt{BP\_SaveGame}, berfungsi menampung instansi objek simpanan yang sedang aktif dimuat di dalam memori RAM.
+  \item \texttt{SlotName}: Variabel bertipe data teks \textit{String}, berfungsi menyimpan nama slot berkas simpanan yang menjadi pengenal unik saat berkas dituliskan ke media penyimpanan disk.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/12.png}
+  \caption{Konfigurasi Nilai Default SlotName pada Panel Details}
+  \label{fig:gameinstance-slotname-default}
+\end{figure}
+
+\par Sesuai dengan instruksi modul praktikum, Gambar \ref{fig:gameinstance-slotname-default} memperlihatkan proses konfigurasi nilai bawaan pada panel \textit{Details} setelah saya menekan tombol \textit{Compile}. Pada kolom \textit{Default Value} untuk variabel \texttt{SlotName}, saya mengisi nilai \texttt{1}. Nilai string ini bertindak sebagai nama pengenal \textit{save slot} sehingga berkas simpanan fisik yang dihasilkan pada direktori lokal sistem akan memiliki nama \texttt{1.sav}.
+
+\subsection{Perancangan Blueprint Interface BPI\_SaveData}
+
+\par Untuk membangun komunikasi yang bersih dan modular antara berbagai aktor dalam permainan dengan \textit{GameInstance}, saya menerapkan pola perancangan menggunakan \textit{Blueprint Interface}. Penerapan ini menghilangkan kebutuhan \textit{hard casting} ke kelas \texttt{BP\_GameInstance}, sehingga mencegah terjadinya \textit{circular dependency} dan menjaga performa kompilasi proyek tetap optimal.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/13.png}
+  \caption{Pembuatan Aset Blueprint Interface melalui Menu Konteks}
+  \label{fig:bpi-create-menu}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:bpi-create-menu}, saya mengeklik kanan pada area kerja \textit{Content Drawer} di dalam folder \texttt{Content > Blueprints}, lalu mengarahkan kursor ke menu \textit{Blueprint} dan memilih opsi \textit{Blueprint Interface}. Berbeda dengan kelas Blueprint biasa, \textit{Blueprint Interface} hanya memuat deklarasi nama fungsi beserta parameter \textit{Inputs} dan \textit{Outputs} tanpa menyertakan blok kode implementasi di dalamnya.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/14.png}
+  \caption{Aset BPI\_SaveData pada Content Drawer}
+  \label{fig:bpi-savedata-created}
+\end{figure}
+
+\par Gambar \ref{fig:bpi-savedata-created} menampilkan aset \textit{Blueprint Interface} baru yang berhasil dibuat dan saya beri nama \texttt{BPI\_SaveData} dengan prefiks standar \texttt{BPI\_}. Aset ini disiapkan sebagai kontrak komunikasi universal untuk seluruh operasi penyimpanan dan pengambilan status permainan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/15.png}
+  \caption{Konfigurasi Parameter Input Fungsi LoadGameData pada BPI\_SaveData}
+  \label{fig:bpi-loadgamedata}
+\end{figure}
+
+\par Setelah membuka berkas \texttt{BPI\_SaveData}, saya menyusun empat buah fungsi \textit{Interface} sesuai dengan spesifikasi modul praktikum. Pada Gambar \ref{fig:bpi-loadgamedata}, saya membuat fungsi pertama bernama \texttt{LoadGameData}. Melalui panel \textit{Details} pada kategori \textit{Inputs}, saya menambahkan satu parameter input bernama \texttt{Async} bertipe data \textit{Boolean}. Parameter ini berfungsi sebagai sakelar penentu apakah operasi pemuatan data dari disk akan dilakukan secara asinkron pada \textit{background thread} atau secara sinkron pada \textit{main game thread}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/16.png}
+  \caption{Konfigurasi Parameter Input Fungsi SaveGameData pada BPI\_SaveData}
+  \label{fig:bpi-savegamedata}
+\end{figure}
+
+\par Melanjutkan pembuatan fungsi kedua, Gambar \ref{fig:bpi-savegamedata} memperlihatkan fungsi \texttt{SaveGameData}. Serupa dengan fungsi pemuatan, fungsi ini juga saya konfigurasikan dengan parameter input tunggal berupa \texttt{Async} bertipe data \textit{Boolean}. Parameter ini digunakan untuk menentukan mode penulisan berkas simpanan ke penyimpanan disk lokal.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/17.png}
+  \caption{Konfigurasi Parameter Output Fungsi GetGameData pada BPI\_SaveData}
+  \label{fig:bpi-getgamedata}
+\end{figure}
+
+\par Gambar \ref{fig:bpi-getgamedata} memperlihatkan fungsi ketiga, yaitu \texttt{GetGameData}. Fungsi ini berperan sebagai fungsi \textit{getter} murni. Pada panel \textit{Details} bagian \textit{Outputs}, saya menambahkan parameter \texttt{S\_PlayerState} dengan tipe data \textit{Structure} \texttt{S\_PlayerState}. Melalui fungsi ini, seluruh aktor dalam level permainan dapat memperoleh data transformasi pemain tanpa harus mengetahui detail implementasi internal \textit{GameInstance}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/18.png}
+  \caption{Konfigurasi Parameter Input Fungsi SavePlayer pada BPI\_SaveData}
+  \label{fig:bpi-saveplayer}
+\end{figure}
+
+\par Fungsi keempat yang saya definisikan adalah \texttt{SavePlayer} sebagaimana ditunjukkan pada Gambar \ref{fig:bpi-saveplayer}. Fungsi ini memiliki dua parameter input pada panel \textit{Inputs}:
+\begin{enumerate}
+  \item \texttt{S\_PlayerState}: Bertipe \textit{Structure} \texttt{S\_PlayerState}, digunakan untuk menerima data transformasi yang dikirim oleh aktor pemicu atau karakter.
+  \item \texttt{Async}: Bertipe data \textit{Boolean}, digunakan untuk meneruskan instruksi mode penyimpanan asinkron ke tingkat sistem berkas.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/19.png}
+  \caption{Pengikatan Interface BPI\_SaveData pada Class Settings BP\_GameInstance}
+  \label{fig:gameinstance-add-interface}
+\end{figure}
+
+\par Setelah keempat fungsi \textit{Interface} selesai didefinisikan, langkah berikutnya adalah mengimplementasikan kontrak \textit{Interface} tersebut ke dalam kelas \texttt{BP\_GameInstance}. Sebagaimana tampak pada Gambar \ref{fig:gameinstance-add-interface}, saya membuka editor \texttt{BP\_GameInstance} dan menekan tombol \textit{Class Settings} pada bilah menu atas. Pada panel \textit{Details} di kategori \textit{Interfaces > Implemented Interfaces}, saya mengeklik tombol \textit{Add} dan memilih \textit{Interface} \texttt{BPI\_SaveData}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/20.png}
+  \caption{Daftar Fungsi Interface Terdaftar pada Panel My Blueprint BP\_GameInstance}
+  \label{fig:gameinstance-interfaces-list}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:gameinstance-interfaces-list}, setelah proses penambahan \textit{Interface} berhasil dan dilakukan kompilasi, panel \textit{My Blueprint} pada \texttt{BP\_GameInstance} secara otomatis memunculkan kategori baru bernama \textit{INTERFACES}. Di dalamnya terdaftar empat fungsi yang siap untuk diimplementasikan secara konkret, yaitu \texttt{SavePlayer}, \texttt{GetGameData}, \texttt{SaveGameData}, dan \texttt{LoadGameData}.
+
+\subsection{Implementasi Logika Simpan dan Muat Data pada Game Instance}
+
+\par Setelah seluruh fungsi \textit{Interface} terdaftar, tahapan krusial berikutnya adalah menyusun alur logika pada \textit{Event Graph} dan fungsi implementasi \texttt{BP\_GameInstance}. Logika ini mencakup validasi ketersediaan berkas simpanan, penulisan data ke memori volatil dan media non-volatil, alur eksekusi asinkron, hingga penanganan siklus hidup inisialisasi engine melalui node \texttt{Event Init}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/21.png}
+  \caption{Implementasi Fungsi GetGameData pada BP\_GameInstance}
+  \label{fig:gameinstance-getgamedata-graph}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:gameinstance-getgamedata-graph}, saya mengeklik dua kali fungsi \texttt{GetGameData} di bawah panel \textit{Interfaces} untuk membuka kanvas grafisnya. Logika fungsi ini diawali dengan memanggil node \texttt{Does Save Game Exist} yang menerima parameter \texttt{Slot Name} dari variabel \texttt{SlotName} dan \texttt{User Index} sebesar \texttt{0}. Nilai keluaran boolean dari node ini dihubungkan ke kondisi node \texttt{Branch}:
+\begin{enumerate}
+  \item Cabang \textit{True}: Jika berkas simpanan ditemukan, alur memanggil \texttt{Return Node} dengan variabel \texttt{Save Game}, lalu mengakses variabel anggotanya via \textit{getter} \texttt{S Player State} sebagai keluaran fungsi.
+  \item Cabang \textit{False}: Bila berkas belum ada, alur memanggil \texttt{Return Node} untuk mengembalikan nilai \textit{Transform} kosong berkoordinat (0.0, 0.0, 0.0), rotasi (0.0, 0.0, 0.0), dan skala (1.0, 1.0, 1.0) guna mencegah kesalahan \textit{null reference}.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/22.png}
+  \caption{Implementasi Event SavePlayer pada Event Graph BP\_GameInstance}
+  \label{fig:gameinstance-saveplayer-event}
+\end{figure}
+
+\par Melanjutkan ke implementasi fungsi berikutnya, Gambar \ref{fig:gameinstance-saveplayer-event} memperlihatkan penyusunan logika event \texttt{Event SavePlayer} pada \textit{Event Graph} \texttt{BP\_GameInstance}. Saat event \textit{Interface} ini dipanggil oleh entitas lain, pin eksekusi langsung diarahkan ke node \texttt{SET S Player State} dengan target yang terhubung ke variabel instansi \texttt{Save Game}. Langkah ini menyalin paket data transformasi terbaru yang diterima dari pin input ke dalam memori RAM objek \textit{SaveGame}. Setelah pembaruan memori selesai, alur eksekusi memanggil fungsi internal \texttt{Save Game Data} dengan meneruskan nilai boolean dari pin \texttt{Async}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/23.png}
+  \caption{Implementasi Event SaveGameData pada Event Graph BP\_GameInstance}
+  \label{fig:gameinstance-savegamedata-event}
+\end{figure}
+
+\par Implementasi logika untuk event \texttt{SaveGameData} pada \texttt{BP\_GameInstance} diperlihatkan pada Gambar \ref{fig:gameinstance-savegamedata-event}. Alur ini mengevaluasi parameter \texttt{Async} menggunakan node \texttt{Branch}:
+\begin{enumerate}
+  \item Jika \texttt{Async} bernilai \textit{True}: Mesin mengeksekusi node \texttt{Async Save Game to Slot}. Penulisan berkas simpanan dijalankan secara paralel pada \textit{background thread}, sehingga aktivitas I/O disk tidak memicu \textit{hitch} pada perenderan grafis utama.
+  \item Jika \texttt{Async} bernilai \textit{False}: Mesin mengeksekusi node standar \texttt{Save Game to Slot} yang bekerja secara sinkron pada utas utama permainan.
+\end{enumerate}
+Kedua node penyimpanan tersebut sama-sama menerima parameter \textit{Save Game Object} dari variabel \texttt{Save Game}, \textit{Slot Name} dari variabel \texttt{SlotName}, dan \textit{User Index} sebesar \texttt{0}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/24.png}
+  \caption{Implementasi Event LoadGameData pada Event Graph BP\_GameInstance}
+  \label{fig:gameinstance-loadgamedata-event}
+\end{figure}
+
+\par Untuk mekanisme pemuatan data dari media disk ke memori kerja, saya menyusun alur logika \texttt{Event LoadGameData} sebagaimana tampak pada Gambar \ref{fig:gameinstance-loadgamedata-event}. Alur komputasi diawali dengan pengujian keberadaan berkas melalui node \texttt{Does Save Game Exist}:
+\begin{enumerate}
+  \item Pada cabang \textit{True} (berkas simpanan ditemukan): Alur mengevaluasi parameter \texttt{Async} via node \texttt{Branch}. Jika bernilai \textit{True}, node \texttt{Async Load Game from Slot} dipanggil; jika bernilai \textit{False}, node \texttt{Load Game from Slot} dieksekusi. Objek yang dimuat dari berkas fisik dialirkan ke node \texttt{Cast To BP\_SaveGame} dan disimpan ke variabel referensi \texttt{Save Game} di memori RAM.
+  \item Pada cabang \textit{False} (berkas simpanan belum ada): Mesin mengeksekusi node \texttt{Create Save Game Object} bertipe kelas \texttt{BP\_SaveGame}, lalu menetapkannya ke variabel \texttt{Save Game} sebagai instansi baru di memori.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/25.png}
+  \caption{Implementasi Event Init pada BP\_GameInstance untuk Memuat Data Awal}
+  \label{fig:gameinstance-event-init}
+\end{figure}
+
+\par Gambar \ref{fig:gameinstance-event-init} memperlihatkan penyelesaian logika siklus hidup pada \texttt{BP\_GameInstance}. Saya menambahkan node event bawaan mesin \texttt{Event Init}, yaitu \textit{entry point} yang secara otomatis dipanggil oleh mesin sesaat setelah objek \textit{GameInstance} diinstansiasi ke dalam memori aplikasi sebelum aktor mana pun di level muncul. Dari pin keluaran \texttt{Event Init}, saya menyambungkan alur eksekusi langsung ke pemanggilan fungsi \texttt{Load Game Data} dengan target \texttt{self} dan parameter \texttt{Async} bernilai \textit{False}. Hal ini memastikan bahwa pada detik pertama peluncuran game, berkas simpanan di disk langsung dimuat ke memori kerja secara sinkron sebelum level permainan merender aktor pemain.
+
+\subsection{Integrasi Restorasi Posisi pada BP\_ThirdPersonCharacter}
+
+\par Setelah sistem penyimpanan dan pemuatan data terpasang sempurna pada \textit{GameInstance}, tahapan berikutnya adalah mengintegrasikan data simpanan tersebut ke dalam karakter utama permainan. Tujuannya adalah agar saat karakter mengalami \textit{spawn} di dalam level, posisinya secara otomatis dipindahkan ke koordinat terakhir yang tersimpan pada berkas permainan alih-alih selalu memulai dari titik awal \textit{PlayerStart}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/26.png}
+  \caption{Navigasi ke Folder ThirdPerson Blueprints untuk Mengakses Karakter}
+  \label{fig:character-asset-folder}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:character-asset-folder}, saya membuka panel \textit{Content Drawer} dan menavigasi ke direktori \texttt{Content > ThirdPerson > Blueprints}. Di dalam folder ini terdapat kelas \textit{Blueprint} karakter utama bawaan template, yaitu \texttt{BP\_ThirdPersonCharacter}. Saya membuka berkas tersebut untuk menyisipkan logika inisialisasi posisi pada \textit{Event Graph}-nya.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/27.png}
+  \caption{Implementasi Logika Restorasi Posisi Karakter pada Event BeginPlay}
+  \label{fig:character-restore-location}
+\end{figure}
+
+\par Gambar \ref{fig:character-restore-location} memperlihatkan penyusunan logika restorasi koordinat spasial pada \textit{Event Graph} \texttt{BP\_ThirdPersonCharacter}. Pada node awal siklus hidup \texttt{Event BeginPlay}, langkah-langkah yang saya konfigurasikan adalah sebagai berikut:
+\begin{enumerate}
+  \item Memanggil node \texttt{Get Game Instance} dan mengalirkannya ke target pesan \textit{Interface} \texttt{Get Game Data} untuk mengambil data tanpa \textit{hard casting}.
+  \item Mengakses nilai \textit{Location} dari \textit{Structure} melalui pin keluaran \texttt{S\_PlayerState}.
+  \item Menghubungkan nilai vektor lokasi ke node perbandingan \texttt{!=} dengan vektor pembanding bernilai nol. Validasi ini bertindak sebagai \textit{guard condition} untuk memastikan berkas simpanan telah memiliki koordinat yang valid.
+  \item Hasil kondisi boolean dihubungkan ke node \texttt{Branch}. Apabila bernilai \textit{True}, alur eksekusi diteruskan ke node \texttt{Set Actor Location} untuk merestorasi posisi karakter ke koordinat checkpoint terakhir.
+\end{enumerate}
+
+\subsection{Pembuatan dan Konfigurasi Aktor Checkpoint (BP\_CheckPoint)}
+
+\par Agar proses penyimpanan data posisi dapat diuji secara interaktif di dalam level permainan, saya merancang sebuah entitas pemicu berupa aktor \textit{Checkpoint}. Aktor ini dilengkapi dengan komponen \textit{Box Collision} yang akan mendeteksi ketika karakter pemain melewatinya dan secara otomatis mengeksekusi operasi penyimpanan koordinat ke \textit{GameInstance}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/28.png}
+  \caption{Pemilihan Parent Class Actor untuk Blueprint Checkpoint}
+  \label{fig:checkpoint-pick-actor}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:checkpoint-pick-actor}, saya membuka dialog \textit{Pick Parent Class} melalui \textit{Content Drawer} dan memilih kelas dasar \textit{Actor}. Kelas \textit{Actor} merupakan kelas objek paling fundamental dalam Unreal Engine yang dapat ditempatkan atau dimunculkan secara fisik di dalam ruang dunia 3D level permainan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/29.png}
+  \caption{Aset BP\_CheckPoint pada Direktori Blueprints}
+  \label{fig:checkpoint-asset-created}
+\end{figure}
+
+\par Mengacu pada Gambar \ref{fig:checkpoint-asset-created}, aset Blueprint baru tersebut saya beri nama \texttt{BP\_CheckPoint}. Aset ini disimpan di folder \texttt{Content/Blueprints} untuk berperan sebagai zona checkpoint interaktif di level permainan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/30.png}
+  \caption{Penambahan Komponen Box Collision pada BP\_CheckPoint}
+  \label{fig:checkpoint-add-box-collision}
+\end{figure}
+
+\par Langkah selanjutnya adalah menyematkan sensor batas tabrakan pada aktor. Pada Gambar \ref{fig:checkpoint-add-box-collision}, setelah membuka editor \texttt{BP\_CheckPoint}, saya menuju panel \textit{Components} di sudut kiri atas dan mengeklik tombol \textit{+ Add}. Saya mencari komponen \textit{Box Collision} dan menyematkannya di bawah \texttt{DefaultSceneRoot}. Komponen volume berbentuk balok ini bertindak sebagai \textit{trigger volume} yang mampu mendeteksi perlintasan aktor lain melalui saluran deteksi \textit{Overlap}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/31.png}
+  \caption{Implementasi Logika Pemicu Simpan pada Event Graph BP\_CheckPoint}
+  \label{fig:checkpoint-overlap-event}
+\end{figure}
+
+\par Gambar \ref{fig:checkpoint-overlap-event} memperlihatkan implementasi logika penyimpanan pada \textit{Event Graph} aktor \texttt{BP\_CheckPoint}:
+\begin{enumerate}
+  \item Pada komponen \texttt{Box}, saya menambahkan event \texttt{OnComponentBeginOverlap} yang aktif saat karakter memasuki volume kotak tabrakan.
+  \item Pin eksekusi dihubungkan ke node kendali alur \texttt{Do Once}. Pemasangan node \texttt{Do Once} sangat krusial guna menjamin bahwa operasi penyimpanan hanya dieksekusi tepat satu kali saat pemain menyentuh checkpoint, sehingga mencegah pemborosan operasi I/O secara redundan atau \textit{spamming}.
+  \item Alur keluar \textit{Completed} dari \texttt{Do Once} memanggil pesan \textit{Interface} \texttt{Save Player}.
+  \item Pin input \textit{Target} dihubungkan dengan node global \texttt{Get Game Instance}.
+  \item Untuk memperoleh data posisi, saya memanggil node \texttt{Get Actor Transform} bertarget \texttt{Self}, lalu mengalirkan pin \textit{Return Value} ke node simpan.
+  \item Parameter input \texttt{Async} saya atur ke \textit{True} agar penulisan berkas simpanan diproses di \textit{background thread} demi menjaga stabilitas \textit{frame rate} simulasi.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/32.png}
+  \caption{Penonaktifan Opsi Hidden in Game pada Komponen Box Collision}
+  \label{fig:checkpoint-hidden-in-game}
+\end{figure}
+
+\par Secara bawaan, komponen tabrakan primitif seperti \textit{Box Collision} disembunyikan tampilannya saat simulasi permainan berjalan. Agar selama proses pengujian saya dapat memantau secara visual batas fisik kotak pemicu checkpoint di viewport permainan, saya melakukan konfigurasi properti sebagaimana tampak pada Gambar \ref{fig:checkpoint-hidden-in-game}. Pada tab \textit{Viewport} \texttt{BP\_CheckPoint}, saya memilih komponen \texttt{Box}, lalu pada panel \textit{Details} di kategori \textit{Rendering}, saya menghilangkan centang pada properti \textit{Hidden in Game}. Dengan demikian, kawat pembatas kotak berwarna merah akan dirender secara kasat mata selama simulasi berjalan.
+
+\subsection{Pengujian Simulasi dan Validasi Persistensi Data (Play-in-Editor)}
+
+\par Tahapan penutup praktikum adalah melakukan pengujian fungsionalitas sistem secara langsung melalui mode simulasi \textit{Play-in-Editor} (PIE). Pengujian ini dirancang untuk memvalidasi dua siklus penting: pertama, keberhasilan deteksi pemicu tabrakan \textit{Box Collision} saat karakter menyentuh volume checkpoint dan mengeksekusi operasi simpan; kedua, keberhasilan pemuatan berkas fisik \texttt{.sav} saat sesi simulasi baru dimulai ulang sehingga posisi karakter tereksitasi langsung pada koordinat checkpoint.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/33.png}
+  \caption{Permulaan Sesi Simulasi PIE dari Titik PlayerStart Default}
+  \label{fig:simulation-pie-start}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:simulation-pie-start}, saya memulai pengujian tahap pertama dengan menekan tombol \textit{Play} pada bilah alat editor. Pada peluncuran awal ini, berkas simpanan belum memuat koordinat checkpoint yang pernah disentuh, sehingga karakter pemain dimunculkan pada titik awal \textit{PlayerStart} yang berada di atas platform silinder melingkar berwarna hijau. Di kejauhan pada area lapangan datar tampak dua volume tabrakan berupa kotak kawat merah, yaitu volume kerusakan dari praktikum sebelumnya dan volume \texttt{BP\_CheckPoint} yang baru saya tambahkan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/34.png}
+  \caption{Pergerakan Karakter Menuju Area Checkpoint}
+  \label{fig:simulation-move-to-checkpoint}
+\end{figure}
+
+\par Gambar \ref{fig:simulation-move-to-checkpoint} memperlihatkan tahapan saat saya mengendalikan karakter berjalan menuruni tanjakan platform dan bergerak melintasi lantai kisi-kisi arena menuju ke arah kotak pembatas \texttt{BP\_CheckPoint}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/35.png}
+  \caption{Karakter Memasuki Volume Box Collision BP\_CheckPoint}
+  \label{fig:simulation-overlap-checkpoint}
+\end{figure}
+
+\par Sebagaimana diperlihatkan pada Gambar \ref{fig:simulation-overlap-checkpoint}, karakter pemain berhasil melangkah masuk dan berada tepat di dalam volume kawat \textit{Box Collision} \texttt{BP\_CheckPoint}. Penetrasi fisik ini secara otomatis memicu event \texttt{On Component Begin Overlap (Box)}. Sesuai logika yang telah disusun, node \texttt{Do Once} mengunci pemicu dan mengeksekusi pemanggilan pesan \textit{Interface} \texttt{Save Player} ke \texttt{BP\_GameInstance}. Sistem kemudian merekam koordinat transformasi aktor checkpoint ke dalam \textit{Structure} \texttt{S\_PlayerState} pada objek \texttt{BP\_SaveGame} di memori RAM dan secara asinkron menuliskannya ke dalam berkas fisik penyimpanan lokal \texttt{1.sav}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/36.png}
+  \caption{Penghentian Sesi Simulasi PIE Kembali ke Editor}
+  \label{fig:simulation-stop-pie}
+\end{figure}
+
+\par Setelah proses penyimpanan terpicu sempurna, Gambar \ref{fig:simulation-stop-pie} memperlihatkan langkah saya menekan tombol \textit{Stop} pada bilah kontrol simulasi atau tombol pintasan keyboard \texttt{Esc} untuk menghentikan sesi \textit{Play-in-Editor} dan kembali ke tampilan editor level Unreal Engine. Penghentian sesi ini secara otomatis memusnahkan seluruh objek aktor dinamis yang hidup di dalam level, termasuk menghancurkan instansi karakter pemain yang sedang berada di area checkpoint.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/37.png}
+  \caption{Peluncuran Kembali Simulasi PIE dengan Karakter Berhasil Spawn di Checkpoint}
+  \label{fig:simulation-respawn-checkpoint}
+\end{figure}
+
+\par Pembuktian akhir dari fungsionalitas arsitektur persistensi disajikan pada Gambar \ref{fig:simulation-respawn-checkpoint}. Saya meluncurkan kembali mode simulasi \textit{Play-in-Editor} untuk kedua kalinya. Saat sesi baru ini dimulai, urutan eksekusi sistematis berlangsung di latar belakang:
+\begin{enumerate}
+  \item Mesin menginisialisasi \texttt{BP\_GameInstance} dan mengeksekusi \texttt{Event Init}, yang langsung memanggil \texttt{Load Game Data} untuk membaca berkas fisik \texttt{1.sav} dari disk ke memori RAM.
+  \item Level memuat dan memunculkan karakter \texttt{BP\_ThirdPersonCharacter} yang secara otomatis menjalankan \texttt{Event BeginPlay}.
+  \item Logika inisialisasi karakter memanggil pesan \textit{Interface} \texttt{Get Game Data} dari \textit{GameInstance}, mendeteksi keberadaan koordinat simpanan yang valid, dan mengeksekusi perintah \texttt{Set Actor Location}.
+\end{enumerate}
+Hasil visual pada Gambar \ref{fig:simulation-respawn-checkpoint} membuktikan bahwa karakter tidak lagi muncul di titik awal \textit{PlayerStart}, melainkan langsung berada di dalam zona kawat \texttt{BP\_CheckPoint}. Hal ini memvalidasi secara empiris bahwa integrasi antara \textit{GameInstance}, \textit{SaveGame}, \textit{Blueprint Interface}, dan pemicu checkpoint telah bekerja secara akurat, presisi, dan sempurna.
 
 \section{Hasil Akhir}
+
+\par Berdasarkan seluruh rangkaian perancangan, implementasi, dan pengujian teknis yang telah saya laksanakan pada Praktikum Pengembangan Game Pertemuan 5 mengenai materi \textit{Game Instance \& Save Game}, berikut adalah kesimpulan dan analisis komprehensif atas pencapaian hasil praktikum:
+\begin{enumerate}[label=\alph*.]
+  \item \textbf{Keberhasilan Implementasi Arsitektur Game Instance dan Save Game:} Saya telah berhasil merancang dan mengintegrasikan dua pilar persistensi data Unreal Engine 5, yaitu kelas berbasis \textit{SaveGame} (\texttt{BP\_SaveGame}) sebagai penampung serialisasi data non-volatil pada sistem berkas lokal (\texttt{.sav}), serta kelas \textit{GameInstance} (\texttt{BP\_GameInstance}) sebagai pengelola data volatil global di memori RAM yang memiliki siklus hidup persisten melampaui siklus hidup level individual. Konfigurasi \textit{Game Instance Class} pada \textit{Project Settings Maps \& Modes} terbukti berhasil mengaktifkan kelas pengelola kustom ini sejak detik pertama aplikasi dijalankan.
+  \item \textbf{Efektivitas Komunikasi Modular melalui Blueprint Interface:} Penerapan \textit{Blueprint Interface} \texttt{BPI\_SaveData} terbukti efektif dalam membangun arsitektur sistem permainan yang bersifat \textit{decoupled}. Karakter pemain dan checkpoint dapat berkomunikasi dua arah dengan \textit{GameInstance} tanpa memerlukan \textit{hard casting}. Hal ini meningkatkan modularitas sistem sekaligus mencegah dependensi sirkular antar-aset.
+  \item \textbf{Optimasi Kinerja Penyimpanan Data Asinkron:} Implementasi parameter \texttt{Async} pada sistem penyimpanan membuktikan pentingnya pemilihan metode I/O dalam pengembangan game. Penggunaan node \texttt{Async Save Game to Slot} pada pemicu checkpoint memungkinkan penulisan data ke disk diproses di \textit{background thread} tanpa mengganggu \textit{main game thread}, sehingga mencegah terjadinya lonjakan \textit{frame time} maupun \textit{hitch} pada simulasi.
+  \item \textbf{Presisi Mekanisme Restorasi Koordinat Spasial Karakter:} Pengujian restorasi koordinat pada siklus hidup \texttt{Event BeginPlay} di dalam \texttt{BP\_ThirdPersonCharacter} menunjukkan akurasi posisi yang sangat presisi. Logika validasi vektor berhasil membedakan inisiasi permainan awal pada titik \textit{PlayerStart} dengan sesi lanjutan yang merestorasi posisi karakter langsung ke koordinat checkpoint via node \texttt{Set Actor Location}.
+  \item \textbf{Validasi Integritas Sistem melalui Simulasi Play-in-Editor (PIE):} Seluruh siklus persistensi data terbukti berhasil secara empiris melalui pengujian dua sesi berurutan. Karakter yang melintasi volume \textit{Box Collision} \texttt{BP\_CheckPoint} berhasil memicu perekaman posisi melalui pengaman \texttt{Do Once}. Pada peluncuran simulasi berikutnya, karakter langsung dimunculkan pada posisi checkpoint yang tersimpan. Pengujian ini memastikan tidak ada data yang hilang maupun kesalahan \textit{null reference} selama runtime.
+\end{enumerate}
 
 \end{document}
