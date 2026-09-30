@@ -99,22 +99,19 @@ Pertemuan \Pertemuan\\
 
 \begin{document}
 
-% Jika ingin daftar pustaka muncul meskipun belum ada entri di ref.bib,
-% tambahkan entri BibTeX ke file ref.bib terlebih dulu.
-
 % Title Page
-\begin{titlingpage} 
+\begin{titlingpage}
   \begin{center}
 
     \vspace{4cm}
-    \begin{Large} 
+    \begin{Large}
       \textbf{\thetitle} \\
     \end{Large}
     \vspace{2cm}
-    
-    \includegraphics[height=8cm]{resource/lambang ugm.png}\\ 
+
+    \includegraphics[height=8cm]{resource/lambang ugm.png}\\
     \vspace{2cm}
-    
+
     \textbf{Disusun oleh:}\\[0.8em]
     \begin{minipage}{0.8\textwidth}
       \raggedright
@@ -127,7 +124,7 @@ Pertemuan \Pertemuan\\
         \end{tabular}
       \end{large}
     \end{minipage}
-    
+
     \vspace{2cm}
     \begin{Large}
       \textbf{Program Studi D-IV Teknologi Rekayasa Perangkat Lunak} \\
@@ -137,7 +134,7 @@ Pertemuan \Pertemuan\\
       \textbf{Yogyakarta}\\
       \textbf{2026}\\
     \end{Large}
-    
+
   \end{center}
 \end{titlingpage}
 
@@ -155,7 +152,6 @@ Pertemuan \Pertemuan\\
   \renewcommand{\footrulewidth}{0pt}
   \fancyfoot[C]{\thepage}
 }
-
 
 % --- Styling Judul Daftar Isi, Gambar, dan Kode ---
 \renewcommand{\cfttoctitlefont}{\hfill\normalfont\LARGE\bfseries}
@@ -180,6 +176,7 @@ Pertemuan \Pertemuan\\
 \renewcommand{\contentsname}{\centering Daftar Isi}
 \renewcommand{\listfigurename}{\centering Daftar Gambar}
 \renewcommand{\lstlistlistingname}{\centering Daftar Kode}
+\renewcommand{\figurename}{Gambar}
 
 % --- Gaya Daftar Gambar dan Daftar Kode ---
 \renewcommand{\cftloftitlefont}{\hfill\normalfont\LARGE\bfseries}
@@ -191,8 +188,7 @@ Pertemuan \Pertemuan\\
 % Daftar Gambar
 \listoffigures
 
-% --- Halaman Laporan Pertemuan (seperti contoh gambar) ---
-% Tidak pakai \chapter agar bisa menyatu dengan halaman sebelumnya.
+% --- Halaman Laporan Pertemuan ---
 \newpage
 \begin{center}
   \textbf{\LARGE Pertemuan \Pertemuan\\
@@ -200,27 +196,754 @@ Pertemuan \Pertemuan\\
 \end{center}
 
 \section{Tujuan Praktikum}
-\begin{enumerate}
-  \item Something
+\begin{enumerate}[label=\arabic*.]
+  \item Mampu merancang dan membangun lingkungan level baru menggunakan sistem tata cahaya atmosferik terintegrasi melalui fitur \textit{Environment Light Mixer} pada Unreal Engine 5.
+  \item Mampu membuat medan lanskap 3D dan menguasai teknik \textit{landscape sculpting} menggunakan aneka fitur \textit{Sculpt}, \textit{Erase}, \textit{Smooth}, \textit{Flatten}, \textit{Ramp}, \textit{Erosion}, dan \textit{Noise}.
+  \item Mampu mengintegrasikan material berbasis tekstur \textit{Physically Based Rendering} (PBR) beresolusi tinggi dari sumber eksternal ke permukaan lanskap.
+  \item Mampu memahami konsep dasar \textit{rigging}, struktur hierarki \textit{Skeletal Mesh}, serta menganalisis disparitas pose referensi awal antara \textit{T-Pose} Mixamo dan \textit{A-Pose} Unreal Engine Mannequin.
+  \item Mampu mengonfigurasi dan melaksanakan proses \textit{retargeting} animasi memanfaatkan sistem \textit{IK Rig} dan \textit{IK Retargeter} antar-karakter dengan struktur hierarki kerangka berbeda.
+  \item Mampu merancang dan mengimplementasikan \textit{Animation Blueprint} dengan node \textit{Retarget Pose From Mesh} untuk menyalurkan animasi \textit{locomotion} secara dinamis saat \textit{runtime}.
+  \item Mampu menyusun hierarki komponen karakter pemain pada \textit{BP\_ThirdPersonCharacter}, menyembunyikan \textit{leader mesh}, dan mengonfigurasi opsi pembaruan \textit{Always Tick Pose and Refresh Bones}.
+  \item Mampu membuat dan mengintegrasikan aset \textit{Animation Montage} serta merancang alur pemicu eksekusi animasi berbasis \textit{input action} tombol keyboard pada \textit{Event Graph}.
+  \item Mampu menguji dan memvalidasi keutuhan sistem gerak karakter serta kelancaran pemutaran animasi \textit{montage} secara komprehensif melalui mode simulasi \textit{Play-in-Editor}.
 \end{enumerate}
 
-%contoh gambar dan kode
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.5\textwidth]{resource/contoh-gambar.png}
-%     \caption{Contoh Gambar}
-%     \label{fig:contoh-gambar}
-% \end{figure}
+\section{Dokumentasi Praktikum}
 
-% \begin{lstlisting}[language=php, caption={Contoh Kode Python}, label={lst:contoh-kode}]
-% def hello_world():
-%     print("Hello, World!")
-% \end{lstlisting}
+\par Bagian dokumentasi ini menyajikan rangkaian tahapan teknis yang saya laksanakan secara komprehensif selama sesi Praktikum Pengembangan Game Pertemuan 6 dengan topik \textit{Landscape, Rig, Retarget, dan Animation} pada Unreal Engine 5. Rangkaian aktivitas dimulai dari pembangunan level mandiri \texttt{LV\_Praktikum} lengkap dengan tata cahaya atmosferik lima komponen, pembentukan topografi lanskap dengan aneka \textit{sculpt tool}, penerapan material tanah berbasis PBR dari Poly Haven, persiapan aset karakter dan animasi Mixamo, konfigurasi penyelarasan kerangka melalui \textit{IK Rig} dan \textit{IK Retargeter}, perancangan grafik animasi \texttt{ABP\_Aure} menggunakan node \textit{Retarget Pose From Mesh}, integrasi komponen kerangka pada \texttt{BP\_ThirdPersonCharacter} beserta koreksi konfigurasi kelas animasi, pembuatan dan pemanggilan \textit{Animation Montage} melalui masukan tombol \texttt{E}, hingga pengujian simulasi \textit{Play-in-Editor} untuk memvalidasi kelancaran pergerakan karakter dan eksekusi aksi secara interaktif.
 
-\section{Dokumetasi Praktikum}
+\subsection{Pembuatan Level Baru dan Penyiapan Tata Cahaya Atmosferik}
 
-\par Sesuai dengan tujuan praktikum, berikut adalah hasil yang diperoleh dan pembahasan terkait materi yang telah dipelajari.
+\par Pada tahapan awal praktikum, fokus kegiatan saya arahkan pada pembangunan sebuah lingkungan level mandiri yang bersih dari objek bawaan. Hal ini penting agar proses perancangan lanskap dan penataan pencahayaan dapat dibangun secara murni dari nol tanpa adanya interferensi aktor pencahayaan statis maupun geometri uji coba bawaan templat.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/1.png}
+  \caption{Pembuatan Level Baru dengan Opsi Empty Level}
+  \label{fig:level-baru-empty}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:level-baru-empty}, langkah pertama yang saya lakukan adalah mengeklik menu \textit{File} pada bilah menu utama editor Unreal Engine, lalu memilih perintah \textit{New Level}. Pada jendela dialog pembuatan level yang muncul, Unreal Engine menyediakan berbagai templat dasar seperti \textit{Open World}, \textit{Basic}, dan \textit{Empty Level}. Pada praktikum ini, saya memilih opsi \textit{Empty Level}. Pemilihan templat kosong ini bertujuan untuk mengosongkan seluruh aktor dunia game, sehingga saya memiliki kendali penuh atas konfigurasi sistem pencahayaan dan atmosferik yang akan dipasang.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/2.png}
+  \caption{Tampilan Viewport Kosong pada Level Baru}
+  \label{fig:level-viewport-kosong}
+\end{figure}
+
+\par Setelah templat \textit{Empty Level} dimuat, Gambar \ref{fig:level-viewport-kosong} memperlihatkan kondisi jendela \textit{3D Viewport} yang sepenuhnya gelap gulita. Kegelapan ini merupakan kondisi wajar karena dunia game belum memiliki satupun sumber cahaya, bola langit, maupun volume atmosfer. Pada panel \textit{Outliner} di sisi kanan layar, terlihat bahwa hierarki level masih bersih dan hanya memuat objek dunia bawaan tingkat atas tanpa adanya entitas pencahayaan aktif.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/3.png}
+  \caption{Penyimpanan Aset Level Melalui Menu File}
+  \label{fig:level-save-as-menu}
+\end{figure}
+
+\par Sebelum menambahkan aktor lingkungan lebih lanjut, saya melakukan penyimpanan berkas level terlebih dahulu guna mencegah potensi kehilangan data konfigurasi. Sebagaimana tampak pada Gambar \ref{fig:level-save-as-menu}, saya menekan \texttt{ctrl + S} pada keyboard. Kebiasaan menyimpan level di awal tahapan merupakan praktik rekayasa yang sangat baik dalam pengembangan game berbasis Unreal Engine.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/4.png}
+  \caption{Penamaan Berkas Level sebagai LV\_Praktikum}
+  \label{fig:level-save-lv-praktikum}
+\end{figure}
+
+\par Sebagaimana ditunjukkan pada Gambar \ref{fig:level-save-lv-praktikum}, jendela dialog penyimpanan aset level terbuka di atas direktori proyek. Saya menavigasi struktur folder penyimpanan dan memberi nama berkas level tersebut \texttt{LV\_Praktikum}. Penamaan ini mengadopsi standar konvensi penamaan Unreal Engine dengan menyematkan prefiks \texttt{LV\_} yang merepresentasikan tipe aset \textit{Level}. Setelah itu, saya menekan tombol \textit{Save} untuk mengukuhkan penyimpanan aset pada disk proyek.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/5.png}
+  \caption{Pembukaan Panel Environment Light Mixer}
+  \label{fig:env-light-mixer-menu}
+\end{figure}
+
+\par Untuk menerangi ruang level yang masih gelap, saya memanfaatkan alat bantu pencahayaan modern Unreal Engine 5 bernama \textit{Environment Light Mixer}. Berdasarkan Gambar \ref{fig:env-light-mixer-menu}, saya membuka bilah menu \textit{Window} pada antarmuka teratas editor, lalu mengarahkan kursor dan mengeklik opsi \textit{Env. Light Mixer}. Fitur ini berfungsi sebagai pusat kontrol terintegrasi untuk menciptakan dan mengelola seluruh komponen tata cahaya atmosferik dunia game secara terpadu tanpa perlu mencari satu per satu aktor pada \textit{Content Drawer}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/6.png}
+  \caption{Antarmuka Jendela Env. Light Mixer}
+  \label{fig:env-light-mixer-window}
+\end{figure}
+
+\par Gambar \ref{fig:env-light-mixer-window} menampilkan jendela utilitas \textit{Environment Light Mixer} yang terbuka. Di bagian atas panel ini, sistem secara cerdas mendeteksi ketiadaan komponen pencahayaan dan menyajikan lima tombol aksi cepat untuk menginisialisasi lima pilar utama tata cahaya lingkungan terbuka, yaitu \textit{Create Directional Light}, \textit{Create Sky Light}, \textit{Create Sky Atmosphere}, \textit{Create Volumetric Cloud}, dan \textit{Create Exponential Height Fog}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/7.png}
+  \caption{Penambahan Seluruh Komponen Pencahayaan dan Atmosfer}
+  \label{fig:env-light-mixer-create}
+\end{figure}
+
+\par Pada tahapan yang disajikan pada Gambar \ref{fig:env-light-mixer-create}, saya mengeklik kelima tombol pembuatan komponen tersebut satu per satu secara berurutan. Masing-masing komponen memiliki fungsi komputasi visual yang saling melengkapi:
+\begin{enumerate}
+  \item \textit{Directional Light}: Menyimulasikan sumber pencahayaan matahari langsung yang memancarkan berkas cahaya paralel dengan sudut datang dinamis dan menghasilkan bayangan tajam pada permukaan objek.
+  \item \textit{SkyLight}: Berfungsi menangkap pencahayaan ambien dari kubah langit dan merefleksikannya kembali ke area-area yang berada di dalam bayangan, sehingga mencegah bayangan tampak gelap pekat tak alami.
+  \item \textit{SkyAtmosphere}: Mengimplementasikan model hamburan atmosfer fisik \textit{Rayleigh and Mie scattering} untuk merender kubah langit dengan gradasi warna biru di zenit dan rona hangat di horizon.
+  \item \textit{Volumetric Cloud}: Merender partisi awan volumetrik 3D prosedural dinamis yang merespons secara langsung terhadap sudut elevasi matahari.
+  \item \textit{Exponential Height Fog}: Menghadirkan kabut atmosferik berkepadatan eksponensial menurut elevasi sumbu $Z$ untuk menghasilkan persepsi kedalaman visual \textit{depth cues} yang realistis.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/8.png}
+  \caption{Hasil Pencahayaan Atmosferik pada 3D Viewport}
+  \label{fig:env-light-result}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:env-light-result}, setelah kelima komponen lingkungan aktif, tampilan pada \textit{3D Viewport} seketika bertransformasi menjadi lingkungan alam terbuka yang hidup, kaya warna, dan memiliki cakrawala luas. Efek pencahayaan matahari terpantul lembut di atmosfer dengan bentangan awan dinamis di angkasa, menandakan bahwa fondasi tata cahaya lingkungan untuk level \texttt{LV\_Praktikum} telah siap digunakan untuk proses pemahatan lanskap.
+
+\subsection{Pembentukan Lanskap dan Landscape Sculpting}
+
+\par Setelah sistem tata cahaya terkonfigurasi sempurna, tahapan berikutnya yang saya laksanakan adalah merancang topografi medan menggunakan sistem \textit{Landscape} Unreal Engine 5. Sistem ini memungkinkan pembuatan permukaan tanah berukuran raksasa dengan optimasi pemanggilan komputasi poligon bertingkat melalui fitur \textit{LOD tessellation} yang efisien.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/9.png}
+  \caption{Pengaktifan Mode Landscape pada Bilah Mode Editor}
+  \label{fig:landscape-mode-select}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:landscape-mode-select}, langkah awal pembuatan medan adalah mengubah mode kerja editor. Saya mengeklik menu dropdown pemilih mode di sudut kiri atas antarmuka atau menekan kombinasi tombol pintas \textit{Shift + 2} untuk beralih dari \textit{Selection Mode} ke \textit{Landscape Mode}. Seketika antarmuka editor menampilkan panel perkakas \textit{Landscape} di sisi kiri dan memunculkan panduan \textit{green wireframe grid} pada \textit{Viewport}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/10.png}
+  \caption{Konfigurasi Parameter Grid Landscape 15x15 Quads}
+  \label{fig:landscape-manage-quads}
+\end{figure}
+
+\par Pada panel \textit{Landscape} sebagaimana diperlihatkan pada Gambar \ref{fig:landscape-manage-quads}, saya mengonfigurasi dimensi dan kepadatan medan sebelum menekan tombol pembuatan. Sesuai dengan instruksi modul praktikum, saya mengatur nilai \textit{Section Size} menjadi \texttt{15x15 Quads}, \textit{Sections Per Component} bernilai \texttt{1x1}, serta \textit{Number of Components} sebesar \texttt{32x32}. Konfigurasi ini menghasilkan nilai \textit{Overall Resolution} sebesar \texttt{505x505} \textit{vertices} dengan total \texttt{1024} komponen. Pemilihan ukuran kuad \texttt{15x15} ini memberikan rasio densitas \textit{vertices} medan yang proporsional untuk simulasi perbukitan pasir tanpa membebani kinerja kartu grafis.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/11.png}
+  \caption{Pembuatan Medan dan Pemilihan Tool Sculpt}
+  \label{fig:landscape-sculpt-select}
+\end{figure}
+
+\par Setelah parameter topografi ditentukan, Gambar \ref{fig:landscape-sculpt-select} memperlihatkan momen saat saya menekan tombol \textit{Create}. Tampilan \textit{wireframe} hijau seketika dikonversi oleh mesin menjadi entitas aktor \textit{Landscape} solid dengan permukaan dasar datar. Selanjutnya, saya beralih ke tab menu \textit{Sculpt} pada panel perkakas lanskap dan memilih \textit{sculpt tool} utama untuk mulai membentuk kontur ketinggian medan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/12.png}
+  \caption{Pembentukan Kontur Perbukitan dengan Sculpt Tool}
+  \label{fig:landscape-sculpt-action}
+\end{figure}
+
+\par Gambar \ref{fig:landscape-sculpt-action} mendokumentasikan aksi pemahatan awal yang saya lakukan. Dengan menekan dan menggeser klik kiri mouse pada permukaan lanskap, kuas \textit{Sculpt} secara bertahap mengangkat elevasi \textit{vertices} tanah ke arah sumbu vertikal $Z$. Saya membentuk gundukan bukit dan rentetan pegunungan pasir yang membentang di kejauhan dengan memanfaatkan pengaturan \textit{Tool Strength} dan \textit{Brush Size} yang dinamis guna menciptakan variasi ketinggian bukit yang organik.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/13.png}
+  \caption{Penurunan Elevasi Permukaan dengan Erase Tool}
+  \label{fig:landscape-erase-action}
+\end{figure}
+
+\par Untuk memperbaiki puncak bukit yang terangkat melebihi batas rancangan atau menciptakan cekungan lembah, saya menerapkan teknik penghapusan elevasi sebagaimana tampak pada Gambar \ref{fig:landscape-erase-action}. Saya menggunakan fitur \textit{Erase}, atau dengan menahan tombol keyboard \textit{Shift} sambil mengeklik mouse pada mode \textit{Sculpt}, untuk menekan permukaan tanah kembali ke bawah sehingga kontur lereng bukit dapat saya kendalikan dengan sangat presisi.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/14.png}
+  \caption{Penghalusan Kontur Lanskap dengan Smooth Tool}
+  \label{fig:landscape-smooth-action}
+\end{figure}
+
+\par Selama proses pengangkatan tanah dengan kuas pemahat, kerap kali terbentuk sudut-sudut patahan curam atau tonjolan tajam \textit{sharp vertices} yang terlihat kasar. Berdasarkan Gambar \ref{fig:landscape-smooth-action}, saya memilih fitur \textit{Smooth} pada panel \textit{Sculpt} untuk menyapu area perbukitan tersebut. Kuas penghalus ini secara matematis menginterpolasi ketinggian antar-\textit{vertices} yang berdekatan, menghasilkan transisi lereng bukit pasir yang mengalir lembut dan alami.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/15.png}
+  \caption{Perataan Puncak Lanskap dengan Flatten Tool}
+  \label{fig:landscape-flatten-action}
+\end{figure}
+
+\par Sebagaimana diperlihatkan pada Gambar \ref{fig:landscape-flatten-action}, saya selanjutnya menguji perkakas \textit{Flatten}. Perkakas ini beroperasi dengan mengunci nilai elevasi \textit{vertices} pada titik klik awal, lalu menyamakan seluruh \textit{vertices} medan di sekitarnya yang terkena kuas ke nilai elevasi acuan tersebut. Dengan menggunakan \textit{Flatten Tool}, saya berhasil menciptakan area dataran tinggi \textit{plateau} pada punggung bukit yang ideal untuk dijadikan lintasan gerak karakter pemain.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/16.png}
+  \caption{Pembuatan Jalur Landai dengan Ramp Tool}
+  \label{fig:landscape-ramp-action}
+\end{figure}
+
+\par Untuk menghubungkan area lembah bawah dengan dataran tinggi yang baru dibuat, saya memanfaatkan alat \textit{Ramp} seperti yang tampak pada Gambar \ref{fig:landscape-ramp-action}. Saya mengeklik dua titik koordinat berbeda pada lereng bukit untuk meletakkan titik awal dan titik akhir tanjakan. Fitur ini secara otomatis memproyeksikan jalan landai bertingkat dengan lebar dan kemiringan seragam, sehingga karakter dapat menaiki puncak perbukitan tanpa terhalang kemiringan ekstrem.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/17.png}
+  \caption{Pembentukan Alur Alami dengan Erosion Tool}
+  \label{fig:landscape-erosion-action}
+\end{figure}
+
+\par Untuk meningkatkan realisme lingkungan gurun pasir, Gambar \ref{fig:landscape-erosion-action} memperlihatkan penerapan alat \textit{Erosion}. Alat ini menyimulasikan fenomena pengikisan termal dan hidraulik alami di mana material tanah tergerus dari puncak lereng dan mengendap di dasar bukit. Penerapan kuas erosi ini menghasilkan lekukan alur selokan dan punggungan tanah alami yang memperkaya kedalaman visual topografi.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/18.png}
+  \caption{Penambahan Variasi Tekstur Acak dengan Noise Tool}
+  \label{fig:landscape-noise-action}
+\end{figure}
+
+\par Sebagai sentuhan pemahatan akhir, Gambar \ref{fig:landscape-noise-action} memperlihatkan penggunaan alat \textit{Noise}. Perkakas ini menyuntikkan algoritma variasi ketinggian acak \textit{perlin noise} ke permukaan medan yang disapu kuas. Efek ini memecah bidang tanah yang terlalu datar dan menghasilkan variasi tonjolan-tonjolan mikro pasir, sehingga permukaan lanskap tampak sangat meyakinkan dan tidak artifisial.
+
+\subsection{Penerapan Material dan Tekstur PBR pada Lanskap}
+
+\par Lanskap dengan bentuk geometris perbukitan yang telah selesai dipahat masih memerlukan penerapan material berbasis komputasi fisik \textit{Physically Based Rendering} (PBR) agar mampu berinteraksi dengan cahaya matahari secara fotorealistis. Pada subbab ini, saya mendokumentasikan proses pengunduhan tekstur PBR eksternal dan penerapannya ke permukaan lanskap.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/19.png}
+  \caption{Penerapan Material Awal pada Permukaan Lanskap}
+  \label{fig:landscape-material-initial}
+\end{figure}
+
+\par Sebelum menerapkan material khusus tanah, Gambar \ref{fig:landscape-material-initial} memperlihatkan langkah awal saat saya menugaskan material dasar ke slot \textit{Landscape Material} pada panel \textit{Details} aktor \textit{Landscape}. Tahapan ini dilakukan untuk menguji apakah seluruh komponen kuad medan mampu memetakan koordinat tekstur \textit{UV mapping} secara merata tanpa ada area yang mengalami distorsi \textit{texture stretching}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/20.png}
+  \caption{Pengunduhan Tekstur PBR farm\_soil dari Poly Haven}
+  \label{fig:polyhaven-download-texture}
+\end{figure}
+
+\par Untuk memperoleh aset tekstur permukaan tanah berkualitas tinggi yang berlisensi bebas, Gambar \ref{fig:polyhaven-download-texture} mendokumentasikan aktivitas saya saat mengakses portal repositori aset terbuka \textit{Poly Haven} melalui peramban web. Sesuai panduan modul, saya memilih aset material bertema \textit{Farm Soil} dengan resolusi \texttt{2K}. Paket aset ini menyediakan peta tekstur lengkap yang meliputi kanal peta \textit{Diffuse}, \textit{Normal GL}, dan \textit{Roughness}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/21.png}
+  \caption{Berkas Tekstur Hasil Ekstraksi pada Penyimpanan Lokal}
+  \label{fig:texture-extracted-files}
+\end{figure}
+
+\par Setelah berkas arsip zip diekstrak, Gambar \ref{fig:texture-extracted-files} memperlihatkan struktur berkas tekstur pada direktori lokal. Tiga berkas utama yang siap diimpor ke Unreal Engine mencakup:
+\begin{enumerate}
+  \item \texttt{farm\_soil\_diff\_2k.jpg}: Menentukan warna dasar albedo permukaan tanah.
+  \item \texttt{farm\_soil\_nor\_gl\_2k.exr}: Mengalkulasi vektor normal pencahayaan semu mikro.
+  \item \texttt{farm\_soil\_rough\_2k.exr}: Mengatur tingkat kekasaran refleksi partikel butiran tanah.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/22.png}
+  \caption{Impor Tekstur dan Konfigurasi Material M\_FarmSoil}
+  \label{fig:landscape-material-soil}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:landscape-material-soil}, saya mengimpor ketiga berkas tekstur tersebut ke direktori proyek \texttt{Content > farm\_soil\_2k} dan merangkai material baru bernama \texttt{M\_FarmSoil}. Material ini kemudian saya tautkan ke slot \textit{Landscape Material} pada aktor medan. Hasil visual pada \textit{3D Viewport} membuktikan bahwa seluruh kontur perbukitan kini terbalut oleh tekstur tanah pasir berbutir alami dengan kalkulasi bayangan dan kedalaman mikro yang sangat realistis di bawah paparan sinar matahari langsung.
+
+\subsection{Pengunduhan dan Impor Aset Karakter serta Animasi Mixamo}
+
+\par Lingkungan lanskap yang telah selesai dirancang memerlukan entitas karakter yang dapat dikendalikan untuk menjelajahinya. Pada tahapan ini, saya memanfaatkan ekosistem karakter dan animasi 3D daring \textit{Mixamo} dari Adobe untuk mengunduh model karakter bersenjata serta animasi aksi khusus yang akan diintegrasikan ke dalam Unreal Engine 5.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/23.png}
+  \caption{Pemilihan Karakter Gas Mask pada Portal Mixamo}
+  \label{fig:mixamo-character-select}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:mixamo-character-select}, langkah awal yang saya lakukan adalah mengakses laman resmi Mixamo melalui peramban web dan masuk ke tab \textit{Characters}. Dari katalog karakter yang tersedia, saya memilih model prajurit taktis bertopeng bernama \textit{Gas Mask}. Karakter ini memiliki proporsi tubuh humanoid standar dengan detail pakaian taktis militer yang sangat cocok untuk skenario penjelajahan lingkungan medan terbuka.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/24.png}
+  \caption{Pengunduhan Karakter Berformat FBX with Skin}
+  \label{fig:mixamo-character-download}
+\end{figure}
+
+\par Setelah memilih karakter tersebut, Gambar \ref{fig:mixamo-character-download} memperlihatkan jendela dialog konfigurasi pengunduhan pada Mixamo. Saya menekan tombol \textit{Download} dan mengonfigurasi parameter berkas: format berkas dipilih \textit{FBX}, jenis \textit{Skin} diatur ke opsi \textit{With Skin} agar geometri \textit{mesh} poligon dan pembobotan tulang disertakan dalam satu berkas, \textit{Frames per Second} ditetapkan pada \texttt{30}, serta pose referensi dibiarkan pada opsi default \textit{T-Pose}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/25.png}
+  \caption{Penelusuran Aset Animasi Firing Rifle pada Mixamo}
+  \label{fig:mixamo-anim-search}
+\end{figure}
+
+\par Selain model tubuh karakter, saya juga memerlukan animasi aksi khusus yang nantinya akan dipicu saat pemain berinteraksi dalam permainan. Pada Gambar \ref{fig:mixamo-anim-search}, saya beralih ke tab \textit{Animations} pada portal Mixamo dan mengetikkan kata kunci \texttt{Firing Rifle} pada bilah pencarian. Saya memilih animasi aksi tembakan senapan untuk diterapkan pada karakter Gas Mask yang sedang aktif.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/26.png}
+  \caption{Pengunduhan Berkas Animasi FBX dari Mixamo}
+  \label{fig:mixamo-anim-download}
+\end{figure}
+
+\par Sebagaimana tampak pada Gambar \ref{fig:mixamo-anim-download}, saya menekan tombol \textit{Download} untuk mengunduh animasi aksi tersebut. Parameter unduhan dikonfigurasi dengan format \textit{FBX}, kecepatan bingkai \texttt{30 fps}, dan opsi kompresi bingkai kunci disetel tanpa reduksi agar kurva gerakan rotasi sendi tetap presisi saat diimpor ke dalam mesin game.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/27.png}
+  \caption{Pembuatan Direktori Penyimpanan Content/Characters/Mixamo}
+  \label{fig:ue-folder-mixamo-created}
+\end{figure}
+
+\par Sebelum memasukkan berkas unduhan ke dalam mesin game, saya menyiapkan manajemen direktori aset yang tertata rapi. Berdasarkan Gambar \ref{fig:ue-folder-mixamo-created}, saya membuka \textit{Content Drawer} Unreal Engine, menavigasi ke dalam folder \texttt{Content > Characters}, lalu mengeklik kanan untuk membuat folder baru bernama \texttt{Mixamo}. Pemisahan folder ini menjamin agar aset dari pihak ketiga tidak tercampur baur dengan aset bawaan mesin.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/28.png}
+  \caption{Proses Impor Berkas FBX Firing Rifle ke Engine}
+  \label{fig:ue-import-fbx-action}
+\end{figure}
+
+\par Gambar \ref{fig:ue-import-fbx-action} mendokumentasikan aksi impor berkas ke dalam proyek. Melalui tombol \textit{Import} pada \textit{Content Drawer} atau metode \textit{drag-and-drop}, saya memasukkan berkas animasi \texttt{Firing Rifle.fbx} ke direktori target \texttt{Content/Characters/Mixamo}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/29.png}
+  \caption{Konfigurasi Opsi pada Dialog FBX Import Options}
+  \label{fig:ue-fbx-import-options}
+\end{figure}
+
+\par Saat berkas FBX dimasukkan, Unreal Engine secara otomatis memunculkan jendela dialog \textit{FBX Import Options} sebagaimana ditampilkan pada Gambar \ref{fig:ue-fbx-import-options}. Pada panel ini, saya memastikan bahwa opsi \textit{Import Mesh} dalam keadaan tercentang, opsi \textit{Skeletal Mesh} aktif, serta pada kategori \textit{Animation} saya mengaktifkan centang \textit{Import Animations}. Pengaturan ini penting agar mesin tidak hanya mengimpor \textit{mesh} tubuh karakter dan kerangka tulangnya, melainkan sekaligus mengekstrak klip sekuens animasi yang tertanam di dalam berkas FBX. Setelah seluruh opsi dipastikan sesuai, saya menekan tombol \textit{Import All}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/30.png}
+  \caption{Struktur Aset Hasil Impor pada Content Drawer}
+  \label{fig:ue-imported-assets-list}
+\end{figure}
+
+\par Setelah proses pemrosesan selesai, Gambar \ref{fig:ue-imported-assets-list} memperlihatkan deretan aset baru yang berhasil digenerasi oleh sistem ke dalam \textit{Content Drawer}. Aset-aset tersebut meliputi berkas \textit{Skeletal Mesh}, hierarki tulang \textit{Skeleton}, aset simulasi fisik \textit{Physics Asset}, klip sekuens animasi \textit{Animation Sequence}, serta sejumlah material dan tekstur dasar pembungkus pakaian karakter.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/31.png}
+  \caption{Standardisasi Penamaan Skeletal Mesh dan Skeleton}
+  \label{fig:ue-naming-mesh-skeleton}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:ue-naming-mesh-skeleton}, langkah berikutnya yang sangat esensial adalah standardisasi penamaan sesuai konvensi Unreal Engine. Saya menamai berkas \textit{Skeletal Mesh} karakter menjadi \texttt{SK\_Firing\_Rifle} dengan prefiks standar \texttt{SK\_}, serta menamai aset kerangka tulangnya menjadi \texttt{SK\_Firing\_Rifle\_Skeleton}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/32.png}
+  \caption{Standardisasi Penamaan Berkas Tekstur Karakter}
+  \label{fig:ue-naming-textures}
+\end{figure}
+
+\par Gambar \ref{fig:ue-naming-textures} memperlihatkan proses penggantian nama pada seluruh berkas tekstur karakter. Saya menyematkan prefiks standar \texttt{T\_} pada tiap citra tekstur, seperti \texttt{T\_Ch35\_1001\_Diffuse}, \texttt{T\_Ch35\_1001\_Glossiness}, \texttt{T\_Ch35\_1001\_Normal}, serta \texttt{T\_Ch35\_1001\_Specular}, guna memudahkan pemfilteran aset tekstur saat proyek berkembang.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/33.png}
+  \caption{Standardisasi Penamaan Material Instance Karakter}
+  \label{fig:ue-naming-materials}
+\end{figure}
+
+\par Sejalan dengan penataan tekstur, Gambar \ref{fig:ue-naming-materials} memperlihatkan standardisasi pada aset material penutup tubuh karakter. Masing-masing material dikonfigurasi dan dinamai menggunakan prefiks \texttt{MI\_} untuk \textit{Material Instance}, seperti \texttt{MI\_Ch35\_body}, \texttt{MI\_Ch35\_body1}, dan \texttt{MI\_Ch35\_body2}, yang mengikat material rompi, masker, dan seragam taktis karakter.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/34.png}
+  \caption{Konsolidasi Seluruh Aset Karakter Mixamo yang Rapi}
+  \label{fig:ue-mixamo-assets-organized}
+\end{figure}
+
+\par Hasil akhir dari proses konsolidasi aset disajikan pada Gambar \ref{fig:ue-mixamo-assets-organized}. Seluruh 23 berkas aset di dalam direktori \texttt{Content/Characters/Mixamo} kini telah tertata dengan sangat disiplin, bersih, dan konsisten. Setiap tipe aset memiliki identitas prefiks yang jelas, sehingga siap digunakan pada tahapan penyelarasan kerangka animasi selanjutnya.
+
+\subsection{Konfigurasi IK Rig dan Retargeting Animasi IK Retargeter}
+
+\par Salah satu tantangan teknis utama dalam grafika komputer dan pengembangan game adalah mentransfer animasi dari satu karakter ke karakter lain yang memiliki struktur hierarki kerangka tulang atau proporsi tubuh berbeda. Karakter bawaan Unreal Engine (Manny/Quinn) menggunakan pose referensi \textit{A-Pose}, sedangkan karakter dari Mixamo menggunakan pose referensi \textit{T-Pose}. Untuk menjembatani perbedaan ini secara dinamis, Unreal Engine 5 menyediakan subsistem \textit{IK Rig} dan \textit{IK Retargeter}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/35.png}
+  \caption{Inisiasi Retargeting Animasi pada Aset MM\_Idle}
+  \label{fig:retarget-init-mm-idle}
+\end{figure}
+
+\par Sebagaimana diperlihatkan pada Gambar \ref{fig:retarget-init-mm-idle}, langkah awal penyelarasan animasi adalah membuka direktori animasi Mannequin pada folder \texttt{Characters/Mannequins/Anims/Unarmed}. Saya memilih aset animasi diam \texttt{MM\_Idle}, mengeklik kanan ikon aset, lalu memilih opsi \textit{Retarget Animations} dan mengeklik perintah \textit{Duplicate and Retarget Animation Blueprint/Asset}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/36.png}
+  \caption{Pembuatan Otomatis Source dan Target IK Rig}
+  \label{fig:retarget-auto-generate-rig}
+\end{figure}
+
+\par Gambar \ref{fig:retarget-auto-generate-rig} menampilkan jendela panduan dialog retargeting otomatis. Pada antarmuka ini, Unreal Engine 5 menyediakan kapabilitas untuk menganalisis hierarki tulang \textit{Source Skeleton} dan \textit{Target Skeleton}. Dengan opsi generasi otomatis, mesin secara cerdas memetakan rantai \textit{IK Chains} untuk kepala, tulang belakang, lengan, dan kaki tanpa pendefinisian manual.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/37.png}
+  \caption{Generasi Aset IK Rig dan RTG\_AutoGenerated}
+  \label{fig:retarget-assets-generated}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:retarget-assets-generated}, proses komputasi generasi otomatis menghasilkan tiga berkas aset utama di dalam \textit{Content Drawer}:
+\begin{enumerate}
+  \item \texttt{IK\_AutoGeneratedSource}: Berkas \textit{IK Rig} yang bertindak sebagai pemeta rantai gerak tulang pada kerangka sumber Unreal Mannequin.
+  \item \texttt{IK\_AutoGeneratedTarget}: Berkas \textit{IK Rig} yang mendefinisikan struktur rantai tulang yang bersesuaian pada kerangka target \texttt{SK\_Firing\_Rifle\_Skeleton}.
+  \item \texttt{RTG\_AutoGenerated}: Aset utama \textit{IK Retargeter} yang mengorkestrasi konversi matematika koordinat spasial dan perputaran sendi antar-kedua \textit{IK Rig} tersebut.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/38.png}
+  \caption{Antarmuka Editor RTG\_AutoGenerated Pose Karakter}
+  \label{fig:retarget-editor-overview}
+\end{figure}
+
+\par Untuk memverifikasi keakuratan pemetaan tulang, Gambar \ref{fig:retarget-editor-overview} mendokumentasikan saat saya membuka aset \texttt{RTG\_AutoGenerated}. Pada jendela editor ini, kedua karakter ditampilkan bersanding di dalam \textit{Viewport}: model Mannequin di sebelah kiri dan model Gas Mask Mixamo di sebelah kanan. Sistem secara visual memperlihatkan bagaimana orientasi sendi \textit{pelvis}, \textit{spine}, lengan, dan tungkai telah saling terhubung melalui rantai kinematika balik.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/39.png}
+  \caption{Evaluasi Pratinjau Keselarasan Animasi Retargeting}
+  \label{fig:retarget-preview-alignment}
+\end{figure}
+
+\par Pada tahapan evaluasi gerak pada Gambar \ref{fig:retarget-preview-alignment}, saya memutar pratinjau animasi pada panel \textit{Asset Browser} di dalam editor retargeter. Ketika animasi dijalankan, model karakter Gas Mask mampu menirukan setiap gerak pernapasan dan pergeseran bobot tubuh dari animasi \texttt{MM\_Idle} milik Mannequin secara serempak. Hal ini membuktikan bahwa algoritma kompensasi posisi antara \textit{T-Pose} dan \textit{A-Pose} telah bekerja secara tepat.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/40.png}
+  \caption{Konfirmasi Setup dan Penyelesaian IK Retargeter}
+  \label{fig:retarget-setup-complete}
+\end{figure}
+
+\par Gambar \ref{fig:retarget-setup-complete} memperlihatkan konfirmasi akhir dari penyelarasan kerangka. Parameter rantai tulang seperti \textit{Root}, \textit{Spine}, \textit{LeftArm}, \textit{RightArm}, \textit{LeftLeg}, dan \textit{RightLeg} seluruhnya berstatus valid tanpa ada pesan peringatan kesalahan rotasi sendi \textit{joint flipped}. Dengan tersedianya aset \texttt{RTG\_AutoGenerated} yang terverifikasi ini, saya dapat melanjutkan ke tahapan pembuatan grafik animasi \textit{runtime}.
+
+\subsection{Pembuatan Animation Blueprint ABP\_Aure dan Retarget Pose From Mesh}
+
+\par Pendekatan tradisional dalam penerapan animasi retargeting mengharuskan pengembang mengekspor dan menyimpan puluhan berkas sekuens animasi baru secara permanen ke disk, yang memboroskan kapasitas memori. Pada Unreal Engine 5, diperkenalkan metode modern yang jauh lebih efisien bernama \textit{Runtime Retargeting} menggunakan node \textit{Retarget Pose From Mesh} di dalam \textit{Animation Blueprint}. Metode ini mentransfer pose animasi secara instan pada memori kerja selama game berjalan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/41.png}
+  \caption{Pembuatan Aset Animation Blueprint Baru}
+  \label{fig:abp-create-new}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:abp-create-new}, langkah awal perancangan logika animasi adalah membuat aset \textit{Animation Blueprint} baru. Pada folder \texttt{Characters/Mixamo} di \textit{Content Drawer}, saya mengeklik kanan area kosong, mengarahkan kursor ke menu \textit{Animation}, lalu memilih opsi \textit{Animation Blueprint}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/42.png}
+  \caption{Pemilihan SK\_Firing\_Rifle\_Skeleton sebagai Target Skeleton}
+  \label{fig:abp-select-skeleton}
+\end{figure}
+
+\par Pada jendela dialog pembuatan \textit{Create Animation Blueprint} sebagaimana tampak pada Gambar \ref{fig:abp-select-skeleton}, mesin meminta penentuan kerangka tulang sasaran. Dari daftar kerangka yang terdeteksi pada proyek, saya memilih aset \texttt{SK\_Firing\_Rifle\_Skeleton}. Pemilihan kerangka ini krusial agar grafik animasi yang disusun beroperasi secara spesifik pada hierarki tulang milik karakter Gas Mask Mixamo.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/43.png}
+  \caption{Penamaan Aset Animation Blueprint sebagai ABP\_Aure}
+  \label{fig:abp-naming-abp-aure}
+\end{figure}
+
+\par Sesuai dengan petunjuk pada lembar modul praktikum, Gambar \ref{fig:abp-naming-abp-aure} memperlihatkan aset \textit{Animation Blueprint} baru tersebut saya beri nama \texttt{ABP\_Aure}. Penamaan ini menggunakan prefiks standar \texttt{ABP\_} untuk \textit{Animation Blueprint} yang mengidentifikasikan berkas pengendali grafik animasi runtime.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/44.png}
+  \caption{Antarmuka Lembar Kerja AnimGraph pada ABP\_Aure}
+  \label{fig:abp-animgraph-empty}
+\end{figure}
+
+\par Gambar \ref{fig:abp-animgraph-empty} menampilkan antarmuka kerja editor saat berkas \texttt{ABP\_Aure} dibuka. Di sisi kiri atas terdapat panel \textit{Viewport} yang menampilkan karakter dalam kondisi pratinjau, sementara di area tengah terbentang kanvas visual \textit{AnimGraph} yang saat ini baru memuat satu node terminal tunggal bernama \textit{Output Pose} dengan ikon pose Mannequin berlari.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/45.png}
+  \caption{Penambahan Node Retarget Pose From Mesh}
+  \label{fig:abp-add-retarget-node}
+\end{figure}
+
+\par Untuk menghubungkan aliran data pose animasi dari karakter utama ke karakter Mixamo, Gambar \ref{fig:abp-add-retarget-node} mendokumentasikan saat saya mengeklik kanan pada kanvas kosong \textit{AnimGraph} dan mengetikkan kata kunci pencarian \texttt{retarget pose fro}. Dari daftar tindakan yang muncul, saya memilih node khusus bernama \textit{Retarget Pose From Mesh}. Node ini memiliki pin masukan tersembunyi yang secara otomatis membaca pose kerangka dari komponen \textit{parent mesh} tempat komponen ini berada.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/46.png}
+  \caption{Konfigurasi Properti RTG\_AutoGenerated pada Node}
+  \label{fig:abp-set-retargeter-asset}
+\end{figure}
+
+\par Setelah meletakkan node tersebut pada kanvas, saya memilih node \textit{Retarget Pose From Mesh} untuk membuka panel \textit{Details} di sisi kanan editor sebagaimana terlihat pada Gambar \ref{fig:abp-set-retargeter-asset}. Pada kategori \textit{Settings}, saya menugaskan aset retargeter yang telah dibuat sebelumnya dengan memilih \texttt{RTG\_AutoGenerated} pada kolom properti \textit{IKRetargeter Asset}. Langkah ini memberi instruksi kepada mesin untuk menggunakan aturan konversi kerangka dari \texttt{RTG\_AutoGenerated} dalam menghitung pose gerak setiap \textit{frame}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/47.png}
+  \caption{Penghubungan Node ke Output Pose dan Kompilasi}
+  \label{fig:abp-connect-output-pose}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:abp-connect-output-pose}, langkah penutup pada perancangan awal grafik animasi adalah menghubungkan alur pose dari pin keluaran node \textit{Retarget Pose From Mesh} ke pin masukan \textit{Result} pada node terminal \textit{Output Pose}. Setelah terhubung sempurna, saya menekan tombol \textit{Compile} di sudut kiri atas bilah alat. Ikon centang hijau muncul pada tombol \textit{Compile}, memvalidasi bahwa grafik evaluasi pose telah berhasil dirangkai tanpa ada kesalahan sintaks logika.
+
+\subsection{Integrasi Komponen Skeletal Mesh pada BP\_ThirdPersonCharacter}
+
+\par Setelah grafik animasi \texttt{ABP\_Aure} siap mentransfer pose, tahapan krusial berikutnya adalah mengintegrasikan \textit{Skeletal Mesh} karakter Gas Mask ke dalam aktor pengendali pemain utama, yaitu \texttt{BP\_ThirdPersonCharacter}. Pada arsitektur Unreal Engine, pendekatan \textit{Leader-Follower Pose} diterapkan dengan menjadikan komponen mesh baru sebagai \textit{child component} dari komponen kerangka bawaan pemain.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/48.png}
+  \caption{Navigasi Membuka BP\_ThirdPersonCharacter}
+  \label{fig:bp-open-thirdperson}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:bp-open-thirdperson}, langkah awal integrasi karakter adalah membuka berkas Blueprint pemain. Pada \textit{Content Drawer}, saya menuju folder \texttt{ThirdPerson/Blueprints} dan mengeklik ganda aset \texttt{BP\_ThirdPersonCharacter} untuk membuka editor kelas tersebut.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/49.png}
+  \caption{Tampilan Viewport Default BP\_ThirdPersonCharacter}
+  \label{fig:bp-viewport-default}
+\end{figure}
+
+\par Gambar \ref{fig:bp-viewport-default} menampilkan tampilan \textit{Viewport} awal dari \texttt{BP\_ThirdPersonCharacter}. Pada area tengah terlihat komponen fisik \textit{CapsuleComponent}, kamera pengikut \textit{FollowCamera} yang terpasang pada lengan \textit{CameraBoom}, serta komponen kerangka bawaan \texttt{Mesh (CharacterMesh0)} yang saat ini masih memuat geometri visual Mannequin Unreal Engine.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/50.png}
+  \caption{Penambahan Skeletal Mesh Component Baru}
+  \label{fig:bp-add-skeletal-component}
+\end{figure}
+
+\par Untuk menyematkan karakter Gas Mask, Gambar \ref{fig:bp-add-skeletal-component} memperlihatkan momen saat saya mengeklik tombol hijau \texttt{+ Add} di sudut kiri atas panel \textit{Components}. Pada bilah pencarian komponen yang muncul, saya mengetikkan kata kunci pencarian \texttt{skeletal} dan memilih tipe komponen \textit{Skeletal Mesh Component}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/51.png}
+  \caption{Penempatan Komponen SK\_Firing\_Rifle di Bawah Mesh Induk}
+  \label{fig:bp-child-component-place}
+\end{figure}
+
+\par Sebagaimana tampak pada Gambar \ref{fig:bp-child-component-place}, komponen kerangka baru tersebut saya beri nama \texttt{SK\_Firing\_Rifle}. Pada hierarki komponen, saya menyusun komponen \texttt{SK\_Firing\_Rifle} ini bersarang tepat di bawah \texttt{Mesh (CharacterMesh0)} sebagai \textit{child component}. Posisi hierarki ini merupakan syarat mutlak agar node \textit{Retarget Pose From Mesh} pada grafik animasi mengenali \texttt{CharacterMesh0} sebagai \textit{parent mesh} acuan secara otomatis.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/52.png}
+  \caption{Penugasan Skeletal Mesh Asset SK\_Firing\_Rifle}
+  \label{fig:bp-assign-mesh-asset}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:bp-assign-mesh-asset}, setelah komponen terpilih di panel hierarki, saya beralih ke panel \textit{Details} di sisi kanan editor. Pada kategori \textit{Mesh}, saya mengeklik menu dropdown properti \textit{Skeletal Mesh Asset} dan memilih model \textit{Skeletal Mesh} karakter yang telah diimpor, yaitu \texttt{SK\_Firing\_Rifle}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/53.png}
+  \caption{Tampilan Karakter Mixamo dalam Kondisi Awal T-Pose}
+  \label{fig:bp-mesh-tpose-initial}
+\end{figure}
+
+\par Pada tahapan yang terdokumentasi pada Gambar \ref{fig:bp-mesh-tpose-initial}, model \textit{Skeletal Mesh} karakter Gas Mask berhasil muncul di dalam \textit{Viewport}. Namun, karakter masih berdiri kaku dalam pose \textit{T-Pose} horizontal dan bertumpuk dengan model Mannequin. Kondisi ini terjadi karena komponen \textit{mesh} baru belum diberi kelas animasi \textit{Anim Class}, sehingga sistem hanya menampilkan \textit{bind pose} bawaan kerangka.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/54.png}
+  \caption{Evaluasi Properti Komponen SK\_Firing\_Rifle}
+  \label{fig:bp-review-animclass-none}
+\end{figure}
+
+\par Melalui pemeriksaan mendalam pada panel \textit{Details} sebagaimana ditunjukkan pada Gambar \ref{fig:bp-review-animclass-none}, saya mengevaluasi kategori \textit{Animation}. Terlihat bahwa properti \textit{Animation Mode} telah berada pada mode \textit{Use Animation Blueprint}, namun kolom properti \textit{Anim Class} masih bernilai \texttt{None}. Ketiadaan kelas animasi inilah yang menjadi penyebab utama mengapa karakter belum merespons pose retargeting dari mesh induk.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/55.png}
+  \caption{Pemilihan ABP\_Aure pada Dropdown Anim Class}
+  \label{fig:bp-select-abp-aure}
+\end{figure}
+
+\par Untuk memperbaiki kondisi tersebut, Gambar \ref{fig:bp-select-abp-aure} memperlihatkan tahapan perbaikan di mana saya mengeklik menu dropdown pada kolom properti \textit{Anim Class}. Dari daftar kelas animasi yang tersedia pada proyek, saya memilih \texttt{ABP\_Aure} yang telah dirancang sebelumnya dengan node \textit{Retarget Pose From Mesh}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/56.png}
+  \caption{Verifikasi Transformasi Pose Karakter Mixamo}
+  \label{fig:bp-animclass-applied-pose}
+\end{figure}
+
+\par Sebagaimana dibuktikan pada Gambar \ref{fig:bp-animclass-applied-pose}, segera setelah properti \textit{Anim Class} terisi oleh \texttt{ABP\_Aure\_C}, karakter Gas Mask pada \textit{Viewport} seketika keluar dari kondisi kaku \textit{T-Pose} dan bertransformasi mengadopsi \textit{idle pose} yang persis sama dengan pose Mannequin. Hal ini memvalidasi secara visual bahwa saluran komunikasi pose antar-kerangka telah aktif dan bekerja dengan sempurna.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/57.png}
+  \caption{Penonaktifan Visibilitas Mesh Mannequin Bawaan}
+  \label{fig:bp-hide-mannequin-visible}
+\end{figure}
+
+\par Meskipun karakter Gas Mask telah bergerak selaras, keberadaan dua tubuh karakter yang saling bertumpuk tentu mengganggu estetika visual permainan. Untuk mengatasi hal ini, Gambar \ref{fig:bp-hide-mannequin-visible} memperlihatkan langkah saya memilih komponen induk \texttt{Mesh (CharacterMesh0)} pada tab \textit{Components}, lalu pada panel \textit{Details} kategori \textit{Rendering}, saya menghilangkan tanda centang pada opsi \textit{Visible}. Tindakan ini menyembunyikan tampilan visual \textit{mesh} Mannequin tanpa menghapusnya dari hierarki.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/58.png}
+  \caption{Pengaturan Always Tick Pose and Refresh Bones}
+  \label{fig:bp-tick-refresh-bones}
+\end{figure}
+
+\par Secara default, Unreal Engine memiliki mekanisme optimasi performa yang secara otomatis menghentikan pembaruan kalkulasi tulang pada mesh yang visibilitasnya dinonaktifkan. Apabila hal ini dibiarkan, maka komponen anak \texttt{SK\_Firing\_Rifle} tidak akan menerima data transformasi tulang saat game dimainkan. Untuk mencegah kendala tersebut, Gambar \ref{fig:bp-tick-refresh-bones} mendokumentasikan pengaturan pada komponen \texttt{Mesh (CharacterMesh0)}, di mana saya mengubah \textit{Visibility Based Anim Tick Option} menjadi \textit{Always Tick Pose and Refresh Bones}. Pengaturan ini memastikan mesin tetap menghitung siklus transformasi tulang Mannequin setiap \textit{frame} di latar belakang sehingga karakter Gas Mask menerima umpan gerak secara kontinu.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/59.png}
+  \caption{Hasil Kompilasi BP\_ThirdPersonCharacter}
+  \label{fig:bp-compile-success}
+\end{figure}
+
+\par Gambar \ref{fig:bp-compile-success} memperlihatkan momen saat saya menekan tombol \textit{Compile} dan \textit{Save} pada bilah alat Blueprint. Panel \textit{Compiler Results} di bagian bawah menampilkan laporan sukses kompilasi kelas, mengonfirmasi bahwa hierarki komponen dan pengaturan visibilitas karakter telah siap digunakan.
+
+\subsection{Pembuatan dan Integrasi Animation Montage AM\_Emote}
+
+\par Selain animasi gerakan dasar dari retargeting pose induk, karakter game modern membutuhkan kemampuan mengeksekusi aksi sesaat, seperti menembak atau gestur \textit{emote}, yang dapat dipicu oleh pemain. Pada Unreal Engine, fungsionalitas ini diwujudkan melalui sistem \textit{Animation Montage}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/60.png}
+  \caption{Pembuatan Aset Animation Montage dari Animasi Rifle}
+  \label{fig:montage-create-from-anim}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:montage-create-from-anim}, langkah awal pembuatan aksi adalah mengonversi sekuens animasi menjadi sebuah \textit{Montage}. Pada direktori \texttt{Mixamo} di \textit{Content Drawer}, saya mengeklik kanan animasi \texttt{A\_Firing\_Rifle\_Anim}, lalu pada menu konteks \textit{Create} saya memilih opsi \textit{Create AnimMontage}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/61.png}
+  \caption{Penamaan Aset Animasi Montage sebagai AM\_Emote}
+  \label{fig:montage-naming-am-emote}
+\end{figure}
+
+\par Sesuai dengan konvensi penamaan resmi modul praktikum, Gambar \ref{fig:montage-naming-am-emote} memperlihatkan aset baru tersebut saya beri nama \texttt{AM\_Emote} dengan menyematkan prefiks standar \texttt{AM\_} untuk \textit{Animation Montage}. Aset ini bertindak sebagai pembungkus fleksibel untuk pengaturan kecepatan putar, pencampuran transisi \textit{blending in/out}, dan pemisahan seksi animasi.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/62.png}
+  \caption{Penyisipan Node Slot DefaultSlot pada AnimGraph ABP\_Aure}
+  \label{fig:abp-insert-slot-default}
+\end{figure}
+
+\par Agar animasi \textit{Montage} dapat diputar dan menimpa pose gerakan dasar secara halus saat dipanggil, grafik animasi harus memiliki gerbang slot penampung. Berdasarkan Gambar \ref{fig:abp-insert-slot-default}, saya membuka kembali lembar kerja \textit{AnimGraph} pada \texttt{ABP\_Aure}. Saya memutus sambungan pin antara node \textit{Retarget Pose From Mesh} dan node terminal \textit{Output Pose}, lalu menyisipkan node \textit{Slot 'DefaultSlot'}. Pin keluaran pose dari node retarget disambungkan ke pin \textit{Source} node slot, dan pin keluaran node slot diteruskan ke pin \textit{Result} \textit{Output Pose}. Susunan ini menjamin bahwa jika tidak ada montage yang dimainkan, pose retarget dasar akan mengalir normal, namun ketika montage dipicu, frame animasi montage akan ditumpangkan secara mulus di atas pose dasar.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/63.png}
+  \caption{Navigasi ke EventGraph BP\_ThirdPersonCharacter}
+  \label{fig:bp-navigate-eventgraph}
+\end{figure}
+
+\par Setelah grafik animasi siap menerima panggilan montage, tahapan berikutnya adalah merancang logika pemicu tombol interaktif pada aktor karakter. Sebagaimana tampak pada Gambar \ref{fig:bp-navigate-eventgraph}, saya membuka kembali jendela editor \texttt{BP\_ThirdPersonCharacter} dan mengalihkan tab kerja dari \textit{Viewport} ke lembar kanvas logika visual \textit{EventGraph}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/64.png}
+  \caption{Pencarian Node Play Montage pada Menu Tindakan}
+  \label{fig:bp-search-play-montage}
+\end{figure}
+
+\par Pada kanvas kosong \textit{EventGraph}, Gambar \ref{fig:bp-search-play-montage} memperlihatkan saat saya mengeklik kanan mouse untuk memunculkan menu pencarian tindakan dan mengetikkan kata kunci \texttt{playmonta}. Dari kategori \textit{Animation > Montage}, saya memilih fungsi bawaan \textit{Play Montage}. Node ini bertugas memutar aset montage pada komponen \textit{Skeletal Mesh} tertentu saat menerima sinyal eksekusi.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/65.png}
+  \caption{Konfigurasi Target SK Firing Rifle dan Montage AM\_Emote}
+  \label{fig:bp-config-play-montage}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:bp-config-play-montage}, saya menyeret referensi variabel komponen \texttt{SK\_Firing\_Rifle} dari panel \textit{Components} ke kanvas grafik, lalu menghubungkan pin referensinya ke pin masukan biru \textit{In Skeletal Mesh Component} pada node \textit{Play Montage}. Selanjutnya, pada kolom parameter \textit{Montage to Play}, saya memilih aset montage \texttt{AM\_Emote} dari menu dropdown. Konfigurasi ini secara tegas menginstruksikan sistem bahwa montage penembakan senapan harus dimainkan secara spesifik pada \textit{mesh} tubuh karakter Gas Mask.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/66.png}
+  \caption{Penghubungan Pemicu Input Tombol Keyboard E}
+  \label{fig:bp-connect-input-e}
+\end{figure}
+
+\par Untuk memungkinkan pemain memicu animasi tersebut melalui perangkat keras masukan, Gambar \ref{fig:bp-connect-input-e} mendokumentasikan penambahan node masukan \textit{Keyboard Event E}. Saya menyambungkan pin eksekusi \textit{Pressed} dari node tombol \texttt{E} ke pin eksekusi masukan node \textit{Play Montage}. Dengan demikian, setiap kali pemain menekan tombol keyboard \texttt{E} saat permainan berlangsung, sinyal komputasi akan langsung dialirkan untuk memutar animasi montage.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/67.png}
+  \caption{Kompilasi Logika Eksekusi Montage pada Karakter}
+  \label{fig:bp-compile-montage-logic}
+\end{figure}
+
+\par Gambar \ref{fig:bp-compile-montage-logic} memperlihatkan tahapan saat saya menekan tombol \textit{Compile} pada bilah atas editor \texttt{BP\_ThirdPersonCharacter}. Jendela status kompilasi mengonfirmasikan bahwa perangkaian node masukan tombol \texttt{E}, komponen \textit{mesh} sasaran, dan fungsi \textit{Play Montage} telah bebas dari kesalahan logika dan siap diuji dalam simulasi.
+
+\subsection{Konfigurasi Level, Player Start, World Settings, dan Animasi Gerak Dasar}
+
+\par Sebelum simulasi interaktif dapat diluncurkan pada level lingkungan \texttt{LV\_Praktikum}, terdapat serangkaian konfigurasi lingkungan dunia game yang wajib disiapkan, meliputi penentuan titik kemunculan awal pemain \textit{Player Start}, penugasan aturan mode game \textit{GameMode Override}, serta verifikasi persistensi siklus gerak dasar karakter.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/68.png}
+  \caption{Pencarian dan Pemilihan Aktor Player Start}
+  \label{fig:level-search-player-start}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:level-search-player-start}, saya kembali membuka \textit{Viewport} level \texttt{LV\_Praktikum}. Melalui menu \textit{Quick Add to Project} atau panel \textit{Place Actors}, saya mencari kata kunci \texttt{player} lalu memilih aktor \textit{Player Start}. Aktor ini berfungsi menandai koordinat ruang 3D tempat mesin melakukan \textit{spawn} karakter pemain saat simulasi dimulai.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/69.png}
+  \caption{Penempatan Aktor Player Start pada Permukaan Lanskap}
+  \label{fig:level-place-player-start}
+\end{figure}
+
+\par Sebagaimana tampak pada Gambar \ref{fig:level-place-player-start}, saya menyeret dan meletakkan aktor \textit{Player Start} tepat di atas lereng bukit pasir pada lanskap yang telah dipahat. Saya memanfaatkan gizmo transformasi translasi tombol \texttt{W} untuk memastikan bahwa kapsul aktor berada pas di atas permukaan tanah dan tidak terbenam ke dalam geometri medan, sehingga mencegah karakter terjebak di dalam tanah akibat tabrakan fisik awal.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/70.png}
+  \caption{Pembukaan Menu Pengaturan Level World Settings}
+  \label{fig:level-open-world-settings}
+\end{figure}
+
+\par Mengingat level \texttt{LV\_Praktikum} dibuat dari templat kosong, level ini secara bawaan belum memiliki aturan penanganan pemain. Berdasarkan Gambar \ref{fig:level-open-world-settings}, saya mengakses bilah menu utama \textit{Window} dan mengeklik opsi \textit{World Settings}. Tindakan ini memunculkan tab konfigurasi properti dunia pada panel di sisi kanan editor.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/71.png}
+  \caption{Konfigurasi GameMode Override ke BP\_ThirdPersonGameMode}
+  \label{fig:level-set-gamemode-override}
+\end{figure}
+
+\par Pada tab \textit{World Settings} sebagaimana diperlihatkan pada Gambar \ref{fig:level-set-gamemode-override}, saya menavigasi ke kategori \textit{Game Mode} dan membuka menu dropdown pada opsi properti \textit{GameMode Override}. Saya memilih kelas \texttt{BP\_ThirdPersonGameMode}. Penugasan \textit{GameMode Override} ini sangat esensial karena kelas tersebut secara baku menginstruksikan mesin untuk menggunakan \texttt{BP\_ThirdPersonCharacter} sebagai pion pemain \textit{Default Pawn Class} saat simulasi dijalankan pada level ini.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/72.png}
+  \caption{Konfigurasi Animasi Gerak Dasar Locomotion pada Karakter}
+  \label{fig:bp-locomotion-mesh-check}
+\end{figure}
+
+\par Sebagai tahapan verifikasi teknis akhir sebelum uji coba permainan, Gambar \ref{fig:bp-locomotion-mesh-check} mendokumentasikan pemeriksaan konfigurasi pada komponen induk \texttt{Mesh (CharacterMesh0)} di dalam \texttt{BP\_ThirdPersonCharacter}. Saya memastikan bahwa properti \textit{Anim Class} pada mesh induk tetap terhubung secara solid ke kelas animasi \texttt{ABP\_Unarmed\_C} dan \textit{Skeletal Mesh Asset} tetap memegang model kerangka \texttt{SKM\_Quinn\_Simple}. Keberadaan \texttt{ABP\_Unarmed\_C} yang tetap beroperasi di latar belakang ini merupakan kunci utama yang menyuplai seluruh kurva gerak dasar \textit{locomotion state machine}, mulai dari siklus diam, berjalan kaki, berlari cepat, hingga melompat di udara, yang kemudian ditiru secara instan oleh \textit{mesh} karakter Gas Mask melalui node retargeting.
+
+\subsection{Pengujian Simulasi Play-in-Editor (PIE) dan Validasi Hasil}
+
+\par Tahapan puncak dari seluruh rangkaian praktikum adalah melakukan pengujian interaktif secara langsung menggunakan mode simulasi \textit{Play-in-Editor} (PIE) atau jendela terpisah \textit{Standalone Window}. Pengujian ini bertujuan untuk memvalidasi secara empiris keberhasilan deformasi medan lanskap, keakuratan sistem tata cahaya dinamis, keandalan transfer pose animasi gerak dasar, serta responsivitas pemanggilan \textit{Animation Montage}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/73.png}
+  \caption{Pengujian Simulasi PIE: Karakter Berlari pada Lanskap}
+  \label{fig:pie-test-running-landscape}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:pie-test-running-landscape}, saya meluncurkan simulasi permainan dengan menekan tombol \textit{Play} pada bilah alat editor. Karakter Gas Mask SWAT berhasil muncul tepat pada titik koordinat \textit{Player Start} di puncak perbukitan pasir. Ketika saya menekan tombol keyboard \texttt{W}, \texttt{A}, \texttt{S}, dan \texttt{D}, karakter dapat bergerak secara responsif menuruni dan menaiki lereng lanskap. Siklus animasi berjalan dan berlari tertransfer secara sangat mulus dari mesh penggerak tanpa mengalami dislokasi sendi \textit{joint twisting} maupun distorsi poligonal yang rusak, membuktikan bahwa integrasi \textit{Leader-Follower Pose} dengan node \textit{Retarget Pose From Mesh} beroperasi dengan sempurna.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/74.png}
+  \caption{Pengujian Simulasi PIE: Eksekusi Animasi Montage Tombol E}
+  \label{fig:pie-test-montage-action}
+\end{figure}
+
+\par Gambar \ref{fig:pie-test-montage-action} mendokumentasikan pengujian interaktif kedua saat saya menekan tombol keyboard \texttt{E} saat karakter sedang berada di atas bukit pasir. Seketika sinyal masukan mengeksekusi node \textit{Play Montage} pada \textit{EventGraph}. Karakter Gas Mask langsung beralih memainkan animasi aksi penembakan senapan \texttt{AM\_Emote} secara presisi lengkap dengan bayangan dinamis di permukaan tanah bertekstur PBR. Setelah animasi aksi tuntas, karakter kembali bertransisi secara mulus \textit{blended out} ke pose diam tanpa terjadi hentakan \textit{snapping} visual. Pengujian ini memastikan bahwa seluruh sistem perancangan dunia, kerangka karakter, retargeting dinamis, dan sistem montage telah terintegrasi secara utuh dan siap digunakan untuk pengembangan game tingkat lanjut.
 
 \section{Hasil Akhir}
+
+\par Berdasarkan seluruh rangkaian perancangan, implementasi, dan pengujian teknis yang telah saya laksanakan pada Praktikum Pengembangan Game Pertemuan 6 dengan topik bahasan \textit{Landscape, Rig, Retarget, dan Animation} pada Unreal Engine 5, berikut adalah kesimpulan dan analisis komprehensif atas pencapaian hasil praktikum:
+\begin{enumerate}[label=\alph*.]
+  \item \textbf{Keberhasilan Perancangan Lingkungan Terbuka dan Lanskap Bertekstur PBR:} Saya telah berhasil membangun level mandiri \texttt{LV\_Praktikum} dari templat kosong menggunakan tata cahaya atmosferik lima komponen melalui \textit{Environment Light Mixer}, meliputi \textit{Directional Light}, \textit{SkyLight}, \textit{SkyAtmosphere}, \textit{Volumetric Cloud}, dan \textit{Exponential Height Fog}. Topografi perbukitan pasir dipahat pada resolusi \texttt{505x505} dengan ukuran \texttt{15x15 Quads} memakai aneka alat \textit{landscape sculpting}, mencakup \textit{Sculpt}, \textit{Erase}, \textit{Smooth}, \textit{Flatten}, \textit{Ramp}, \textit{Erosion}, serta \textit{Noise}, dan dilapisi tekstur fotorealistis \texttt{farm\_soil\_2k} dari Poly Haven.
+  \item \textbf{Efektivitas Penyelarasan Kerangka Multi-Karakter via IK Retargeting:} Saya berhasil menguasai konsep dasar \textit{rigging} dan menjembatani disparitas pose referensi antara \textit{A-Pose} Mannequin dan \textit{T-Pose} Gas Mask. Pemanfaatan \textit{IK Rig} sumber dan target yang diorkestrasi oleh \texttt{RTG\_AutoGenerated} terbukti memetakan rantai kinematika balik antar-sendi secara matematis, mengeliminasi kesalahan rotasi tulang maupun distorsi pada \textit{mesh}.
+  \item \textbf{Efisiensi Arsitektur Runtime Retargeting pada Animation Blueprint:} Penerapan node \textit{Retarget Pose From Mesh} di dalam grafik animasi \texttt{ABP\_Aure} membuktikan keunggulan arsitektur modern Unreal Engine 5 dibandingkan metode retargeting konvensional. Sistem mampu menghitung dan mentransfer data pose secara dinamis saat \textit{runtime} langsung dari mesh induk di memori RAM, sehingga menghemat ruang penyimpanan disk proyek tanpa perlu menduplikasi puluhan aset animasi terpisah secara permanen.
+  \item \textbf{Keterpaduan Komponen Karakter dan Preservasi Gerak Dasar:} Melalui metode \textit{Leader-Follower Pose} pada karakter pemain, komponen \texttt{SK\_Firing\_Rifle} diposisikan sebagai \textit{child} dari \texttt{Mesh (CharacterMesh0)} di dalam \texttt{BP\_ThirdPersonCharacter}. Pengaturan opsi \textit{Visibility Based Anim Tick Option} menjadi \textit{Always Tick Pose and Refresh Bones} menjamin mesin gerak \texttt{ABP\_Unarmed\_C} tetap berjalan di latar belakang saat wujud mesh disembunyikan, sehingga karakter Gas Mask dapat bergerak selaras melintasi lanskap perbukitan.
+  \item \textbf{Responsivitas dan Fleksibilitas Eksekusi Animation Montage Gameplay:} Implementasi node slot \textit{DefaultSlot} pada lembar kerja animasi yang dipadukan dengan pemanggilan \textit{Play Montage} melalui penekanan tombol \texttt{E} pada \textit{EventGraph} membuktikan fleksibilitas sistem \textit{Animation Montage}. Animasi aksi khusus \texttt{AM\_Emote} dapat disuntikkan secara langsung di atas siklus gerak dasar dengan proses \textit{blending} yang halus, memberikan pengalaman kontrol permainan yang responsif dan bebas kendala visual.
+\end{enumerate}
 
 \end{document}
