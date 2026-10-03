@@ -6,7 +6,6 @@
 \usepackage{graphicx}
 \usepackage{titling}
 \usepackage{titlesec}
-\usepackage[backend=biber,style=ieee]{biblatex}
 
 % Package tambahan untuk layout dan formatting
 \usepackage{geometry}           % untuk margin
@@ -85,8 +84,8 @@
 }
 
 % Info dokumen
-\newcommand{\Pertemuan}{11}
-\newcommand{\Materi}{Navigate Unreal Engine 5.8}
+\newcommand{\Pertemuan}{7}
+\newcommand{\Materi}{Asset FAB dan Widget Blueprint (UI)}
 \title{Laporan Praktikum \\ Praktikum Pengembangan Game\\
 Pertemuan \Pertemuan\\
 \Materi}
@@ -99,22 +98,19 @@ Pertemuan \Pertemuan\\
 
 \begin{document}
 
-% Jika ingin daftar pustaka muncul meskipun belum ada entri di ref.bib,
-% tambahkan entri BibTeX ke file ref.bib terlebih dulu.
-
 % Title Page
-\begin{titlingpage} 
+\begin{titlingpage}
   \begin{center}
 
     \vspace{4cm}
-    \begin{Large} 
+    \begin{Large}
       \textbf{\thetitle} \\
     \end{Large}
     \vspace{2cm}
-    
-    \includegraphics[height=8cm]{resource/lambang ugm.png}\\ 
+
+    \includegraphics[height=8cm]{resource/lambang ugm.png}\\
     \vspace{2cm}
-    
+
     \textbf{Disusun oleh:}\\[0.8em]
     \begin{minipage}{0.8\textwidth}
       \raggedright
@@ -127,7 +123,7 @@ Pertemuan \Pertemuan\\
         \end{tabular}
       \end{large}
     \end{minipage}
-    
+
     \vspace{2cm}
     \begin{Large}
       \textbf{Program Studi D-IV Teknologi Rekayasa Perangkat Lunak} \\
@@ -137,7 +133,7 @@ Pertemuan \Pertemuan\\
       \textbf{Yogyakarta}\\
       \textbf{2026}\\
     \end{Large}
-    
+
   \end{center}
 \end{titlingpage}
 
@@ -155,7 +151,6 @@ Pertemuan \Pertemuan\\
   \renewcommand{\footrulewidth}{0pt}
   \fancyfoot[C]{\thepage}
 }
-
 
 % --- Styling Judul Daftar Isi, Gambar, dan Kode ---
 \renewcommand{\cfttoctitlefont}{\hfill\normalfont\LARGE\bfseries}
@@ -180,6 +175,7 @@ Pertemuan \Pertemuan\\
 \renewcommand{\contentsname}{\centering Daftar Isi}
 \renewcommand{\listfigurename}{\centering Daftar Gambar}
 \renewcommand{\lstlistlistingname}{\centering Daftar Kode}
+\renewcommand{\figurename}{Gambar}
 
 % --- Gaya Daftar Gambar dan Daftar Kode ---
 \renewcommand{\cftloftitlefont}{\hfill\normalfont\LARGE\bfseries}
@@ -191,8 +187,7 @@ Pertemuan \Pertemuan\\
 % Daftar Gambar
 \listoffigures
 
-% --- Halaman Laporan Pertemuan (seperti contoh gambar) ---
-% Tidak pakai \chapter agar bisa menyatu dengan halaman sebelumnya.
+% --- Halaman Laporan Pertemuan ---
 \newpage
 \begin{center}
   \textbf{\LARGE Pertemuan \Pertemuan\\
@@ -200,27 +195,722 @@ Pertemuan \Pertemuan\\
 \end{center}
 
 \section{Tujuan Praktikum}
-\begin{enumerate}
-  \item Something
+\begin{enumerate}[label=\arabic*.]
+  \item Mampu memahami alur penelusuran, perolehan, dan integrasi aset lingkungan 3D eksternal melalui ekosistem FAB Marketplace pada Unreal Engine 5.
+  \item Mampu mengonfigurasi dan mengaplikasikan \textit{Auto-Material} menggunakan \textit{Material Instance} \texttt{MI\_landscape\_pro\_v2\_inst} pada aktor lanskap.
+  \item Mampu memahami dan mengoperasikan fitur \textit{Auto-Fill Target Layer Assets} untuk penugasan berkas \textit{Layer Info} lanskap secara otomatis pada mode \textit{Paint}.
+  \item Mampu menguasai teknik penataan vegetasi lingkungan permainan melalui metode \textit{drag-and-drop} manual maupun penyebaran prosedural berskala besar menggunakan \textit{Foliage Mode}.
+  \item Mampu merancang hierarki antarmuka visual \textit{Heads-Up Display} HUD secara modular berbasis \textit{Widget Blueprint} \texttt{WBP\_HUD} dan \texttt{WBP\_Health}.
+  \item Mampu mengonfigurasi komponen \textit{Progress Bar} sebagai indikator visual HP serta merancang animasi dinamis pada \textit{UMG Animation Timeline} Sequencer.
+  \item Mampu merancang serta mengimplementasikan arsitektur komunikasi sistem yang \textit{decoupled} menggunakan \textit{Blueprint Interface} \texttt{BPI\_HUD} dan \texttt{BPI\_Widget}.
+  \item Mampu mengintegrasikan siklus hidup antarmuka pengguna memakai \texttt{BP\_GameInstance} dan inisialisasi pada \texttt{BP\_ThirdPersonPlayerController}.
+  \item Mampu menghubungkan \textit{Event TakeDamage} pada aktor \texttt{BP\_ThirdPersonCharacter} dengan pembaruan nilai persentase bar serta pemicu animasi saat \textit{runtime}.
 \end{enumerate}
 
-%contoh gambar dan kode
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.5\textwidth]{resource/contoh-gambar.png}
-%     \caption{Contoh Gambar}
-%     \label{fig:contoh-gambar}
-% \end{figure}
+\section{Dokumentasi Praktikum}
 
-% \begin{lstlisting}[language=php, caption={Contoh Kode Python}, label={lst:contoh-kode}]
-% def hello_world():
-%     print("Hello, World!")
-% \end{lstlisting}
+\par Bagian dokumentasi ini menyajikan rangkaian tahapan teknis yang saya laksanakan secara komprehensif selama sesi Praktikum Pengembangan Game Pertemuan 7 dengan topik \textit{Asset FAB dan Widget Blueprint (UI)} pada Unreal Engine 5. Rangkaian aktivitas dimulai dari penelusuran pustaka aset lingkungan terintegrasi pada ekosistem FAB Marketplace, penyiapan proyek hasil salinan asisten praktikum \texttt{PPG\_2026} akibat relokasi ruang laboratorium komputer, implementasi material lanskap otomatis berbasis elevasi dan kemiringan lereng, penugasan layer tekstur secara otomatis via fitur \textit{Auto-Fill Target Layer Assets}, penempatan vegetasi pohon menggunakan metode manual maupun kuas massal \textit{Foliage Mode}, perancangan antarmuka HUD dan bar kesehatan \texttt{WBP\_Health}, perancangan animasi transformasi getar pada Sequencer, penyusunan komunikasi modular berbasis \textit{Blueprint Interface} \texttt{BPI\_HUD} dan \texttt{BPI\_Widget} yang didukung \texttt{BP\_GameInstance}, hingga integrasi masukan damage karakter pada \texttt{BP\_ThirdPersonCharacter} serta pengujian simulasi \textit{Play-in-Editor} (PIE) untuk memvalidasi responsivitas antarmuka visual secara interaktif.
 
-\section{Dokumetasi Praktikum}
+\subsection{Eksplorasi Aset FAB dan Penyiapan Proyek PPG 2026}
 
-\par Sesuai dengan tujuan praktikum, berikut adalah hasil yang diperoleh dan pembahasan terkait materi yang telah dipelajari.
+\par Pada tahapan awal praktikum, fokus kegiatan saya arahkan pada penelusuran dan persiapan aset lingkungan fotorealistis berkualitas tinggi. Berbeda dari sesi-sesi sebelumnya, pelaksanaan praktikum ini secara teknis tidak melanjutkan berkas proyek lokal minggu lalu karena adanya perpindahan ruang laboratorium komputer. Oleh karena itu, saya menyalin repositori proyek dasar yang telah disiapkan oleh asisten praktikum dengan nama folder \texttt{PPG\_2026}. Proyek tersebut telah menyertakan paket aset \textit{Landscape Pro 2.0 Auto-Generated Material} secara lengkap, sehingga proses pada pasar aset digital FAB difokuskan pada pemahaman alur kerja pencarian dan penambahan aset ke pustaka akun pribadi tanpa perlu melakukan proses pengunduhan atau instalasi ulang yang berulang ke direktori lokal komputer.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/1.png}
+  \caption{Pencarian Aset Landscape Pro 2.0 pada Fab Library Epic Games Launcher}
+  \label{fig:fab-search-landscape-pro}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:fab-search-landscape-pro}, langkah pertama yang saya lakukan adalah membuka tab \textit{Fab} pada aplikasi \textit{Epic Games Launcher}. Pada bilah pencarian utama, saya memasukkan kata kunci \texttt{Landscape Pro 2.0}. Hasil penelusuran menampilkan paket aset \textit{Landscape Pro 2.0 Auto-Generated Material} yang dikembangkan oleh STF3d. Pada panel pratinjau di sisi kanan layar, saya memeriksa deskripsi teknis paket yang menawarkan material lanskap otomatis berbasis sudut kemiringan lereng, tekstur tanah dan tebing beresolusi tinggi, serta aneka variasi vegetasi lingkungan fotorealistis. Pada tampilan tersebut, tombol \textit{Add to My Library} tersedia untuk menambahkan lisensi aset secara permanen ke dalam akun pengembang Epic Games saya.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/2.png}
+  \caption{Status Aset Terverifikasi Saved in My Library pada Fab Marketplace}
+  \label{fig:fab-saved-library}
+\end{figure}
+
+\par Setelah tombol penambahan pustaka diklik, Gambar \ref{fig:fab-saved-library} memperlihatkan bahwa status aset telah berubah menjadi \textit{Saved in My Library} dengan tanda centang hijau. Pada tahap ini, antarmuka menampilkan opsi \textit{Add to project} yang memungkinkan integrasi langsung berkas aset ke dalam folder kerja Unreal Engine. Namun, sebagaimana telah dijelaskan pada catatan teknis awal, komputer laboratorium telah memuat proyek \texttt{PPG\_2026} yang disalin dari asisten praktikum dan telah memiliki seluruh hierarki berkas aset ini. Oleh karena itu, saya tidak perlu mengeksekusi pengunduhan berulang sebesar beberapa gigabita, melainkan dapat langsung beralih membuka editor Unreal Engine 5 untuk mengeksplorasi struktur data proyek tersebut.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/3.png}
+  \caption{Struktur Direktori Foliage pada Proyek PPG\_2026 di Content Browser}
+  \label{fig:proyek-foliage-directory}
+\end{figure}
+
+\par Setelah membuka proyek \texttt{PPG\_2026} pada Unreal Engine 5, Gambar \ref{fig:proyek-foliage-directory} mendokumentasikan navigasi yang saya lakukan pada panel \textit{Content Browser}. Saya membuka jalur folder \texttt{Content > STF > Pack03-LandscapePro > Environment > Foliage}. Di dalam direktori ini, tersimpan berbagai subfolder terorganisasi rapi yang mengelompokkan aneka jenis vegetasi dan batuan, meliputi \texttt{BrokenTree}, \texttt{Bush}, \texttt{Clover}, \texttt{DeadTrees}, \texttt{Grass}, \texttt{GreenTrees}, \texttt{RocksCliff}, hingga \texttt{RocksLarge}. Struktur folder yang rapi ini mempermudah pencarian aset 3D yang akan diintegrasikan ke atas lanskap.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/4.png}
+  \caption{Penerapan Filter Static Mesh dan Static Mesh Foliage pada Content Browser}
+  \label{fig:content-filter-static-mesh}
+\end{figure}
+
+\par Guna memilah aset dengan tipe geometri spesifik di tengah banyaknya subfolder, Gambar \ref{fig:content-filter-static-mesh} memperlihatkan penerapan fitur \textit{Filter} pada \textit{Content Browser}. Saya mengaktifkan opsi filter \textit{Static Mesh} dan \textit{Static Mesh Foliage}. Seketika editor menampilkan 84 item aset vegetasi dan batuan dalam bentuk ikon thumbnail interaktif, mencakup variasi pohon cemara \texttt{pines02}, semak hijau \texttt{green-tree}, pohon kering \texttt{dead-tree01}, hingga bongkahan batu tebing \texttt{rock01\_lod000}. Filter ini sangat efisien dalam mempercepat seleksi aset tanpa harus membuka folder secara manual satu per satu.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/5.png}
+  \caption{Peninjauan Aset Vegetasi SM\_dead-tree02 pada Static Mesh Editor}
+  \label{fig:preview-sm-dead-tree}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:preview-sm-dead-tree}, saya melakukan klik ganda pada aset \texttt{SM\_dead-tree02} untuk membuka jendela khusus \textit{Static Mesh Editor}. Pada jendela inspeksi ini, saya memeriksa topologi mesh pohon, saluran \textit{Material Slots} yang menggunakan \texttt{MI\_dead-tree02\_lod00}, serta informasi statistik geometri mencakup 10.488 \textit{triangles} dan 10.677 \textit{vertices}. Pemeriksaan ini penting untuk memastikan bahwa aset memiliki konfigurasi \textit{Level of Detail} yang optimal serta sistem \textit{Collision} yang tepat sebelum disebarkan ke dunia permainan.
+
+\subsection{Konfigurasi Auto-Material dan Penugasan Layer Lanskap Otomatis}
+
+\par Setelah memeriksa kelengkapan aset vegetasi pada proyek, langkah berikutnya adalah menerapkan material lanskap tingkat lanjut. Pengecatan lanskap standar umumnya membutuhkan proses manual yang memakan waktu lama. Melalui paket \textit{Landscape Pro 2.0}, permukaan lanskap dikonfigurasi prosedural menggunakan \textit{Auto-Material}, di mana tekstur rumput, tanah datar, dan tebing batu dipetakan otomatis oleh engine berdasarkan elevasi serta sudut kemiringan \textit{slope} geometri medan secara matematis.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/6.png}
+  \caption{Penugasan Material Instance MI\_landscape\_pro\_v2\_inst pada Lanskap}
+  \label{fig:set-landscape-material}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:set-landscape-material}, saya memilih aktor \texttt{Landscape} pada panel \textit{Outliner}, kemudian beralih ke panel \textit{Details} di sisi kanan layar. Pada kategori pengaturan \textit{Landscape}, saya menemukan slot properti \textit{Landscape Material}. Saya mengeklik kolom tersebut lalu menugaskan aset \textit{Material Instance} bernama \texttt{MI\_landscape\_pro\_v2\_inst}. Begitu aset dipilih, sistem Unreal Engine langsung memicu proses kompilasi shader material di latar belakang untuk menghitung parameter pencahayaan dan blending tekstur PBR.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/7.png}
+  \caption{Visualisasi Lanskap dengan Material Prosedural Berbasis Lereng}
+  \label{fig:landscape-auto-material-view}
+\end{figure}
+
+\par Gambar \ref{fig:landscape-auto-material-view} mendokumentasikan hasil rendering permukaan lanskap di dalam \textit{3D Viewport} sesaat setelah proses kompilasi shader selesai. Terlihat bahwa permukaan lanskap perbukitan secara otomatis menampilkan lapisan tekstur yang dinamis: area datar dihiasi vegetasi tanah berumput lebat, sedangkan lereng-lereng perbukitan yang memiliki sudut elevasi curam secara otomatis terlapisi tekstur tebing batu cadas fotorealistis. Karakteristik prosedural ini secara instan mentransformasikan lanskap uji coba menjadi lingkungan alam liar yang sangat imersif.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/8.png}
+  \caption{Pengaktifan Landscape Mode pada Bilah Mode Unreal Engine 5}
+  \label{fig:switch-landscape-mode}
+\end{figure}
+
+\par Meskipun material lanskap telah bekerja secara otomatis, pengembang tetap membutuhkan fleksibilitas untuk mengecat tekstur kustom pada area tertentu secara manual. Berdasarkan Gambar \ref{fig:switch-landscape-mode}, saya mengalihkan mode interaksi editor dengan membuka menu dropdown mode di bilah alat kiri atas dan memilih opsi \textit{Landscape Mode} atau menekan tombol pintasan keyboard \texttt{Shift + 2}. Peralihan mode ini memunculkan panel kontrol khusus lanskap di sisi kiri antarmuka.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/9.png}
+  \caption{Antarmuka Tab Paint pada Panel Landscape Editor}
+  \label{fig:landscape-paint-interface}
+\end{figure}
+
+\par Pada panel \textit{Landscape Editor} sebagaimana tampak pada Gambar \ref{fig:landscape-paint-interface}, saya mengeklik tab \textit{Paint}. Tab ini menyediakan fitur kuas manipulasi tekstur seperti \textit{Paint}, \textit{Smooth}, \textit{Flatten}, dan \textit{Noise}. Di bagian bawah panel, terdapat daftar \textit{Target Layers} yang memuat seluruh kanal material dari struktur grafik shader \texttt{MI\_landscape\_pro\_v2\_inst} yang telah terpasang pada lanskap.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/10.png}
+  \caption{Daftar Target Layers pada Panel Landscape Paint}
+  \label{fig:landscape-target-layers}
+\end{figure}
+
+\par Gambar \ref{fig:landscape-target-layers} mendokumentasikan pemeriksaan awal pada daftar \textit{Target Layers}. Panel ini menampilkan berbagai layer fungsional seperti \texttt{Layer\_1}, \texttt{Layer\_1\_no\_plants}, \texttt{Layer\_1\_Puddles}, \texttt{Layer\_2}, serta \texttt{Layer\_3}. Pada konfigurasi medan konvensional, setiap layer wajib diasosiasikan secara manual dengan berkas data \textit{Layer Info} bertipe \textit{Weight-Blended Layer}. Namun, pada praktikum ini proses penugasan layer terlaksana secara otomatis melalui kapabilitas bawaan Unreal Engine.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/11.png}
+  \caption{Eksekusi Fitur Auto-Fill Target Layer Assets untuk Penugasan Layer Otomatis}
+  \label{fig:autofill-target-layers}
+\end{figure}
+
+\par Merujuk pada Gambar \ref{fig:autofill-target-layers}, saya menekan tombol berikon petir \textit{Auto-Fill Target Layer Assets} pada panel \textit{Layers}. Engine langsung memindai berkas \textit{Layer Info} yang sesuai di direktori proyek dan menugaskannya ke slot masing-masing, seperti \texttt{Layer\_1\_LayerInfo} serta \texttt{Layer\_2\_LayerInfo}. Dengan mekanisme ini, proses penugasan \textit{Assign Layer} terpenuhi secara instan tanpa konfigurasi manual.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/12.png}
+  \caption{Proses Pengecatan Tekstur Tebing Batu Layer\_2 pada Lereng Lanskap}
+  \label{fig:painting-rock-layer}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:painting-rock-layer}, setelah layer info terhubung, saya memilih \texttt{Layer\_2} pada daftar \textit{Target Layers} untuk menguji kemampuan pengecatan manual. Dengan kuas melingkar di dalam \textit{Viewport}, saya menyapukan sapuan kuas pada salah satu lereng bukit lanskap. Kuas cat secara presisi menimpakan tekstur bebatuan abu-abu di atas tekstur rumput hijau, memungkinkan pembentukan alur jalan setapak berbatu atau tebing terjal yang disesuaikan secara artistik sesuai kebutuhan desain level.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/13.png}
+  \caption{Hasil Visualisasi Pengecatan Tekstur Tebing Batu pada Lanskap}
+  \label{fig:result-painted-landscape}
+\end{figure}
+
+\par Gambar \ref{fig:result-painted-landscape} memperlihatkan hasil akhir pengecatan medan lanskap dari sudut pandang luas di \textit{3D Viewport}. Lereng perbukitan kini menampilkan perpaduan yang sangat harmonis dan alami antara tekstur tanah berumput dari \texttt{Layer\_1} dan tonjolan batuan tebing dari \texttt{Layer\_2}. Integrasi shader \textit{weight-blending} berjalan sempurna tanpa memperlihatkan cacat sambungan tekstur \textit{seam artifacts}.
+
+\subsection{Implementasi Vegetasi Melalui Manual Placement dan Foliage Mode}
+
+\par Setelah topografi dan material medan lanskap terbentuk secara solid, tahapan berikutnya adalah memperkaya ekosistem dunia game dengan menambahkan elemen \textit{foliage}. Pada praktikum ini, saya mempraktikkan dan membandingkan dua pendekatan implementasi vegetasi pada Unreal Engine 5: pendekatan \textit{Manual Actor Placement} serta pendekatan instansi grafis massal \textit{Foliage Instanced Meshes}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/14.png}
+  \caption{Pemilihan Aset Static Mesh SM\_dead-tree04 pada Folder Foliage}
+  \label{fig:select-manual-tree-mesh}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:select-manual-tree-mesh}, langkah pertama dalam metode penempatan manual adalah membuka folder \texttt{Content > STF > Pack03-LandscapePro > Environment > Foliage} melalui \textit{Content Drawer}. Saya memilih salah satu aset pohon model kering berdaun gugur bernama \texttt{SM\_dead-tree04}. Aset ini dipilih sebagai titik fokus lingkungan yang berdiri sendiri pada salah satu puncak bukit.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/15.png}
+  \caption{Penyeretan Aset SM\_dead-tree04 secara Manual ke Viewport}
+  \label{fig:drag-manual-tree-viewport}
+\end{figure}
+
+\par Gambar \ref{fig:drag-manual-tree-viewport} mendokumentasikan aksi \textit{drag-and-drop} aset \texttt{SM\_dead-tree04} langsung dari panel \textit{Content Drawer} menuju permukaan tanah di dalam jendela \textit{3D Viewport}. Kursor mouse secara otomatis mendeteksi bidang tabrakan permukaan lanskap, sehingga objek pohon langsung bertengger di atas koordinat medan yang dituju.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/16.png}
+  \caption{Penyesuaian Posisi Aktor Pohon Hasil Penempatan Manual}
+  \label{fig:adjust-manual-tree-transform}
+\end{figure}
+
+\par Begitu objek pohon diletakkan, Gambar \ref{fig:adjust-manual-tree-transform} memperlihatkan bahwa objek tersebut tercipta sebagai sebuah aktor independen bertipe \texttt{StaticMeshActor} di dalam panel hierarki \textit{Outliner}. Saya memanfaatkan \textit{Translation Gizmo} dengan tombol pintasan \texttt{W} untuk menyesuaikan elevasi pangkal batang pohon agar tertancap pas di bawah kontur tanah lanskap, memastikan akar pohon tidak melayang di udara. Metode manual ini sangat cocok untuk penempatan aset penanda khusus \textit{landmark hero asset}, namun sangat tidak efisien jika digunakan untuk menghutankan seluruh area lanskap yang luas.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/17.png}
+  \caption{Seleksi Jamak Aset Static Mesh Vegetasi pada Content Drawer}
+  \label{fig:select-multi-foliage-meshes}
+\end{figure}
+
+\par Untuk mengisi lingkungan terbuka secara massal dan optimal, saya beralih menggunakan pendekatan kedua, yakni sistem \textit{Foliage Mode}. Berdasarkan Gambar \ref{fig:select-multi-foliage-meshes}, saya membuka kembali \textit{Content Drawer} dengan filter \textit{Static Mesh} aktif. Saya melakukan aksi \textit{multi-selection} terhadap berbagai variasi aset pohon dan semak belukar dengan menahan tombol keyboard \texttt{Ctrl} sembari mengeklik thumbnail aset yang diinginkan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/18.png}
+  \caption{Pengalihan ke Foliage Mode dan Penyeretan Aset ke Palet Foliage}
+  \label{fig:drag-foliage-palette}
+\end{figure}
+
+\par Gambar \ref{fig:drag-foliage-palette} mendokumentasikan pengalihan mode editor ke \textit{Foliage Mode} dengan tombol pintasan \texttt{Shift + 3}. Panel kontrol \textit{Foliage} muncul di sisi kiri antarmuka dengan area drop bertuliskan \textit{+ Foliage} atau \textit{Drop Foliage Here}. Dari posisi tersebut, saya menyeret seluruh kumpulan aset \textit{Static Mesh} yang telah diseleksi sebelumnya ke dalam area penampung palet foliage tersebut.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/19.png}
+  \caption{Daftar Aset Foliage Type yang Terpasang pada Panel Foliage}
+  \label{fig:foliage-assets-list}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:foliage-assets-list}, sistem editor Unreal Engine secara otomatis mengonversi aset-aset mesh tersebut menjadi instansi \textit{Foliage Type} dan menampilkannya pada kisi palet. Setiap item dilengkapi dengan kotak centang aktif serta penghitung jumlah instansi pohon yang telah terpasang di dalam dunia level saat ini (awalnya bernilai nol).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/20.png}
+  \caption{Konfigurasi Properti Kuas Brush Size dan Paint Density}
+  \label{fig:foliage-brush-settings}
+\end{figure}
+
+\par Sebelum menyapukan kuas ke lanskap, Gambar \ref{fig:foliage-brush-settings} memperlihatkan pengaturan parameter pada seksi \textit{Paint} di panel foliage. Saya mengatur properti ukuran kuas \textit{Brush Size} pada angka sekitar \texttt{1537.66} agar memiliki cakupan sebaran yang luas, serta menurunkan nilai kerapatan \textit{Paint Density} ke angka \texttt{0.05}. Nilai densitas yang rendah ini sangat esensial agar jarak antar-pohon tidak bertumpukan secara berlebihan dan tetap menjaga stabilitas komputasi performa GPU.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/21.png}
+  \caption{Proses Pengecatan Vegetasi Pepohonan secara Prosedural pada Lanskap}
+  \label{fig:foliage-painting-action}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:foliage-painting-action}, saya mengarahkan kursor kuas melingkar biru di atas lereng bukit pada \textit{3D Viewport} dan menekan tombol klik kiri mouse untuk melukiskan vegetasi. Dalam hitungan detik, puluhan model pohon dan semak belukar terdistribusi secara acak pada permukaan medan dengan rotasi sudut sumbu Z yang bervariasi otomatis, menciptakan kesan ekosistem hutan yang sangat natural.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/22.png}
+  \caption{Hasil Sebaran Vegetasi Massal pada Puncak dan Lereng Perbukitan}
+  \label{fig:foliage-landscape-result}
+\end{figure}
+
+\par Gambar \ref{fig:foliage-landscape-result} mendokumentasikan tampilan panorama perbukitan lanskap setelah proses pengecatan foliage selesai. Ribuan ranting dan dedaunan pohon tampak tertata lebat di puncak dan lereng bukit dengan proyeksi bayangan dinamis yang tajam. Pada panel \textit{Outliner}, seluruh kumpulan pohon ini tidak membebani hierarki aktor dunia secara individual, melainkan dikelola secara sangat efisien di bawah sebuah aktor tunggal bernama \texttt{InstancedFoliageActor2} berbasis teknologi \textit{Instanced Static Mesh}.
+
+\subsection{Perancangan Antarmuka Pengguna dan Animasi pada Widget Blueprint}
+
+\par Memasuki paruh kedua materi praktikum, fokus beralih ke pengembangan antarmuka \textit{User Interface} menggunakan sistem \textit{Unreal Motion Graphics} UMG. Dalam game modern, antarmuka visual menyajikan umpan balik status kritis permainan kepada pemain, salah satunya adalah status visual \textit{Health Bar}. Pada tahapan ini, saya merancang antarmuka secara modular dengan memisahkan komponen bar kesehatan \texttt{WBP\_Health} dari kanvas layar utama \texttt{WBP\_HUD}, serta menambahkan animasi transformatif dinamis pada Sequencer untuk memberikan efek guncangan visual saat \textit{health} berkurang.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/23.png}
+  \caption{Pembuatan Direktori Widget pada Content Browser}
+  \label{fig:create-widget-folder}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:create-widget-folder}, langkah awal dalam mengorganisasi aset UI adalah membuat direktori kerja baru. Saya membuka folder utama \texttt{Content} pada \textit{Content Browser}, melakukan klik kanan pada area kosong, memilih opsi \textit{New Folder}, dan menamai folder tersebut sebagai \texttt{Widget}. Folder ini difungsikan khusus sebagai wadah penyimpanan seluruh aset \textit{Widget Blueprint} dan antarmuka komunikasi.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/24.png}
+  \caption{Pembuatan Aset Widget Blueprint Melalui Menu Konteks}
+  \label{fig:create-widget-blueprint-menu}
+\end{figure}
+
+\par Setelah masuk ke folder \texttt{Widget}, Gambar \ref{fig:create-widget-blueprint-menu} memperlihatkan proses inisialisasi aset UI. Saya melakukan klik kanan pada ruang kosong panel, menavigasi kursor ke submenu \textit{User Interface}, lalu memilih opsi \textit{Widget Blueprint}. Pilihan ini membuka jendela penentuan kelas dasar antarmuka UMG.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/25.png}
+  \caption{Pemilihan Kelas Induk User Widget untuk Widget Blueprint}
+  \label{fig:select-user-widget-parent}
+\end{figure}
+
+\par Pada jendela dialog pembuatan \textit{Pick Parent Class for New Widget Blueprint} sebagaimana diperlihatkan pada Gambar \ref{fig:select-user-widget-parent}, Unreal Engine menyediakan kategori kelas induk umum. Saya memilih kelas \texttt{User Widget}. Kelas \texttt{User Widget} merupakan kelas induk standar dalam arsitektur UMG yang menyediakan fungsionalitas rendering kanvas, penanganan masukan pemain, serta kemampuan pemograman visual berbasis grafik Blueprint.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/26.png}
+  \caption{Penamaan Aset Widget Blueprint Pertama sebagai WBP\_HUD}
+  \label{fig:name-wbp-hud}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:name-wbp-hud}, saya menamai aset \textit{Widget Blueprint} pertama ini dengan nama \texttt{WBP\_HUD}. Aset ini akan diposisikan sebagai kanvas utama \textit{Master HUD} yang bertugas menampung seluruh elemen tampilan layar permainan, seperti peta mini, status amunisi, dan bar kesehatan pemain secara terpadu.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/27.png}
+  \caption{Pembuatan Aset Widget Blueprint Kedua Melalui Menu User Interface}
+  \label{fig:create-wbp-health-menu}
+\end{figure}
+
+\par Untuk menerapkan prinsip \textit{modular UI design}, komponen bar kesehatan tidak dibuat langsung menempel di dalam kanvas HUD utama, melainkan dibuat sebagai widget komponen mandiri. Berdasarkan Gambar \ref{fig:create-wbp-health-menu}, saya kembali melakukan klik kanan pada folder \texttt{Widget} dan memilih \textit{User Interface > Widget Blueprint} untuk membuat aset kedua.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/28.png}
+  \caption{Pemilihan Kelas User Widget untuk Widget Bar Kesehatan}
+  \label{fig:select-parent-wbp-health}
+\end{figure}
+
+\par Pada jendela pemilihan kelas induk sebagaimana tampak pada Gambar \ref{fig:select-parent-wbp-health}, saya kembali memilih kelas \texttt{User Widget} lalu mengeklik tombol \textit{Select}. Tindakan ini menginstansiasi sebuah berkas blueprint antarmuka baru di dalam folder \texttt{Widget}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/29.png}
+  \caption{Penamaan Aset Widget Blueprint Kedua sebagai WBP\_Health}
+  \label{fig:name-wbp-health}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:name-wbp-health}, saya memberikan penamaan aset widget kedua tersebut sebagai \texttt{WBP\_Health}. Pemisahan antara \texttt{WBP\_Health} dan \texttt{WBP\_HUD} ini memberikan fleksibilitas tinggi, karena \texttt{WBP\_Health} bersifat \textit{reusable} untuk entitas lain, seperti karakter musuh atau aktor rekan tim tanpa menduplikasi logika grafis.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/30.png}
+  \caption{Tampilan Awal Lembar Kerja Designer View pada Editor WBP\_HUD}
+  \label{fig:designer-wbp-hud}
+\end{figure}
+
+\par Gambar \ref{fig:designer-wbp-hud} mendokumentasikan pembukaan lembar kerja editor UMG dengan tab \texttt{WBP\_HUD} dan \texttt{WBP\_Health} yang telah terbuka berdampingan. Pada mode \textit{Designer View}, antarmuka menyajikan kisi area pratinjau resolusi layar standar (\texttt{1280 x 720 (16:9)}), panel pustaka komponen \textit{Palette} di sisi kiri, panel hierarki susunan elemen \textit{Hierarchy} di kiri bawah, serta panel properti \textit{Details} di sisi kanan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/31.png}
+  \caption{Penambahan Komponen Progress Bar dari Palette ke WBP\_Health}
+  \label{fig:add-progress-bar-palette}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:add-progress-bar-palette}, saya berpindah ke tab editor \texttt{WBP\_Health}. Pada panel \textit{Palette}, saya mencari komponen \texttt{Progress Bar} pada kategori \textit{Common}. Saya menyeret komponen tersebut langsung ke atas kanvas desain, sehingga muncul sebuah kotak persegi abu-abu sebagai representasi visual awal pengukur persentase nilai numerik.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/32.png}
+  \caption{Penamaan Komponen menjadi HealthBar dan Pengaktifan Is Variable}
+  \label{fig:rename-healthbar-variable}
+\end{figure}
+
+\par Gambar \ref{fig:rename-healthbar-variable} memperlihatkan penyesuaian identitas komponen pada panel \textit{Details}. Saya mengganti nama bawaan komponen menjadi \texttt{HealthBar} dan memastikan kotak centang \textit{Is Variable} dalam kondisi tercentang aktif. Status sebagai variabel ini mutlak diperlukan agar komponen \texttt{HealthBar} dapat diakses dan dimanipulasi secara langsung melalui kode grafik Blueprint pada lembar kerja \textit{EventGraph}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/33.png}
+  \caption{Konfigurasi Properti Fill Color and Opacity Menjadi Hijau Cerah}
+  \label{fig:set-healthbar-color}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:set-healthbar-color}, saya menavigasi ke seksi pengaturan \textit{Appearance} pada panel \textit{Details}. Pada properti \textit{Fill Color and Opacity}, saya mengubah nilai warna pengisian bar dengan menetapkan kanal warna merah $R = 0.0$, hijau $G = 1.0$, biru $B = 0.0$, dan transparansi alfa $A = 1.0$. Penentuan nilai ini menghasilkan warna hijau cerah yang merepresentasikan status kesehatan normal yang sehat bagi pemain.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/34.png}
+  \caption{Pengujian Nilai Persentase Bar Kesehatan pada Properti Percent}
+  \label{fig:test-percent-property}
+\end{figure}
+
+\par Guna memvalidasi perilaku visual pengisian bar, Gambar \ref{fig:test-percent-property} memperlihatkan pengujian parameter pada seksi \textit{Progress}. Saya memasukkan nilai desimal \texttt{1.0} pada kolom properti \textit{Percent}. Properti ini bekerja pada rentang normalisasi antara nilai \texttt{0.0} untuk bar kosong 0\% hingga \texttt{1.0} untuk bar terisi penuh 100\%.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/35.png}
+  \caption{Tampilan Visual HealthBar Terisi Penuh Warna Hijau}
+  \label{fig:full-healthbar-visual}
+\end{figure}
+
+\par Gambar \ref{fig:full-healthbar-visual} mendokumentasikan tampilan visual komponen \texttt{HealthBar} setelah nilai persentase \texttt{1.0} diterapkan. Seluruh bidang kotak kini terisi penuh dengan warna hijau pekat yang solid. Pengujian ini membuktikan bahwa konfigurasi \textit{style} dan perenderan warna masker pada komponen bekerja dengan sempurna sesuai rancangan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/36.png}
+  \caption{Pembukaan Panel Animations pada Bilah Bawah Editor}
+  \label{fig:open-animations-panel}
+\end{figure}
+
+\par Untuk memberikan pengalaman bermain yang lebih dramatis saat karakter terkena serangan musuh, antarmuka bar kesehatan diperkaya dengan animasi respons visual. Berdasarkan Gambar \ref{fig:open-animations-panel}, saya mengarahkan kursor ke bilah status bawah editor dan mengeklik tombol \textit{Animations} ataupun menekan kombinasi tombol pintasan \texttt{Ctrl + Shift + Space Bar}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/37.png}
+  \caption{Tampilan Antarmuka Panel Animations pada WBP\_Health}
+  \label{fig:animations-timeline-ui}
+\end{figure}
+
+\par Gambar \ref{fig:animations-timeline-ui} menampilkan panel \textit{Animations} yang telah tersemat di bagian bawah jendela editor UMG. Panel ini memadukan daftar sekuens animasi di sisi kiri dengan \textit{Timeline Sequencer} di sisi kanan, lengkap dengan penanda durasi detik, kontrol pemutaran \textit{Play}, \textit{Pause}, dan \textit{Step Forward}, serta pengaturan frame rate \texttt{20 fps}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/38.png}
+  \caption{Pembuatan Trek Animasi onUpdateHealthAnimation}
+  \label{fig:create-anim-onupdatehealth}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:create-anim-onupdatehealth}, saya mengeklik tombol hijau \textit{+ Animation} pada panel animasi dan memberi nama sekuens tersebut sebagai \texttt{onUpdateHealthAnimation}. Pada area kanvas desain, editor memunculkan label status \texttt{SELECTED: onUpdateHealthAnimation} yang menandakan bahwa perekaman keyframe aktif untuk sekuens animasi ini.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/39.png}
+  \caption{Penambahan Trek Komponen HealthBar pada Sequencer Animasi}
+  \label{fig:add-track-healthbar}
+\end{figure}
+
+\par Gambar \ref{fig:add-track-healthbar} mendokumentasikan penambahan target komponen ke dalam timeline. Saya mengeklik tombol \textit{+ Add} pada panel Sequencer, memilih menu \textit{All Named Widgets}, lalu memilih variabel komponen \texttt{HealthBar}. Tindakan ini mendaftarkan baris kontrol khusus untuk memanipulasi properti internal \texttt{HealthBar} sepanjang garis waktu.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/40.png}
+  \caption{Penambahan Sub-Trek Transform pada Trek HealthBar}
+  \label{fig:add-track-transform}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:add-track-transform}, saya mengeklik tombol \textit{+ Add} pada baris trek \texttt{HealthBar}, menavigasi ke kategori \textit{Render Transform}, lalu memilih properti \textit{Transform}. Penambahan sub-trek ini memungkinkan interpolasi nilai koordinat posisi, rotasi, skala, dan kemiringan geometris bar kesehatan saat dimainkan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/41.png}
+  \caption{Penambahan Keyframe Awal pada Garis Waktu Animasi}
+  \label{fig:add-initial-keyframe}
+\end{figure}
+
+\par Gambar \ref{fig:add-initial-keyframe} memperlihatkan penempatan \textit{keyframe} transformasi awal. Saya menempatkan garis pembaca waktu pada detik \texttt{0.00}, lalu mengeklik tombol lingkaran kecil \textit{Add a new key at the current time} pada baris trek \textit{Transform}. Keyframe awal ini mengunci posisi default bar sebelum terjadi efek goyangan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/42.png}
+  \caption{Pembentukan Struktur Keyframe Transformasi pada Titik Durasi Animasi}
+  \label{fig:setup-keyframe-duration}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:setup-keyframe-duration}, saya menyusun rangkaian keyframe lanjutan pada garis waktu dengan interval setiap \texttt{0.25} detik. Setelah titik awal terkunci pada posisi \texttt{0.00} detik, titik keyframe berikutnya ditambahkan pada detik \texttt{0.25}, \texttt{0.50}, dan seterusnya hingga mencapai batas akhir. Tangkapan layar tersebut mendokumentasikan aksi saya mengeklik tombol \textit{Add a new key at the current time} untuk menetapkan keyframe penutup pada posisi \texttt{1.00} detik, sehingga durasi total sekuens animasi genap menjadi \texttt{1.0} detik.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/43.png}
+  \caption{Perluasan Parameter Sub-Trek Transform pada Garis Waktu}
+  \label{fig:expand-transform-channels}
+\end{figure}
+
+\par Gambar \ref{fig:expand-transform-channels} mendokumentasikan ekspansi kanal parameter dengan mengeklik panah kecil pada baris \textit{Transform}. Terlihat seluruh sub-kanal terbuka secara mendalam, mencakup kanal \textit{Translation}, \textit{Rotation}, \textit{Scale}, dan \textit{Shear}. Dengan struktur terbuka ini, nilai koordinat setiap sumbu gerak dapat dimanipulasi secara independen.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/44.png}
+  \caption{Konfigurasi Nilai Translasi Sumbu Y pada Keyframe Transisi}
+  \label{fig:set-translation-y-anim}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:set-translation-y-anim}, saya memilih keyframe pada titik waktu transisi sekitar frame ke-6 atau \texttt{0.06} detik, lalu mengisikan nilai numerik pada sub-kanal \textit{Translation Y} sebesar \texttt{-50.0}. Nilai negatif ini memerintahkan mesin untuk menghentakkan posisi bar ke arah atas setinggi 50 piksel secara mendadak saat karakter terkena dampak serangan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/45.png}
+  \caption{Konfigurasi Nilai Translasi Sumbu X pada Keyframe Transisi}
+  \label{fig:set-translation-x-anim}
+\end{figure}
+
+\par Gambar \ref{fig:set-translation-x-anim} memperlihatkan modifikasi koordinat lanjutan pada titik waktu \texttt{0.19} detik. Pada titik ini, saya mengisikan nilai pergeseran sumbu horizontal \textit{Translation X} sebesar \texttt{100.0}. Perpaduan translasi sumbu Y dan sumbu X yang berlangsung cepat dalam hitungan milidetik ini menghasilkan efek guncangan visual \textit{damage impact shake} yang sangat dinamis sebelum bar kembali bertransisi ke koordinat origin \texttt{(0,0)}.
+
+\subsection{Penyusunan Komunikasi Antar-Blueprint Menggunakan Blueprint Interface}
+
+\par Setelah komponen bar kesehatan \texttt{WBP\_Health} beserta animasinya selesai dibangun, tahapan krusial berikutnya adalah menyusun arsitektur komunikasi data. Dalam rekayasa perangkat lunak game modern, menghubungkan karakter dengan antarmuka layar menggunakan metode konvensional seperti \textit{Direct Casting} sangat tidak direkomendasikan karena menciptakan keterikatan dependensi \textit{tight coupling}. Solusi terbaik yang diajarkan pada praktikum ini adalah memanfaatkan \textit{Blueprint Interface} BPI, di mana pesan pembaruan data dapat disalurkan secara aman dan independen tanpa mengharuskan aktor pengirim mengetahui struktur internal dari aktor penerima.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/46.png}
+  \caption{Pencarian Komponen Canvas Panel pada Palette WBP\_HUD}
+  \label{fig:search-canvas-panel}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:search-canvas-panel}, saya beralih kembali ke tab editor kanvas utama \texttt{WBP\_HUD}. Pada panel \textit{Palette}, saya memasukkan kata kunci pencarian \texttt{canvas} dan menemukan komponen dasar \texttt{Canvas Panel} di bawah kategori \textit{Panel}. Komponen ini berfungsi sebagai kanvas koordinat absolut utama yang dapat menampung berbagai widget antarmuka pada layar monitor pemain.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/47.png}
+  \caption{Penanaman Aset WBP\_Health ke Dalam Komponen Canvas Panel}
+  \label{fig:embed-wbp-health-canvas}
+\end{figure}
+
+\par Gambar \ref{fig:embed-wbp-health-canvas} mendokumentasikan penempatan \texttt{WBP\_Health} dari \textit{Content Drawer} langsung ke komponen \texttt{[Canvas Panel]} di panel \textit{Hierarchy}. Langkah ini menerapkan komposisi UI modular, sehingga seluruh fungsionalitas serta animasi pada \texttt{WBP\_Health} tertanam langsung di dalam \texttt{WBP\_HUD}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/48.png}
+  \caption{Hierarki Komponen WBP\_Health di Bawah Canvas Panel}
+  \label{fig:hierarchy-wbp-health}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:hierarchy-wbp-health}, susunan hierarki pada panel \textit{Hierarchy} memperlihatkan bahwa \texttt{WBP\_Health} telah sah berkedudukan sebagai elemen \textit{child} dari \texttt{[Canvas Panel]}. Pada tampilan pratinjau kanvas di sebelah kanan, tampak komponen bar kesehatan muncul di pojok kiri atas area kerja desain.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/49.png}
+  \caption{Perancangan Fungsi UpdateHealthValue pada Blueprint Interface BPI\_HUD}
+  \label{fig:bpi-hud-function}
+\end{figure}
+
+\par Untuk menjembatani pengiriman nilai HP, Gambar \ref{fig:bpi-hud-function} mendokumentasikan pembuatan berkas antarmuka baru bernama \texttt{BPI\_HUD}. Pada panel \textit{My Blueprint}, saya menambahkan sebuah fungsi antarmuka dengan nama \texttt{UpdateHealthValue}. Pada seksi \textit{Inputs} di panel \textit{Details}, saya mendefinisikan dua parameter masukan bertipe \textit{Float}, yaitu parameter \texttt{CurrentHealth} dan parameter \texttt{MaxHealth}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/50.png}
+  \caption{Perancangan Fungsi SetHUDWidget pada Blueprint Interface BPI\_Widget}
+  \label{fig:bpi-widget-sethud}
+\end{figure}
+
+\par Selain antarmuka data HP, dibutuhkan pula antarmuka untuk mengelola referensi instance widget di tingkat global permainan. Berdasarkan Gambar \ref{fig:bpi-widget-sethud}, saya membuat berkas antarmuka kedua bernama \texttt{BPI\_Widget}. Di dalamnya, saya merancang fungsi pertama bernama \texttt{SetHUDWidget} dengan satu parameter masukan pada seksi \textit{Inputs} bernama \texttt{HUD} yang bertipe referensi objek \textit{User Widget}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/51.png}
+  \caption{Perancangan Fungsi GetHUDWidget pada Blueprint Interface BPI\_Widget}
+  \label{fig:bpi-widget-gethud}
+\end{figure}
+
+\par Gambar \ref{fig:bpi-widget-gethud} memperlihatkan perancangan fungsi kedua pada \texttt{BPI\_Widget}, yakni fungsi \texttt{GetHUDWidget}. Berbeda dengan fungsi setter, fungsi getter ini dikonfigurasikan pada seksi \textit{Outputs} dengan parameter kembalian bernama \texttt{HUD} bertipe referensi objek \textit{User Widget}. Antarmuka ini nantinya memungkinkan aktor manapun di dunia level untuk meminta referensi HUD yang sedang aktif.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/52.png}
+  \caption{Konfigurasi Posisi dan Penjangkaran Anchors WBP\_Health pada WBP\_HUD}
+  \label{fig:anchor-wbp-health}
+\end{figure}
+
+\par Kembali ke Designer View \texttt{WBP\_HUD}, Gambar \ref{fig:anchor-wbp-health} mendokumentasikan penataan tata letak \textit{Canvas Panel Slot} untuk \texttt{WBP\_Health}. Saya mengonfigurasi properti ukuran \textit{Size X} sebesar \texttt{100.0}, \textit{Size Y} sebesar \texttt{30.0}, serta menetapkan sistem \textit{Anchors} tepat pada sudut kiri atas kanvas monitor. Pengaturan ini menjamin posisi bar kesehatan tidak akan bergeser meskipun game dijalankan pada resolusi layar yang berbeda.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/53.png}
+  \caption{Tampilan EventGraph WBP\_HUD dan Variabel Referensi WBP\_Health}
+  \label{fig:eventgraph-wbp-hud-init}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:eventgraph-wbp-hud-init}, saya beralih dari mode desain ke mode pemrograman grafik dengan mengeklik tombol \textit{Graph} di sudut kanan atas editor \texttt{WBP\_HUD}. Pada panel \textit{My Blueprint}, terlihat variabel referensi bernama \texttt{WBP\_Health} telah otomatis tersedia dan siap dihubungkan ke dalam logika eksekusi \textit{EventGraph}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/54.png}
+  \caption{Pengaksesan Menu Class Settings pada Bilah Alat WBP\_HUD}
+  \label{fig:open-class-settings-hud}
+\end{figure}
+
+\par Agar \texttt{WBP\_HUD} dapat mengenali dan merespons pesan fungsi yang dikirimkan melalui antarmuka \texttt{BPI\_HUD}, blueprint ini harus didaftarkan sebagai pengimplementasi antarmuka tersebut. Gambar \ref{fig:open-class-settings-hud} memperlihatkan langkah saya mengeklik tombol \textit{Class Settings} pada bilah menu alat atas editor.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/55.png}
+  \caption{Pemeriksaan Kategori Interfaces pada Details Panel Class Settings}
+  \label{fig:check-interfaces-category}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:check-interfaces-category}, jendela pengaturan kelas membuka panel \textit{Details} yang memuat kategori \textit{Interfaces}. Pada seksi \textit{Implemented Interfaces}, status awal menunjukkan \textit{No Interfaces}, menandakan bahwa kelas ini belum mengimplementasikan kontrak antarmuka eksternal apapun.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/56.png}
+  \caption{Penerapan Blueprint Interface BPI\_HUD pada Implemented Interfaces}
+  \label{fig:implement-bpi-hud}
+\end{figure}
+
+\par Gambar \ref{fig:implement-bpi-hud} mendokumentasikan aksi saya mengeklik tombol dropdown \textit{Add} pada seksi \textit{Implemented Interfaces}, mengetikkan kata kunci \texttt{bpi}, lalu memilih \texttt{BPI\_HUD}. Begitu dipilih, kelas \texttt{WBP\_HUD} secara resmi terikat dengan kontrak fungsi yang dideklarasikan oleh antarmuka tersebut.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/57.png}
+  \caption{Kemunculan Fungsi Interface UpdateHealthValue pada Panel My Blueprint}
+  \label{fig:interface-function-listed}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:interface-function-listed}, pada panel \textit{My Blueprint} di sisi kiri layar kini muncul kategori baru bertajuk \textit{INTERFACES} yang memuat fungsi \texttt{UpdateHealthValue}. Keberadaan fungsi ini membuktikan bahwa kontrak antarmuka telah berhasil diwariskan ke dalam blueprint widget.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/58.png}
+  \caption{Penempatan Node Event UpdateHealthValue pada EventGraph WBP\_HUD}
+  \label{fig:place-event-updatehealth}
+\end{figure}
+
+\par Pada Gambar \ref{fig:place-event-updatehealth}, saya mengeklik kanan fungsi \texttt{UpdateHealthValue} di panel \textit{My Blueprint} dan memilih perintah implementasi event. Node \texttt{Event UpdateHealthValue} berwarna merah bata seketika berhasil ditempatkan pada bidang \textit{Event Graph}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/59.png}
+  \caption{Node Event UpdateHealthValue dengan Pin Current Health dan Max Health}
+  \label{fig:event-updatehealth-pins}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:event-updatehealth-pins}, node \texttt{Event UpdateHealthValue} dari \texttt{BPI\_HUD} telah terpasang dengan dua pin data keluaran hijau: pin \texttt{Current Health} serta pin \texttt{Max Health}. Kedua pin data ini menyalurkan besaran angka kesehatan yang dikirimkan oleh karakter pemain saat terjadi benturan atau damage.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/60.png}
+  \caption{Penyusunan Logika Pembagian Rasio HP, Play Animation, dan Set Percent}
+  \label{fig:hud-eventgraph-logic}
+\end{figure}
+
+\par Gambar \ref{fig:hud-eventgraph-logic} mendokumentasikan penyusunan rangkaian logika Blueprint yang sangat komprehensif pada \textit{EventGraph} \texttt{WBP\_HUD}. Alur eksekusi dirancang sebagai berikut:
+\begin{enumerate}
+  \item Nilai numerik dari pin \texttt{Current Health} dibagi dengan nilai pin \texttt{Max Health} menggunakan operasi \textit{Divide Float} guna menghasilkan nilai rasio ternormalisasi antara 0.0 hingga 1.0.
+  \item Sinyal \textit{execution wire} dari node \texttt{Event UpdateHealthValue} memicu pemanggilan node \textit{Play Animation}. Pin \textit{Target} dihubungkan dengan variabel instansi \texttt{WBP\_Health}, dan pin \textit{In Animation} mengambil referensi sekuens animasi \texttt{On Update Health Animation}. Hal ini memastikan animasi getaran guncangan langsung dimainkan setiap kali terjadi pembaruan status HP.
+  \item Selanjutnya sinyal eksekusi berlanjut mengeksekusi node \textit{Set Percent}. Pin masukan \textit{In Percent} mengambil hasil kalkulasi rasio pembagian HP, dan pin \textit{Target} diarahkan ke komponen \texttt{HealthBar} yang diperoleh dari variabel anak \texttt{WBP\_Health}. Dengan skema ini, bar visual akan menyusut secara presisi sesuai sisa HP karakter pemain.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/61.png}
+  \caption{Penambahan Blueprint Interface BPI\_Widget pada BP\_GameInstance}
+  \label{fig:gi-implement-bpi-widget}
+\end{figure}
+
+\par Guna menjamin instance widget antarmuka dapat diakses oleh karakter tanpa terikat siklus hidup level, saya memanfaatkan kelas global \texttt{BP\_GameInstance}. Berdasarkan Gambar \ref{fig:gi-implement-bpi-widget}, saya membuka editor \texttt{BP\_GameInstance}, membuka menu \textit{Class Settings}, dan menambahkan \texttt{BPI\_Widget} ke dalam daftar \textit{Implemented Interfaces}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/62.png}
+  \caption{Pembuatan Variabel AddedWidget Bertipe User Widget pada BP\_GameInstance}
+  \label{fig:gi-create-addedwidget-var}
+\end{figure}
+
+\par Pada panel \textit{My Blueprint} \texttt{BP\_GameInstance} sebagaimana tampak pada Gambar \ref{fig:gi-create-addedwidget-var}, saya membuat sebuah variabel baru dengan nama \texttt{AddedWidget}. Tipe variabel ini diatur sebagai referensi objek \textit{User Widget Object Reference} yang berfungsi sebagai wadah penyimpanan memori bagi instansi \texttt{WBP\_HUD} yang aktif.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/63.png}
+  \caption{Implementasi Fungsi GetHUDWidget pada BP\_GameInstance}
+  \label{fig:gi-implement-gethud}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:gi-implement-gethud}, saya mengimplementasikan fungsi antarmuka \texttt{GetHUDWidget} di dalam \texttt{BP\_GameInstance}. Di dalam grafik fungsi tersebut, saya menyeret variabel \texttt{AddedWidget} dalam mode \textit{getter} dan menghubungkan pin nilainya langsung ke pin masukan \texttt{HUD} pada node \textit{Return Node}. Fungsi ini bertindak sebagai pintu keluar data bagi entitas lain yang membutuhkan akses ke widget.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/64.png}
+  \caption{Implementasi Event SetHUDWidget Menyimpan Referensi ke AddedWidget}
+  \label{fig:gi-implement-sethud}
+\end{figure}
+
+\par Gambar \ref{fig:gi-implement-sethud} mendokumentasikan implementasi \texttt{Event SetHUDWidget} pada \textit{EventGraph} kelas \texttt{BP\_GameInstance}. Begitu event ini menerima sinyal dari kontroler, referensi pin masukan \texttt{HUD} disimpan ke variabel \texttt{AddedWidget} via node \textit{setter} \texttt{SET Added Widget}.
+
+\subsection{Integrasi Sistem UI pada Player Controller dan Karakter Pemain}
+
+\par Tahapan selanjutnya adalah merajut seluruh modul antarmuka yang telah dibangun ke dalam alur logika permainan aktual. Tanggung jawab pembuatan dan penayangan widget pada layar diembankan kepada kontroler pemain \texttt{BP\_ThirdPersonPlayerController} saat sesi permainan dimulai, sedangkan pembaruan data numerik dan pemanggilan animasi dipicu oleh logika damage pada karakter pemain \texttt{BP\_ThirdPersonCharacter}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/65.png}
+  \caption{Pemilihan Aset BP\_ThirdPersonPlayerController pada Content Browser}
+  \label{fig:select-player-controller}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:select-player-controller}, saya membuka folder blueprint karakter pada \textit{Content Browser} dan mengeklik dua kali aset \texttt{BP\_ThirdPersonPlayerController}. Kelas kontroler ini dipilih sebagai pengelola siklus hidup UI karena kontroler pemain adalah entitas yang persisten dan secara logis merepresentasikan sudut pandang pengguna yang melihat layar monitor.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/66.png}
+  \caption{Peninjauan Alur Logika Inisialisasi pada BP\_ThirdPersonPlayerController}
+  \label{fig:inspect-pc-eventgraph}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:inspect-pc-eventgraph}, alur \textit{Event Graph} kelas \texttt{BP\_ThirdPersonPlayerController} saya amati secara mendalam. Ketika \textit{Event BeginPlay} dijalankan, kontroler pemain memicu inisialisasi \textit{Enhanced Input Local Player Subsystem} serta kontrol layar sentuh. Pada ujung rantai inisialisasi inilah modul widget HUD akan disuntikkan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/67.png}
+  \caption{Penyusunan Node Create Widget, Set HUDWidget, dan Add to Player Screen}
+  \label{fig:pc-create-hud-logic}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:pc-create-hud-logic}, saya menyusun rangkaian node pembuatan widget pada kontroler:
+\begin{enumerate}
+  \item Setelah node \textit{Add Mapping Context} selesai dieksekusi, jalur \textit{execution wire} memanggil node \textit{Create WBP HUD Widget} yang merupakan turunan \textit{Create Widget} dengan properti \textit{Class} disetel ke \texttt{WBP\_HUD} dan \textit{Owning Player} terhubung ke node referensi diri \texttt{Self}.
+  \item Nilai kembalian instansi widget dari pin \textit{Return Value} kemudian disalurkan ke node panggilan pesan antarmuka \textit{Set HUDWidget (Target is BPI Widget)}. Pin target dari node ini mengambil referensi objek dari node global \textit{Get Game Instance}. Dengan langkah ini, instansi \texttt{WBP\_HUD} tersimpan aman di dalam variabel \texttt{AddedWidget} milik \texttt{BP\_GameInstance}.
+  \item Terakhir, sinyal \textit{execution wire} memanggil node \textit{Add to Player Screen} dengan pin \textit{Target} terhubung ke instansi \texttt{WBP\_HUD}. Node inilah yang secara resmi memerintahkan perender kartu grafis untuk menggambar seluruh kanvas antarmuka di atas layar tampilan pemain.
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/68.png}
+  \caption{Peninjauan Event TakeDamage Awal pada BP\_ThirdPersonCharacter}
+  \label{fig:inspect-character-takedamage}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:inspect-character-takedamage}, saya memeriksa kelas \texttt{BP\_ThirdPersonCharacter}. Pada mulanya, node \texttt{Event TakeDamage} antarmuka \texttt{BPI\_Overlap} hanya memicu fungsi \textit{Modify Health} pada komponen \texttt{BPC\_Health} serta menampilkan teks via node \textit{Print String} tanpa visualisasi bar HP.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/69.png}
+  \caption{Integrasi Get HUDWidget dan Pengiriman Pesan Update Health Value}
+  \label{fig:character-updatehealth-call}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:character-updatehealth-call}, saya memodifikasi alur \texttt{Event TakeDamage} dengan menyisipkan logika komunikasi antarmuka:
+\begin{enumerate}
+  \item Begitu node \textit{Modify Health} selesai mengurangi angka kesehatan karakter, jalur \textit{execution wire} memanggil fungsi antarmuka \textit{Get HUDWidget (Target is BPI Widget)} yang dialamatkan ke node \textit{Get Game Instance}. Panggilan ini secara instan mengambil referensi \texttt{WBP\_HUD} yang tersimpan di dalam Game Instance.
+  \item Selanjutnya, sinyal \textit{execution wire} memicu pesan antarmuka \textit{Update Health Value (Target is BPI HUD)}. Pin target diarahkan ke pin kembalian \texttt{HUD} dari node sebelumnya.
+  \item Untuk parameter data, pin \texttt{Current Health} mengambil variabel nilai kesehatan saat ini dari komponen \texttt{BPC\_Health}, sedangkan pin \texttt{Max Health} mengambil variabel nilai kesehatan maksimal dari komponen tersebut. Dengan rangkaian ini, setiap kali karakter terkena damage benturan, nilai HP terkini langsung dikirimkan ke HUD untuk diproses menjadi persentase visual dan memicu animasi getar pada layar.
+\end{enumerate}
+
+\subsection{Pengujian Simulasi Play-in-Editor (PIE) dan Validasi Responsivitas UI}
+
+\par Tahapan puncak dari praktikum ini adalah melakukan verifikasi empiris fungsionalitas sistem melalui mode simulasi \textit{Play-in-Editor} (PIE) pada level \texttt{Lvl\_ThirdPerson}. Pengujian ini bertujuan untuk memvalidasi apakah widget bar kesehatan berhasil dirender dengan stabil di layar monitor, mampu memperbarui persentase bar secara akurat saat terjadi pengurangan HP, serta berhasil mengeksekusi animasi transformatif guncangan tanpa menimbulkan gangguan performa \textit{frame drop} atau eror pada log eksekusi.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/70.png}
+  \caption{Pengujian Simulasi PIE: Visualisasi Awal Karakter dan Widget Bar Kesehatan}
+  \label{fig:pie-initial-spawn-hud}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:pie-initial-spawn-hud}, saya meluncurkan simulasi permainan dengan menekan tombol \textit{Play} pada bilah atas editor. Karakter pemain berhasil muncul di arena level uji coba. Pada sudut kiri paling atas layar viewport, bar kesehatan horizontal hijau \texttt{WBP\_Health} langsung tertayang secara presisi dan stabil dalam kondisi penuh 100\%. Hal ini membuktikan bahwa inisialisasi pada kelas \texttt{BP\_ThirdPersonPlayerController} serta perenderan kanvas \texttt{WBP\_HUD} melalui node \textit{Add to Player Screen} telah bekerja sempurna.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/71.png}
+  \caption{Pengujian Simulasi PIE: Pengurangan Bar HP saat Menerima damage}
+  \label{fig:pie-take-damage-reduction}
+\end{figure}
+
+\par Gambar \ref{fig:pie-take-damage-reduction} mendokumentasikan pengujian interaktif ketika saya menggerakkan karakter memasuki area pemicu damage \textit{Damage Overlap Volume} yang ditandai warna hijau di arena. Seketika karakter menerima benturan serangan, \textit{execution wire} pada \texttt{BP\_ThirdPersonCharacter} langsung mengirimkan sinyal pembaruan data. Bar kesehatan hijau di sudut kiri atas terlihat langsung menyusut menjadi sekitar 80\% dari kapasitas penuhnya, membuktikan bahwa perhitungan rasio pembagian nilai HP dan pembaruan node \textit{Set Percent} berjalan secara sangat akurat dan mulus saat \textit{runtime}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{resource/Dokumentasi/72.png}
+  \caption{Pengujian Simulasi PIE: Validasi Animasi Reaktif dan Nilai Kesehatan Kritis}
+  \label{fig:pie-critical-health-anim}
+\end{figure}
+
+\par Berdasarkan Gambar \ref{fig:pie-critical-health-anim}, saya melanjutkan pengujian interaktif dengan membiarkan karakter menerima serangan benturan secara berkelanjutan. Bar kesehatan terus menyusut secara konsisten hingga mencapai kisaran 70\%. Pada setiap detak penerimaan damage, komponen bar kesehatan secara konsisten memainkan animasi \texttt{onUpdateHealthAnimation}, di mana bar terhentak ke atas dan bergeser secara dinamis sesuai kurva translasi yang telah disusun pada Sequencer sebelum kembali ke posisi semula. Uji coba ini menegaskan bahwa integrasi antara sistem lingkungan lanskap, aset vegetasi, antarmuka modular UMG, dan arsitektur komunikasi \textit{Blueprint Interface} telah beroperasi secara utuh, kokoh, dan siap digunakan untuk fondasi pengembangan game komersial lebih lanjut.
 
 \section{Hasil Akhir}
+
+\par Berdasarkan seluruh rangkaian perancangan, implementasi, dan pengujian teknis yang telah saya laksanakan pada Praktikum Pengembangan Game Pertemuan 7 dengan topik bahasan \textit{Asset FAB dan Widget Blueprint (UI)} pada Unreal Engine 5, berikut adalah kesimpulan dan analisis komprehensif atas pencapaian hasil praktikum:
+\begin{enumerate}[label=\alph*.]
+  \item \textbf{Integrasi Aset Lingkungan FAB dan Preservasi Proyek PPG\_2026:} Saya telah berhasil memahami alur penelusuran pustaka aset melalui ekosistem FAB Marketplace dan menguasai adaptasi proyek salinan asisten \texttt{PPG\_2026} akibat perpindahan lab. Keberadaan paket \textit{Landscape Pro 2.0 Auto-Generated Material} yang telah tersemat dieksplorasi secara mendalam tanpa unduhan ulang, mencakup pemilahan 84 aset vegetasi dengan filter \textit{Static Mesh} dan pengujian LOD pada \textit{Static Mesh Editor}.
+  \item \textbf{Efisiensi Prosedural Auto-Material dan Auto-Fill Target Layer:} Penerapan \textit{Material Instance} \texttt{MI\_landscape\_pro\_v2\_inst} pada aktor lanskap membuktikan keunggulan teknik medan modern Unreal Engine 5. Material mampu memetakan tekstur tanah datar dan tebing batuan secara otomatis berdasarkan kemiringan \textit{slope} geometri 3D. Selain itu, fitur \textit{Auto-Fill Target Layer Assets} pada mode \textit{Paint} menugaskan berkas \textit{Layer Info} seperti \texttt{Layer\_1\_LayerInfo}, \texttt{Layer\_2\_LayerInfo}, dan seterusnya secara instan tanpa konfigurasi manual.
+  \item \textbf{Fleksibilitas Penataan Vegetasi Hibrida Manual dan Foliage Tool:} Saya berhasil mempraktikkan dan membandingkan dua metode penempatan vegetasi lingkungan 3D. Penempatan manual \texttt{SM\_dead-tree04} terbukti sangat presisi untuk aset penanda khusus \textit{landmark hero asset}, sedangkan pemanfaatan \textit{Foliage Mode} dengan kuas \textit{multi-selection} dan densitas \texttt{0.05} mampu menghutankan perbukitan secara masif dan fotorealistis di bawah pengelolaan aktor \texttt{InstancedFoliageActor2} yang sangat hemat memori GPU.
+  \item \textbf{Arsitektur Antarmuka Pengguna Modular Berbasis UMG dan Timeline Animasi:} Perancangan antarmuka visual dibuat modular dengan memisahkan komponen \texttt{WBP\_Health} dari kanvas \texttt{WBP\_HUD}. Komponen \textit{Progress Bar} disetel berwarna hijau cerah dan dianimasikan via trek \textit{Transform} Sequencer pada koordinat $Y = -50.0$ serta $X = 100.0$ guna menghadirkan efek getaran visual saat menerima serangan.
+  \item \textbf{Keandalan Komunikasi Terisolasi via Blueprint Interface dan Game Instance:} Arsitektur komunikasi berbasis \textit{Blueprint Interface} \texttt{BPI\_HUD} dan \texttt{BPI\_Widget} sukses meniadakan keterikatan langsung \textit{hard reference casting}. Penyimpanan referensi di variabel \texttt{AddedWidget} pada \texttt{BP\_GameInstance} menjamin antarmuka persisten, diinisialisasi oleh \texttt{BP\_ThirdPersonPlayerController} melalui node \textit{Add to Player Screen}, serta diperbarui oleh \texttt{BP\_ThirdPersonCharacter} saat \textit{Event TakeDamage} aktif.
+\end{enumerate}
 
 \end{document}
